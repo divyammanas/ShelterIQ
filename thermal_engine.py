@@ -139,6 +139,7 @@ def simulate(shelter: Shelter, climate: ClimateSeries, dt_h: float = 0.5,
         hod = t[k] % 24.0
         cl = climate.at(t[k])
         T_out_k = cl["T_out"]
+        # pyrefly: ignore [bad-argument-type]
         h_out_dyn = wind_film_coefficient(cl["wind"])
 
         # --- sol-air temps + opaque conduction target for the mass node ---
@@ -151,9 +152,12 @@ def simulate(shelter: Shelter, climate: ClimateSeries, dt_h: float = 0.5,
                 # temperature, not to swinging ambient air / solar
                 T_solair = GROUND_TEMP_C
             else:
+                # pyrefly: ignore [bad-argument-type]
                 I_surf = surface_irradiance(cl["ghi"], hod, el.orientation_deg,
+                                             # pyrefly: ignore [bad-argument-type]
                                              el.tilt_deg, cl["cloud"])
                 layer_alpha = el.layers[0].material.alpha if el.layers else 0.6
+                # pyrefly: ignore [bad-argument-type]
                 T_solair = sol_air_temperature(T_out_k, I_surf, layer_alpha, h_out=h_out_dyn,
                                                 is_horizontal=(el.tilt_deg < 10),
                                                 long_wave_correction=4.0 if I_surf == 0 else 0.0)
@@ -163,6 +167,7 @@ def simulate(shelter: Shelter, climate: ClimateSeries, dt_h: float = 0.5,
         # --- window solar gain (direct, split air/mass) ---
         Q_win_solar = 0.0
         for w in windows:
+            # pyrefly: ignore [bad-argument-type]
             I_surf = surface_irradiance(cl["ghi"], hod, w.orientation_deg, 90.0, cl["cloud"])
             Q_win_solar += I_surf * w.shgc * w.area
         Q_solar_air = 0.7 * Q_win_solar + internal_gains_W
@@ -216,6 +221,7 @@ def simulate(shelter: Shelter, climate: ClimateSeries, dt_h: float = 0.5,
     T_out_series = np.interp(t, climate.t_hours, climate.T_out)
 
     return SimulationResult(
+        # pyrefly: ignore [bad-argument-type]
         t_hours=t, T_out=T_out_series, T_air=T_air, T_mass=T_mass,
         solar_gain_W=solar_gain, conduction_loss_W=cond_loss, ventilation_loss_W=vent_loss,
         net_heat_flow_W=net_flow, storage_rate_W=storage_rate, heating_power_W=heating_power,

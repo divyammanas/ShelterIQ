@@ -11,14 +11,13 @@ Produces:
 """
 
 import numpy as np
+# pyrefly: ignore [missing-import]
 import matplotlib
 matplotlib.use("Agg")
+# pyrefly: ignore [missing-import]
 import matplotlib.pyplot as plt
+# pyrefly: ignore [missing-import]
 import pandas as pd
-from pathlib import Path
-
-# Keep all generated files inside the ShelterIQ project folder.
-OUTPUT_DIR = Path(__file__).resolve().parent
 
 from materials import MaterialDatabase, Material
 from geometry import Shelter, Layer, Opening
@@ -110,7 +109,7 @@ def main():
     axs[3].set_title("Comfort Status")
 
     plt.tight_layout()
-    plt.savefig(OUTPUT_DIR / "simulation_dashboard.png", dpi=130)
+    plt.savefig("/home/claude/thermal_engine/simulation_dashboard.png", dpi=130)
     print("Saved simulation_dashboard.png")
 
     pd.DataFrame({
@@ -119,7 +118,7 @@ def main():
         "conduction_loss_W": result.conduction_loss_W, "ventilation_loss_W": result.ventilation_loss_W,
         "net_heat_flow_W": result.net_heat_flow_W, "storage_rate_W": result.storage_rate_W,
         "comfort_status": result.comfort_status,
-    }).to_csv(OUTPUT_DIR / "simulation_timeseries.csv", index=False)
+    }).to_csv("/home/claude/thermal_engine/simulation_timeseries.csv", index=False)
 
     # 2) Design comparison module --------------------------------------
     struct_alt = mdb.get("rammed_earth")
@@ -145,7 +144,7 @@ def main():
     for row in comp_rows:
         row["design_score"] = design_score(row)
     comp_df = pd.DataFrame(comp_rows)
-    comp_df.to_csv(OUTPUT_DIR / "comparison_table.csv", index=False)
+    comp_df.to_csv("/home/claude/thermal_engine/comparison_table.csv", index=False)
     print("\n=== Design comparison ===")
     print(comp_df.to_string(index=False))
 
@@ -162,7 +161,7 @@ def main():
     top = optimize(baseline, mdb, space, climate, n_random=30, top_k=5,
                     dt_h=1.0, comfort_band=comfort_band, heating_setpoint_C=16.0)
     opt_df = pd.DataFrame([{k: v for k, v in r.items() if k != "params"} for r in top])
-    opt_df.to_csv(OUTPUT_DIR / "optimization_results.csv", index=False)
+    opt_df.to_csv("/home/claude/thermal_engine/optimization_results.csv", index=False)
     print("\n=== Top optimizer picks ===")
     print(opt_df.to_string(index=False))
     print("\nBest design parameters:", top[0]["params"])

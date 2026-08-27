@@ -78,7 +78,9 @@ class Opening:
     name: str
     width: float
     height: float
+    # pyrefly: ignore [bad-assignment]
     glazing: Material = None       # None => opaque door
+    # pyrefly: ignore [bad-assignment]
     u_value_override: float = None  # e.g. door U-value if not glazing
     shgc: float = 0.6               # solar heat gain coefficient (windows)
     orientation_deg: float = 180.0
@@ -108,7 +110,9 @@ class Shelter:
     orientation_deg: float = 180.0  # compass bearing the "front" (length) wall faces
     roof_pitch_deg: float = 20.0
     walls: Dict[str, BuildingElement] = field(default_factory=dict)   # N,E,S,W
+    # pyrefly: ignore [bad-assignment]
     roof: BuildingElement = None
+    # pyrefly: ignore [bad-assignment]
     floor: BuildingElement = None
     openings: List[Opening] = field(default_factory=list)
     ach: float = 0.5   # air changes per hour (infiltration + ventilation)
