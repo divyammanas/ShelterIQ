@@ -1,0 +1,6 @@
+design,min_T_air_C,max_T_air_C,comfortable_h,marginal_h,uncomfortable_h,total_heat_loss_kWh,total_solar_gain_kWh,thermal_stability_stdC,estimated_heating_kWh,score
+stone_granite(30cm)+xps_insulation(15cm) orient=200 win=10% ACH=0.5,5.0,16.0,72.0,0.0,1.0,80.51,15.24,1.28,73.71,79.6
+concrete_light(20cm)+eps_insulation(15cm) orient=180 win=20% ACH=0.5,5.0,16.0,72.0,0.0,1.0,92.9,15.32,1.28,78.18,78.6
+rammed_earth(20cm)+xps_insulation(15cm) orient=200 win=20% ACH=0.3,5.0,16.0,72.0,0.0,1.0,84.79,16.38,1.28,78.06,78.6
+concrete_light(20cm)+eps_insulation(15cm) orient=200 win=20% ACH=0.5,5.0,16.0,72.0,0.0,1.0,93.47,15.35,1.28,78.72,78.4
+rammed_earth(30cm)+xps_insulation(10cm) orient=200 win=10% ACH=0.5,5.0,16.0,72.0,0.0,1.0,84.84,14.73,1.28,79.56,78.2
