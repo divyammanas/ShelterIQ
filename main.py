@@ -288,22 +288,64 @@ def api_optimize(req: OptimizeRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# Serving static frontend
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+REACT_DIST = os.path.join(BASE_DIR, "frontend", "dist")
+LEGACY_INDEX = os.path.join(BASE_DIR, "index.html")
+HAS_REACT_BUILD = os.path.isfile(os.path.join(REACT_DIST, "index.html"))
+
+
+def _index_path() -> str:
+    if HAS_REACT_BUILD:
+        return os.path.join(REACT_DIST, "index.html")
+    return LEGACY_INDEX
+
+
 @app.get("/")
 def get_index():
-    return FileResponse("frontend/dist/index.html")
+    index_path = _index_path()
+    if not os.path.isfile(index_path):
+        raise HTTPException(status_code=500, detail="Frontend index.html was not found")
+    return FileResponse(index_path)
 
-# Serve CSV data tables specifically from workspace root
+
 @app.get("/comparison_table.csv")
 def get_comparison_table():
-    return FileResponse("comparison_table.csv")
+    path = os.path.join(BASE_DIR, "comparison_table.csv")
+    if not os.path.isfile(path):
+        raise HTTPException(status_code=404, detail="comparison_table.csv not found")
+    return FileResponse(path)
+
 
 @app.get("/optimization_results.csv")
 def get_optimization_results():
-    return FileResponse("optimization_results.csv")
+    path = os.path.join(BASE_DIR, "optimization_results.csv")
+    if not os.path.isfile(path):
+        raise HTTPException(status_code=404, detail="optimization_results.csv not found")
+    return FileResponse(path)
 
-# Serve built static files
-app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="static")
+
+if HAS_REACT_BUILD:
+    assets_dir = os.path.join(REACT_DIST, "assets")
+    if os.path.isdir(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+    @app.get("/favicon.svg")
+    def get_favicon():
+        path = os.path.join(REACT_DIST, "favicon.svg")
+        if not os.path.isfile(path):
+            raise HTTPException(status_code=404)
+        return FileResponse(path)
+
+    @app.get("/icons.svg")
+    def get_icons():
+        path = os.path.join(REACT_DIST, "icons.svg")
+        if not os.path.isfile(path):
+            raise HTTPException(status_code=404)
+        return FileResponse(path)
+else:
+    app.mount("/", StaticFiles(directory=BASE_DIR, html=True), name="static")
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    port = int(os.environ.get("PORT", "8000"))
+    host = os.environ.get("HOST", "0.0.0.0")
+    uvicorn.run("main:app", host=host, port=port, reload=os.environ.get("RELOAD", "").lower() in ("1", "true"))
