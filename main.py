@@ -300,7 +300,7 @@ def _index_path() -> str:
     return LEGACY_INDEX
 
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def get_index():
     index_path = _index_path()
     if not os.path.isfile(index_path):
