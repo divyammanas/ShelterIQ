@@ -291,10 +291,19 @@ def api_optimize(req: OptimizeRequest):
 # Serving static frontend
 @app.get("/")
 def get_index():
-    return FileResponse("index.html")
+    return FileResponse("frontend/dist/index.html")
 
-# Serve other files relative from workspace root
-app.mount("/", StaticFiles(directory=".", html=True), name="static")
+# Serve CSV data tables specifically from workspace root
+@app.get("/comparison_table.csv")
+def get_comparison_table():
+    return FileResponse("comparison_table.csv")
+
+@app.get("/optimization_results.csv")
+def get_optimization_results():
+    return FileResponse("optimization_results.csv")
+
+# Serve built static files
+app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="static")
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
