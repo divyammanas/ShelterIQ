@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import logoImg from '../assets/logo.jpg';
 import { 
   LineChart, 
   CloudSun, 
@@ -100,9 +101,7 @@ export const Layout: React.FC = () => {
       <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-[#0c0c0f] border-r border-zinc-200 dark:border-zinc-800 shrink-0">
         {/* Brand */}
         <div className="flex items-center gap-3 p-6 border-b border-zinc-200 dark:border-zinc-800">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-blue-600 text-white font-extrabold text-lg shadow-md shadow-blue-500/20">
-            IQ
-          </div>
+          <img src={logoImg} alt="ShelterIQ" className="w-10 h-10 rounded-xl object-cover shadow-md" />
           <div>
             <span className="font-extrabold text-lg tracking-tight">Shelter<span className="text-blue-500">IQ</span></span>
             <div className="text-[10px] text-zinc-400 font-medium leading-none">Passive Heat Lab</div>
@@ -142,9 +141,7 @@ export const Layout: React.FC = () => {
       {/* Mobile Drawer Navigation */}
       <div className="md:hidden flex items-center justify-between px-6 py-4 bg-white dark:bg-[#0c0c0f] border-b border-zinc-200 dark:border-zinc-800">
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-600 text-white font-extrabold text-sm">
-            IQ
-          </div>
+          <img src={logoImg} alt="ShelterIQ" className="w-8 h-8 rounded-lg object-cover" />
           <span className="font-extrabold text-md tracking-tight">Shelter<span className="text-blue-500">IQ</span></span>
         </div>
         <button 
@@ -161,7 +158,7 @@ export const Layout: React.FC = () => {
           <div className="flex flex-col w-64 bg-white dark:bg-[#0c0c0f] p-6 border-r border-zinc-200 dark:border-zinc-800 animate-slide-in">
             <div className="flex items-center justify-between pb-6 border-b border-zinc-200 dark:border-zinc-800">
               <div className="flex items-center gap-2">
-                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-600 text-white font-bold text-sm">IQ</div>
+                <img src={logoImg} alt="ShelterIQ" className="w-8 h-8 rounded-lg object-cover" />
                 <span className="font-extrabold tracking-tight">Shelter<span className="text-blue-500">IQ</span></span>
               </div>
               <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-lg">
