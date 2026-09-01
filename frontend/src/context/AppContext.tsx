@@ -135,7 +135,10 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const mdb = React.useMemo(() => new MaterialDatabase(), []);
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    const saved = localStorage.getItem('shelterIQ_theme');
+    return saved !== null ? saved === 'dark' : true;
+  });
   const [savedDesigns, setSavedDesigns] = useState<SavedDesign[]>([]);
   
   // Envelope Layers
@@ -217,8 +220,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [optLogs, setOptLogs] = useState<string>("Waiting to execute optimizer search space...");
   const [isOptimizing, setIsOptimizing] = useState<boolean>(false);
 
-  // Sync dark mode class on html tag
+  // Sync dark mode class on html tag and localStorage
   useEffect(() => {
+    localStorage.setItem('shelterIQ_theme', isDarkMode ? 'dark' : 'light');
     const root = window.document.documentElement;
     if (isDarkMode) {
       root.classList.add('dark');
