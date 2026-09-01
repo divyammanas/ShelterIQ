@@ -327,7 +327,30 @@ def get_optimization_results():
 if HAS_REACT_BUILD:
     assets_dir = os.path.join(REACT_DIST, "assets")
     if os.path.isdir(assets_dir):
-        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+    @app.get("/Icon.jpeg")
+    def get_icon_jpeg():
+        path = os.path.join(REACT_DIST, "Icon.jpeg")
+        if not os.path.isfile(path):
+            path = os.path.join(BASE_DIR, "frontend", "Icon.jpeg")
+        if not os.path.isfile(path):
+            raise HTTPException(status_code=404)
+        return FileResponse(path, media_type="image/jpeg")
+
+    @app.get("/favicon.jpg")
+    def get_favicon_jpg():
+        path = os.path.join(REACT_DIST, "favicon.jpg")
+        if not os.path.isfile(path):
+            path = os.path.join(REACT_DIST, "Icon.jpeg")
+        if not os.path.isfile(path):
+            raise HTTPException(status_code=404)
+        return FileResponse(path, media_type="image/jpeg")
+
+    @app.get("/favicon.ico")
+    def get_favicon_ico():
+        path = os.path.join(REACT_DIST, "Icon.jpeg")
+        if not os.path.isfile(path):
+            raise HTTPException(status_code=404)
+        return FileResponse(path, media_type="image/jpeg")
 
     @app.get("/favicon.svg")
     def get_favicon():
