@@ -28,7 +28,8 @@ export const ThreeDShelter: React.FC<ThreeDShelterProps> = ({
     simResult, 
     activeHour, 
     thermalMassType, 
-    thermalMassQty 
+    thermalMassQty,
+    isDarkMode
   } = useApp();
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -51,13 +52,20 @@ export const ThreeDShelter: React.FC<ThreeDShelterProps> = ({
   const animFrameIdRef = useRef<number | null>(null);
   const particlesRef = useRef<{ mesh: THREE.Mesh; origin: THREE.Vector3; destination: THREE.Vector3; t: number; speed: number }[]>([]);
 
+  // Update scene background when dark mode changes
+  useEffect(() => {
+    if (sceneRef.current) {
+      sceneRef.current.background = new THREE.Color(isDarkMode ? 0x0f172a : 0xf8fafc);
+    }
+  }, [isDarkMode]);
+
   // Initialize Three.js scene
   useEffect(() => {
     if (!canvasRef.current || !containerRef.current) return;
     
     // Scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0f172a); // slate navy background
+    scene.background = new THREE.Color(isDarkMode ? 0x0f172a : 0xf8fafc); // slate navy / slate 50 background
     sceneRef.current = scene;
     
     // Camera
@@ -209,12 +217,13 @@ export const ThreeDShelter: React.FC<ThreeDShelterProps> = ({
               heatFlowHtml = `<div class="mb-1"><strong>Heat Flow:</strong> <span style="color:${color};font-weight:bold;">${Math.abs(flowVal).toFixed(0)} W (${label})</span></div>`;
             }
             
+            const textClass = isDarkMode ? "text-zinc-300" : "text-zinc-600";
             tooltipRef.current.innerHTML = `
-              <div class="font-bold border-b border-dashed border-blue-500 pb-1 mb-1.5 text-blue-400 uppercase text-[10px] tracking-wider">${u.name}</div>
-              <div class="mb-1 text-zinc-300"><strong>Material:</strong> ${u.materialName}</div>
-              ${u.thickness ? `<div class="mb-1 text-zinc-300"><strong>Thickness:</strong> ${u.thickness}</div>` : ""}
-              <div class="mb-1 text-zinc-300"><strong>U-value:</strong> ${u.uValue} W/m²K</div>
-              <div class="mb-1 text-zinc-300"><strong>Temperature:</strong> ${u.temp}</div>
+              <div class="font-bold border-b border-dashed border-blue-500 pb-1 mb-1.5 text-blue-600 dark:text-blue-400 uppercase text-[10px] tracking-wider">${u.name}</div>
+              <div class="mb-1 ${textClass}"><strong>Material:</strong> ${u.materialName}</div>
+              ${u.thickness ? `<div class="mb-1 ${textClass}"><strong>Thickness:</strong> ${u.thickness}</div>` : ""}
+              <div class="mb-1 ${textClass}"><strong>U-value:</strong> ${u.uValue} W/m²K</div>
+              <div class="mb-1 ${textClass}"><strong>Temperature:</strong> ${u.temp}</div>
               ${heatFlowHtml}
             `;
             return;
@@ -282,7 +291,8 @@ export const ThreeDShelter: React.FC<ThreeDShelterProps> = ({
     envelopeOpacity, 
     visibilityStates, 
     thermalMassType, 
-    thermalMassQty
+    thermalMassQty,
+    isDarkMode
   ]);
 
   const createCompassLabel = (scene: THREE.Scene, char: string, x: number, y: number, z: number, colorVal: number) => {
@@ -371,7 +381,7 @@ export const ThreeDShelter: React.FC<ThreeDShelterProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     
-    ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+    ctx.fillStyle = isDarkMode ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.95)';
     ctx.strokeStyle = '#3b82f6';
     ctx.lineWidth = 2;
     
@@ -390,7 +400,7 @@ export const ThreeDShelter: React.FC<ThreeDShelterProps> = ({
     ctx.fill();
     ctx.stroke();
     
-    ctx.fillStyle = color;
+    ctx.fillStyle = !isDarkMode && color === "#ffffff" ? "#0f172a" : color;
     ctx.font = 'bold 20px Inter, Arial, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
