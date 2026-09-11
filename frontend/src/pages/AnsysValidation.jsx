@@ -69,32 +69,20 @@ export const AnsysValidation = () => {
       
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-<<<<<<< Updated upstream:frontend/src/pages/AnsysValidation.jsx
-        <div className="lg:col-span-8 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-4 flex items-center gap-2">
-            <LineChart size={16} className="text-blue-500"/> Transient Profile Validation
-=======
         {/* Validation Chart */}
         <div className="lg:col-span-8 bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl p-5 shadow-xs">
           <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4 flex items-center gap-2">
             <LineChart size={15} className="text-blue-500" /> Transient Profile Validation vs Fluent CFD
->>>>>>> Stashed changes:frontend/src/pages/AnsysValidation.tsx
           </h3>
           <div className="h-[320px] w-full">
             <ReactECharts option={getValidationChartOption()} style={{ height: '100%', width: '100%' }} theme={isDarkMode ? 'dark' : 'light'}/>
           </div>
         </div>
 
-<<<<<<< Updated upstream:frontend/src/pages/AnsysValidation.jsx
-        <div className="lg:col-span-4 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-6 self-stretch">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
-            <FileText size={16} className="text-blue-500"/> Error Residual Report
-=======
         {/* Residuals Summary report */}
         <div className="lg:col-span-4 bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl p-5 shadow-xs flex flex-col gap-6 self-stretch">
           <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2 border-b border-slate-200 dark:border-[#1e2638] pb-3 shrink-0">
             <FileText size={15} className="text-blue-500" /> Error Residual Report
->>>>>>> Stashed changes:frontend/src/pages/AnsysValidation.tsx
           </h3>
           
           <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4">
@@ -126,16 +114,10 @@ export const AnsysValidation = () => {
 
       </div>
 
-<<<<<<< Updated upstream:frontend/src/pages/AnsysValidation.jsx
-      <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-4 flex items-center gap-2">
-          <Settings size={16} className="text-blue-500"/> ANSYS Fluent CFD Simulation Specification
-=======
       {/* Specifications */}
       <div className="bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl p-5 shadow-xs">
         <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4 flex items-center gap-2">
           <Settings size={15} className="text-blue-500" /> ANSYS Fluent CFD Simulation Specification
->>>>>>> Stashed changes:frontend/src/pages/AnsysValidation.tsx
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-zinc-100 dark:divide-zinc-800">
           <div className="flex flex-col gap-1 p-2 sm:p-0">

@@ -52,12 +52,16 @@ export const PortfolioCompare = () => {
     return (<div className="flex flex-col gap-6">
       
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<<<<<<< Updated upstream:frontend/src/pages/PortfolioCompare.jsx
+        {savedDesigns.map((design, idx) => (<div key={idx} className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-4 relative overflow-hidden">
+=======
         {savedDesigns.map((design, idx) => (
           <div 
             key={idx}
             className="bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl p-5 shadow-xs flex flex-col gap-4 relative overflow-hidden"
           >
             {/* Rank badge */}
+>>>>>>> Stashed changes:frontend/src/pages/PortfolioCompare.tsx
             <div className="absolute top-4 right-4 flex items-center gap-1">
               <span className="text-[10px] font-extrabold text-zinc-400 uppercase">Rank #{idx + 1}</span>
             </div>
@@ -93,6 +97,14 @@ export const PortfolioCompare = () => {
             </div>
           </div>))}
 
+<<<<<<< Updated upstream:frontend/src/pages/PortfolioCompare.jsx
+        {savedDesigns.length === 0 && (<div className="col-span-full bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-8 shadow-sm text-center text-zinc-400 font-semibold">
+            No design cases loaded. Run a simulation to populate comparison data.
+          </div>)}
+      </div>
+
+      <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden flex flex-col">
+=======
         {savedDesigns.length === 0 && (
           <div className="col-span-full bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl p-8 shadow-xs text-center text-slate-400 font-mono text-xs">
             No design cases loaded. Run baseline simulations and click "Save Portfolio" to add items here.
@@ -102,6 +114,7 @@ export const PortfolioCompare = () => {
 
       {/* Portfolio Performance Matrix Table */}
       <div className="bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl shadow-xs overflow-hidden flex flex-col">
+>>>>>>> Stashed changes:frontend/src/pages/PortfolioCompare.tsx
         <div className="flex items-center justify-between p-5 border-b border-zinc-200 dark:border-zinc-800">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2">
             <Award size={16} className="text-blue-500"/> Portfolio Performance Matrix
