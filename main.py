@@ -10,10 +10,8 @@ from fastapi.responses import FileResponse, HTMLResponse
 from pydantic import BaseModel
 from typing import List, Dict, Optional, Any
 
-# Ensure local path is registered
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-# Import original Python core engine files
 from materials import MaterialDatabase, Material
 from geometry import Shelter, Layer, Opening
 from climate import ClimateSeries, synthetic_ladakh_winter
@@ -24,7 +22,6 @@ from optimize import SearchSpace, optimize as run_optimize
 
 app = FastAPI(title="ShelterIQ Simulation & Optimization Engine API")
 
-# Enable CORS for cross-origin local testing
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -33,7 +30,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- Pydantic API Schemas ---
 class MaterialSchema(BaseModel):
     name: str
     k: float
@@ -99,7 +95,6 @@ class SimulateRequest(BaseModel):
     settings: SimSettingsSchema
     added_masses: List[AddedMassSchema]
 
-# --- Schema Mapping Helpers ---
 def map_to_material(m: MaterialSchema) -> Material:
     return Material(
         name=m.name,
@@ -129,7 +124,6 @@ def map_to_opening(o: OpeningSchema) -> Opening:
     )
 
 def map_to_shelter(s: ShelterSchema) -> Shelter:
-    # Use South wall layers as the uniform wall layer representation
     wall_layers = [map_to_layer(l) for l in s.walls.get("S", [])]
     if not wall_layers and s.walls:
         first_face = list(s.walls.keys())[0]
@@ -152,7 +146,6 @@ def map_to_shelter(s: ShelterSchema) -> Shelter:
     shelter.build_uniform_envelope(wall_layers, roof_layers, floor_layers)
     return shelter
 
-# --- REST Endpoints ---
 @app.post("/api/simulate")
 def api_simulate(req: SimulateRequest):
     try:
@@ -177,7 +170,6 @@ def api_simulate(req: SimulateRequest):
         band = ComfortBand(t_min=16.0, t_max=26.0, t_marginal_low=8.0, t_marginal_high=30.0)
         heating_setpoint = req.settings.heating_setpoint if req.settings.heating_enabled else None
         
-        # Run local transient simulation
         result: SimulationResult = simulate(
             shelter=shelter_obj,
             climate=climate_obj,
@@ -190,7 +182,6 @@ def api_simulate(req: SimulateRequest):
             T_mass0=req.settings.T_mass0
         )
         
-        # Trapeze integrations for loss/gain metrics
         total_loss_kWh = float(np.trapezoid(
             np.clip(result.conduction_loss_W + result.ventilation_loss_W, 0, None),
             result.t_hours) / 1000.0)
@@ -325,9 +316,30 @@ def get_optimization_results():
 
 
 if HAS_REACT_BUILD:
-    assets_dir = os.path.join(REACT_DIST, "assets")
-    if os.path.isdir(assets_dir):
-        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+    @app.get("/Icon.jpeg")
+    def get_icon_jpeg():
+        path = os.path.join(REACT_DIST, "Icon.jpeg")
+        if not os.path.isfile(path):
+            path = os.path.join(BASE_DIR, "frontend", "Icon.jpeg")
+        if not os.path.isfile(path):
+            raise HTTPException(status_code=404)
+        return FileResponse(path, media_type="image/jpeg")
+
+    @app.get("/favicon.jpg")
+    def get_favicon_jpg():
+        path = os.path.join(REACT_DIST, "favicon.jpg")
+        if not os.path.isfile(path):
+            path = os.path.join(REACT_DIST, "Icon.jpeg")
+        if not os.path.isfile(path):
+            raise HTTPException(status_code=404)
+        return FileResponse(path, media_type="image/jpeg")
+
+    @app.get("/favicon.ico")
+    def get_favicon_ico():
+        path = os.path.join(REACT_DIST, "Icon.jpeg")
+        if not os.path.isfile(path):
+            raise HTTPException(status_code=404)
+        return FileResponse(path, media_type="image/jpeg")
 
     @app.get("/favicon.svg")
     def get_favicon():

@@ -2,9 +2,8 @@
    ShelterIQ Core Application Logic - Simulation Engine, Charts & Visualization
    ========================================================================== */
 
-// Seeded LCG Pseudo-Random Generator
 function LCG(seed) {
-  let m = 0x80000000; // 2**31
+  let m = 0x80000000;
   let a = 1103515245;
   let c = 12345;
   let state = seed;
@@ -14,7 +13,6 @@ function LCG(seed) {
   };
 }
 
-// Pseudo-Normal Distribution generator using Box-Muller transform
 function pseudoNormal(seed) {
   let rand = LCG(seed);
   let u1 = rand();
@@ -23,7 +21,6 @@ function pseudoNormal(seed) {
   return Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
 }
 
-// Simple CSV Parser supporting fields with commas enclosed in double quotes
 function parseCSV(text) {
   let lines = text.split(/\r?\n/);
   if (lines.length === 0) return [];
@@ -65,7 +62,6 @@ function parseCSV(text) {
   return result;
 }
 
-// Predefined Materials Database
 const DEFAULT_MATERIALS = {
   "concrete_dense": { name: "Dense Concrete", k: 1.75, rho: 2300, cp: 1000, alpha: 0.65, epsilon: 0.9, is_pcm: false },
   "concrete_light": { name: "Lightweight Concrete", k: 0.38, rho: 1000, cp: 1000, alpha: 0.6, epsilon: 0.9, is_pcm: false },
@@ -129,13 +125,11 @@ class MaterialDatabase {
   }
 }
 
-// Constants
 const RHO_AIR = 1.2;
 const CP_AIR = 1005.0;
 const H_MS = 9.1;
 const GROUND_TEMP_C = 6.0;
 
-// Linear interpolation helper
 function interpolate(x, xs, ys) {
   if (x <= xs[0]) return ys[0];
   if (x >= xs[xs.length - 1]) return ys[ys.length - 1];
@@ -149,7 +143,6 @@ function interpolate(x, xs, ys) {
   return ys[low] + t * (ys[high] - ys[low]);
 }
 
-// Climate interpolation
 function climateAt(climate, t_hour) {
   return {
     T_out: interpolate(t_hour, climate.t_hours, climate.T_out),
@@ -160,7 +153,6 @@ function climateAt(climate, t_hour) {
   };
 }
 
-// Synthetic Climate Generation
 function syntheticLadakhWinter(duration_h = 72, dt_h = 0.5, T_mean = -8.0, T_amp = 9.0, ghi_peak = 650, wind_mean = 3.5, rh_mean = 35, cloud_mean = 15) {
   let t = [];
   for (let hour = 0; hour <= duration_h + 1e-9; hour += dt_h) {
@@ -195,7 +187,6 @@ function syntheticLadakhWinter(duration_h = 72, dt_h = 0.5, T_mean = -8.0, T_amp
   return { t_hours: t, T_out, ghi, wind, rh, cloud };
 }
 
-// Envelope calculation helpers
 function getRValue(layers, is_ground_contact = false, include_films = true) {
   let r = 0;
   for (let l of layers) {
@@ -1552,6 +1543,7 @@ class ShelterVisualizer {
 // ==========================================================================
 // Application Core Manager (State, Events, Actions)
 // ==========================================================================
+
 
 class ShelterIQApp {
   constructor() {

@@ -1,4 +1,7 @@
+venv/
 .venv/
+node_modules/
+frontend/node_modules/
 __pycache__/
 *.pyc
 .gemini/
@@ -6,3 +9,5 @@ __pycache__/
 *.csv
 *.png
 *.log
+.DS_Store
+
