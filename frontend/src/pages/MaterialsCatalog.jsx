@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Database, Plus } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { formatDisplayNumber } from '../services/physicsEngine';
 export const MaterialsCatalog = () => {
     const { mdb, runActiveSimulation } = useApp();
     const [name, setName] = useState('');
@@ -150,21 +151,21 @@ export const MaterialsCatalog = () => {
                 <div className="space-y-1 text-[10px] text-zinc-500 dark:text-zinc-400 font-medium">
                   <div className="flex justify-between">
                     <span>Conductivity (k)</span>
-                    <span className="font-mono text-zinc-800 dark:text-zinc-200">{m.k} W/mK</span>
+                    <span className="font-mono text-zinc-800 dark:text-zinc-200">{formatDisplayNumber(m.k)} W/mK</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Density (ρ)</span>
-                    <span className="font-mono text-zinc-800 dark:text-zinc-200">{m.rho} kg/m³</span>
+                    <span className="font-mono text-zinc-800 dark:text-zinc-200">{formatDisplayNumber(m.rho)} kg/m³</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Specific Heat (Cp)</span>
-                    <span className="font-mono text-zinc-800 dark:text-zinc-200">{m.cp} J/kgK</span>
+                    <span className="font-mono text-zinc-800 dark:text-zinc-200">{formatDisplayNumber(m.cp)} J/kgK</span>
                   </div>
                   
                   {m.is_pcm && m.pcm_props && (<div className="border-t border-zinc-200 dark:border-zinc-800 pt-1.5 mt-1.5 space-y-1">
                       <div className="flex justify-between text-purple-600 dark:text-purple-400">
                         <span>Melting Temp (T_m)</span>
-                        <span className="font-mono">{m.pcm_props.T_melt}°C</span>
+                        <span className="font-mono">{formatDisplayNumber(m.pcm_props.T_melt)}°C</span>
                       </div>
                       <div className="flex justify-between text-purple-600 dark:text-purple-400">
                         <span>Latent Heat (L)</span>

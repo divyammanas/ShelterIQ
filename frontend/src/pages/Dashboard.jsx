@@ -3,7 +3,7 @@ import ReactECharts from 'echarts-for-react';
 import { Thermometer, Timer, Box, Zap, ShieldCheck, AlertTriangle, Lightbulb, Play, Pause, RotateCw, Maximize2, Minimize2 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { ThreeDShelter } from '../components/ThreeDShelter';
-import { getUValue } from '../services/physicsEngine';
+import { getUValue, formatDisplayNumber } from '../services/physicsEngine';
 export const Dashboard = () => {
     const { shelter, simResult, activeHour, setActiveHour, thermalMassType, isDarkMode } = useApp();
     const [viewMode, setViewMode] = useState('physical');
@@ -175,7 +175,8 @@ export const Dashboard = () => {
                 trigger: 'axis',
                 backgroundColor: isDarkMode ? '#18181b' : '#ffffff',
                 borderColor: gridBorderColor,
-                textStyle: { color: isDarkMode ? '#ffffff' : '#09090b' }
+              textStyle: { color: isDarkMode ? '#ffffff' : '#09090b' },
+              valueFormatter: (value) => formatDisplayNumber(value)
             },
             legend: {
                 data: ['Indoor Air', 'Thermal Mass', 'Outdoor Ambient'],
@@ -241,7 +242,8 @@ export const Dashboard = () => {
                 trigger: 'axis',
                 backgroundColor: isDarkMode ? '#18181b' : '#ffffff',
                 borderColor: gridBorderColor,
-                textStyle: { color: isDarkMode ? '#ffffff' : '#09090b' }
+              textStyle: { color: isDarkMode ? '#ffffff' : '#09090b' },
+              valueFormatter: (value) => formatDisplayNumber(value)
             },
             legend: {
                 data: ['Solar Gain', 'Conduction', 'Ventilation', 'Mass Storage'],
