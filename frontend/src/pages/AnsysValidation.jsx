@@ -2,6 +2,7 @@ import React from 'react';
 import ReactECharts from 'echarts-for-react';
 import { LineChart, FileText, Settings } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { formatDisplayNumber } from '../services/physicsEngine';
 export const AnsysValidation = () => {
     const { isDarkMode } = useApp();
     const getValidationChartOption = () => {
@@ -17,7 +18,8 @@ export const AnsysValidation = () => {
                 trigger: 'axis',
                 backgroundColor: isDarkMode ? '#18181b' : '#ffffff',
                 borderColor: gridBorderColor,
-                textStyle: { color: isDarkMode ? '#ffffff' : '#09090b' }
+                textStyle: { color: isDarkMode ? '#ffffff' : '#09090b' },
+                valueFormatter: (value) => formatDisplayNumber(value)
             },
             legend: {
                 data: ['ANSYS Fluent CHT CFD', 'ShelterIQ RC Network'],

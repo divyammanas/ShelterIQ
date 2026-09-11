@@ -4,6 +4,7 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSo
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, ArrowUp, ArrowDown, Trash2, Plus } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { formatDisplayNumber } from '../services/physicsEngine';
 const SortableLayerRow = ({ id, idx, layer, onMaterialChange, onThicknessChange, onDelete, onMoveUp, onMoveDown, isFirst, isLast, mdb }) => {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
     const style = {
@@ -180,7 +181,7 @@ export const LayerEditor = () => {
                 <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-zinc-950/95 border border-zinc-800 text-white rounded-lg p-2 text-[10px] whitespace-nowrap shadow-xl z-50 pointer-events-none">
                   <div className="font-bold">{layer.material.name}</div>
                   <div>Thickness: {Math.round(layer.thickness * 100)}cm</div>
-                  <div>k: {layer.material.k} W/mK</div>
+                  <div>k: {formatDisplayNumber(layer.material.k)} W/mK</div>
                 </div>
               </div>);
         })}

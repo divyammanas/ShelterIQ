@@ -89,7 +89,7 @@ export const PortfolioCompare = () => {
           </div>))}
 
         {savedDesigns.length === 0 && (<div className="col-span-full bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-8 shadow-sm text-center text-zinc-400 font-semibold">
-            No design cases loaded. Run baseline simulations and click "Save Portfolio" to add items here.
+            No design cases loaded. Run a simulation to populate comparison data.
           </div>)}
       </div>
 

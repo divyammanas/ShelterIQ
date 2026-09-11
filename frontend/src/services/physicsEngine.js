@@ -1,3 +1,10 @@
+export function formatDisplayNumber(value) {
+    const number = Number(value);
+    if (!Number.isFinite(number))
+        return String(value);
+    return number.toFixed(5).replace(/\.?(0+)$/, '');
+}
+
 export function LCG(seed) {
     const m = 0x80000000;
     const a = 1103515245;

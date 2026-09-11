@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Sparkles, Play, Import, ListCollapse, Award, Loader2, Check } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import { parseCSV } from '../services/physicsEngine';
+import { formatDisplayNumber, parseCSV } from '../services/physicsEngine';
 export const AutoOptimizer = () => {
     const { optResults, setOptResults, optLogs, setOptLogs, isOptimizing, runOptimizationMC, loadDesignPreset, runActiveSimulation } = useApp();
     const fileInputRef = useRef(null);
@@ -148,9 +148,9 @@ export const AutoOptimizer = () => {
                 </div>
 
                 <div className="flex flex-wrap gap-1.5 text-[9px] font-extrabold uppercase text-zinc-400">
-                  <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{result.params.orient}° Azimuth</span>
+                  <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{formatDisplayNumber(result.params.orient)}° Azimuth</span>
                   <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{(result.params.win_f * 100).toFixed(0)}% Glazing</span>
-                  <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{result.params.ach_val} ACH</span>
+                  <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{formatDisplayNumber(result.params.ach_val)} ACH</span>
                 </div>
               </div>
 
