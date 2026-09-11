@@ -4,6 +4,9 @@ import { Thermometer, Timer, Box, Zap, ShieldCheck, AlertTriangle, Lightbulb, Pl
 import { useApp } from '../context/AppContext';
 import { ThreeDShelter } from '../components/ThreeDShelter';
 import { getUValue, formatDisplayNumber } from '../services/physicsEngine';
+
+const formatHeatLoss = (value) => `-${Math.abs(Number(value)).toFixed(0)}`;
+
 export const Dashboard = () => {
     const { shelter, simResult, activeHour, setActiveHour, thermalMassType, isDarkMode } = useApp();
     const [viewMode, setViewMode] = useState('physical');
@@ -368,11 +371,11 @@ export const Dashboard = () => {
               </div>
               <div className="flex flex-col gap-1 border-b border-zinc-100 dark:border-zinc-800 pb-3">
                 <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Ventilation</span>
-                <span className="text-sm font-bold text-orange-500 font-mono">-{current.ventilation_loss.toFixed(0)} W</span>
+                <span className="text-sm font-bold text-orange-500 font-mono">{formatHeatLoss(current.ventilation_loss)} W</span>
               </div>
               <div className="flex flex-col gap-1 pb-3">
                 <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Infiltration</span>
-                <span className="text-sm font-bold text-purple-500 font-mono">-{(current.ventilation_loss * 0.15).toFixed(0)} W</span>
+                <span className="text-sm font-bold text-purple-500 font-mono">{formatHeatLoss(current.ventilation_loss * 0.15)} W</span>
               </div>
               <div className="flex flex-col gap-1 pb-3">
                 <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Thermal Mass</span>
