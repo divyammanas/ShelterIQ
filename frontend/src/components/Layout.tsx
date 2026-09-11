@@ -97,9 +97,7 @@ export const Layout: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-zinc-50 dark:bg-[#09090b] text-zinc-950 dark:text-zinc-50 transition-colors duration-200">
       
-      {/* Sidebar - Desktop */}
       <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-[#0c0c0f] border-r border-zinc-200 dark:border-zinc-800 shrink-0">
-        {/* Brand */}
         <div className="flex items-center gap-3 p-6 border-b border-zinc-200 dark:border-zinc-800">
           <img src={logoImg} alt="ShelterIQ" className="w-10 h-10 rounded-xl object-cover shadow-md" />
           <div>
@@ -108,7 +106,6 @@ export const Layout: React.FC = () => {
           </div>
         </div>
 
-        {/* Navigation */}
         <nav className="flex-1 px-4 py-6 space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -131,14 +128,12 @@ export const Layout: React.FC = () => {
           })}
         </nav>
 
-        {/* Sidebar Footer */}
         <div className="p-6 border-t border-zinc-200 dark:border-zinc-800 text-[10px] text-zinc-400 font-medium">
           <p>ShelterIQ v1.2.0-Alpha</p>
           <p>© 2026 Passive Heat Lab</p>
         </div>
       </aside>
 
-      {/* Mobile Drawer Navigation */}
       <div className="md:hidden flex items-center justify-between px-6 py-4 bg-white dark:bg-[#0c0c0f] border-b border-zinc-200 dark:border-zinc-800">
         <div className="flex items-center gap-3">
           <img src={logoImg} alt="ShelterIQ" className="w-8 h-8 rounded-lg object-cover" />
@@ -152,7 +147,6 @@ export const Layout: React.FC = () => {
         </button>
       </div>
 
-      {/* Mobile Drawer Modal Overlay */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 flex md:hidden bg-zinc-950/50 backdrop-blur-sm">
           <div className="flex flex-col w-64 bg-white dark:bg-[#0c0c0f] p-6 border-r border-zinc-200 dark:border-zinc-800 animate-slide-in">
@@ -197,10 +191,8 @@ export const Layout: React.FC = () => {
         </div>
       )}
 
-      {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
         
-        {/* Header */}
         <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 border-b border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-[#0c0c0f]/50 backdrop-blur-md sticky top-0 z-40">
           <div>
             <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
@@ -212,13 +204,11 @@ export const Layout: React.FC = () => {
           </div>
           
           <div className="flex items-center gap-3 shrink-0 w-full sm:w-auto justify-end sm:justify-start">
-            {/* Status indicators */}
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
               <span className={`w-2 h-2 rounded-full ${isSimulating ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`} />
               <span>{isSimulating ? 'Simulating...' : 'Passive Model Ready'}</span>
             </div>
 
-            {/* Save Design */}
             <button 
               onClick={() => setShowSaveModal(true)}
               className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all duration-150 shadow-sm shadow-blue-500/10"
@@ -227,7 +217,6 @@ export const Layout: React.FC = () => {
               <span className="hidden sm:inline">Save Portfolio</span>
             </button>
 
-            {/* Theme toggle */}
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
               className="p-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#0c0c0f] text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors"

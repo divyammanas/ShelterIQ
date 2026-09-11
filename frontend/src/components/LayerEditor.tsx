@@ -69,7 +69,6 @@ const SortableLayerRow: React.FC<SortableLayerRowProps> = ({
       style={style}
       className="flex items-center gap-3 p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl hover:shadow-sm transition-all duration-150"
     >
-      {/* Drag Handle */}
       <div 
         {...attributes} 
         {...listeners} 
@@ -78,12 +77,10 @@ const SortableLayerRow: React.FC<SortableLayerRowProps> = ({
         <GripVertical size={16} />
       </div>
 
-      {/* Index */}
       <div className="text-xs font-bold text-zinc-400 dark:text-zinc-500 w-6">
         #{idx + 1}
       </div>
 
-      {/* Material Selector */}
       <div className="flex-1 min-w-[120px]">
         <select
           value={Object.keys(mdb.db).find(k => mdb.db[k].name === layer.material.name) || ''}
@@ -98,7 +95,6 @@ const SortableLayerRow: React.FC<SortableLayerRowProps> = ({
         </select>
       </div>
 
-      {/* Thickness Input */}
       <div className="flex items-center gap-1.5 shrink-0 w-24">
         <input
           type="number"
@@ -112,7 +108,6 @@ const SortableLayerRow: React.FC<SortableLayerRowProps> = ({
         <span className="text-xs text-zinc-400 font-medium">m</span>
       </div>
 
-      {/* Action Buttons */}
       <div className="flex items-center gap-1 shrink-0">
         <button
           onClick={onMoveUp}
@@ -258,7 +253,6 @@ export const LayerEditor: React.FC = () => {
   return (
     <div className="flex flex-col gap-6">
       
-      {/* Assembly tabs */}
       <div className="flex bg-zinc-100 dark:bg-zinc-950 p-1 rounded-xl w-fit self-start border border-zinc-200/50 dark:border-zinc-800/30">
         {(['walls', 'roof', 'floor'] as const).map((tab) => (
           <button
@@ -279,7 +273,6 @@ export const LayerEditor: React.FC = () => {
         Layers assembly order is listed from <strong>Outside (top)</strong> to <strong>Inside (bottom)</strong>. Drag items to reorder.
       </div>
 
-      {/* Layers list */}
       <DndContext 
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -310,7 +303,6 @@ export const LayerEditor: React.FC = () => {
         </SortableContext>
       </DndContext>
 
-      {/* Add layer button */}
       <button 
         onClick={handleAddLayer}
         className="flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#0c0c0f] hover:bg-zinc-50 dark:hover:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-xs font-semibold px-4 py-2.5 rounded-xl transition-all w-fit"
@@ -318,7 +310,6 @@ export const LayerEditor: React.FC = () => {
         <Plus size={14} /> Add Layer
       </button>
 
-      {/* Cross section preview */}
       <div className="border-t border-zinc-200 dark:border-zinc-800/80 pt-6">
         <h4 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-3">
           Assembly Cross-Section Preview (Total: {totalThickness.toFixed(2)}m)

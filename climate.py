@@ -47,7 +47,6 @@ def synthetic_ladakh_winter(duration_h: float = 72, dt_h: float = 1.0,
     hod = t % 24  # hour of day
 
     T_out = T_mean + T_amp * np.sin(2 * np.pi * (hod - 6) / 24 - np.pi / 2)
-    # daytime solar bell curve, zero at night
     daylight = np.clip(np.sin(np.pi * (hod - 6) / 12), 0, None)
     ghi = ghi_peak * daylight ** 1.3
 

@@ -56,10 +56,6 @@ class Material:
         return self.cp
 
 
-# ---------------------------------------------------------------------------
-# Default database — representative values, adjust for lab-verified data.
-# ---------------------------------------------------------------------------
-
 DEFAULT_MATERIALS: Dict[str, Material] = {
     "concrete_dense":   Material("Dense Concrete", k=1.75, rho=2300, cp=1000, alpha=0.65),
     "concrete_light":   Material("Lightweight Concrete", k=0.38, rho=1000, cp=1000, alpha=0.6),

@@ -60,14 +60,12 @@ export const PortfolioCompare: React.FC = () => {
   return (
     <div className="flex flex-col gap-6">
       
-      {/* Comparative Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {savedDesigns.map((design, idx) => (
           <div 
             key={idx}
             className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-4 relative overflow-hidden"
           >
-            {/* Rank badge */}
             <div className="absolute top-4 right-4 flex items-center gap-1">
               <span className="text-[10px] font-extrabold text-zinc-400 uppercase">Rank #{idx + 1}</span>
             </div>
@@ -77,7 +75,6 @@ export const PortfolioCompare: React.FC = () => {
               <h4 className="font-extrabold text-sm text-zinc-950 dark:text-white truncate">{design.name}</h4>
             </div>
 
-            {/* Score metric split */}
             <div className="flex items-center gap-4 bg-zinc-50 dark:bg-zinc-900/60 p-3 rounded-xl border border-zinc-100 dark:border-zinc-800/80">
               <div className="flex flex-col">
                 <span className="text-[8px] font-bold text-zinc-400 uppercase tracking-wider">Composite Score</span>
@@ -88,7 +85,6 @@ export const PortfolioCompare: React.FC = () => {
               </div>
             </div>
 
-            {/* Parameter grid */}
             <div className="grid grid-cols-3 gap-3 text-[10px] text-zinc-500 dark:text-zinc-400 font-medium">
               <div className="flex flex-col gap-1">
                 <span className="text-zinc-400 uppercase text-[8px] font-bold">Comfort Hours</span>
@@ -113,7 +109,6 @@ export const PortfolioCompare: React.FC = () => {
         )}
       </div>
 
-      {/* Portfolio Performance Matrix Table */}
       <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden flex flex-col">
         <div className="flex items-center justify-between p-5 border-b border-zinc-200 dark:border-zinc-800">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2">

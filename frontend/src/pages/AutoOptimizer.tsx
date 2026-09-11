@@ -78,7 +78,6 @@ export const AutoOptimizer: React.FC = () => {
 
   const handleApplyPreset = (params: typeof optResults[0]['params']) => {
     loadDesignPreset(params);
-    // Auto-run simulation on the loaded design preset
     setTimeout(() => runActiveSimulation(), 150);
   };
 
@@ -97,7 +96,6 @@ export const AutoOptimizer: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       
-      {/* Left Column - Configurations & seeded logs */}
       <div className="lg:col-span-5 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-6">
         <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
           <ListCollapse size={16} className="text-blue-500" /> Search Combinatorics
@@ -126,7 +124,6 @@ export const AutoOptimizer: React.FC = () => {
           </div>
         </div>
 
-        {/* Action Triggers */}
         <div className="flex flex-col sm:flex-row gap-3">
           <button
             onClick={runOptimizationMC}
@@ -153,7 +150,6 @@ export const AutoOptimizer: React.FC = () => {
           />
         </div>
 
-        {/* Logs Preview terminal */}
         <div className="flex flex-col gap-2">
           <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Optimizer Progress Logs</label>
           <pre 
@@ -166,7 +162,6 @@ export const AutoOptimizer: React.FC = () => {
 
       </div>
 
-      {/* Right Column - Top Picks Cards */}
       <div className="lg:col-span-7 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-6">
         <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
           <Award size={16} className="text-blue-500" /> Top 5 Optimized Passive Shelter Picks
@@ -188,7 +183,6 @@ export const AutoOptimizer: React.FC = () => {
                   </h4>
                 </div>
 
-                {/* Sub specifications layout */}
                 <div className="flex flex-wrap gap-1.5 text-[9px] font-extrabold uppercase text-zinc-400">
                   <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{result.params.orient}° Azimuth</span>
                   <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{(result.params.win_f*100).toFixed(0)}% Glazing</span>

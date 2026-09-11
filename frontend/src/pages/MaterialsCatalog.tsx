@@ -6,7 +6,6 @@ import type { Material } from '../services/physicsEngine';
 export const MaterialsCatalog: React.FC = () => {
   const { mdb, runActiveSimulation } = useApp();
   
-  // Custom Material Form state
   const [name, setName] = useState('');
   const [k, setK] = useState('0.12');
   const [rho, setRho] = useState('800');
@@ -16,7 +15,6 @@ export const MaterialsCatalog: React.FC = () => {
   const [latent, setLatent] = useState('160000');
   const [mushBand, setMushBand] = useState('2.0');
   
-  // Local trigger to force-update grid listing
   const [refreshKey, setRefreshKey] = useState(0);
 
   const handleAddMaterial = (e: React.FormEvent) => {
@@ -49,7 +47,6 @@ export const MaterialsCatalog: React.FC = () => {
 
     mdb.add(key, newMat);
     
-    // Reset form
     setName('');
     setK('0.12');
     setRho('800');
@@ -59,10 +56,8 @@ export const MaterialsCatalog: React.FC = () => {
     setLatent('160000');
     setMushBand('2.0');
     
-    // Refresh UI grid and lists
     setRefreshKey(prev => prev + 1);
     
-    // Trigger simulation rebuild
     setTimeout(() => runActiveSimulation(), 100);
   };
 
@@ -89,7 +84,6 @@ export const MaterialsCatalog: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       
-      {/* Left Column - Register Custom Material Form */}
       <form 
         onSubmit={handleAddMaterial}
         className="lg:col-span-4 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-4"
@@ -144,7 +138,6 @@ export const MaterialsCatalog: React.FC = () => {
           />
         </div>
 
-        {/* PCM Switch Toggle */}
         <div className="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl mt-2">
           <div>
             <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Phase Change Material (PCM)</span>
@@ -161,7 +154,6 @@ export const MaterialsCatalog: React.FC = () => {
           </label>
         </div>
 
-        {/* Dynamic PCM Fields */}
         {isPcm && (
           <div className="flex flex-col gap-4 p-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl animate-fade-in">
             <div className="flex flex-col gap-1.5">

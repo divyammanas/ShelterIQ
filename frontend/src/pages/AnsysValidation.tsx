@@ -71,10 +71,8 @@ export const AnsysValidation: React.FC = () => {
   return (
     <div className="flex flex-col gap-6">
       
-      {/* Upper Grid Split */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        {/* Validation Chart */}
         <div className="lg:col-span-8 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-4 flex items-center gap-2">
             <LineChart size={16} className="text-blue-500" /> Transient Profile Validation
@@ -88,7 +86,6 @@ export const AnsysValidation: React.FC = () => {
           </div>
         </div>
 
-        {/* Residuals Summary report */}
         <div className="lg:col-span-4 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-6 self-stretch">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
             <FileText size={16} className="text-blue-500" /> Error Residual Report
@@ -123,7 +120,6 @@ export const AnsysValidation: React.FC = () => {
 
       </div>
 
-      {/* Specifications */}
       <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
         <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-4 flex items-center gap-2">
           <Settings size={16} className="text-blue-500" /> ANSYS Fluent CFD Simulation Specification

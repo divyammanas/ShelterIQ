@@ -58,10 +58,8 @@ export const ShelterDesign: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       
-      {/* Left Column - Geometry and Dimensions */}
       <div className="lg:col-span-6 flex flex-col gap-6">
         
-        {/* Envelope Dimensions Card */}
         <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-4">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
             <LayoutGrid size={16} className="text-blue-500" /> Envelope Dimensions
@@ -174,7 +172,6 @@ export const ShelterDesign: React.FC = () => {
           </div>
         </div>
 
-        {/* South Window Openings Card */}
         <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-4">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
             <AppWindow size={16} className="text-blue-500" /> South Window Openings
@@ -241,7 +238,6 @@ export const ShelterDesign: React.FC = () => {
           </div>
         </div>
 
-        {/* Interior Thermal Mass Card */}
         <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-4">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
             <Cpu size={16} className="text-blue-500" /> Interior Thermal Mass
@@ -291,7 +287,6 @@ export const ShelterDesign: React.FC = () => {
 
       </div>
 
-      {/* Right Column - Envelope Layers Assembly */}
       <div className="lg:col-span-6 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
           <Layers size={16} className="text-blue-500" /> Envelope Layers Assembly

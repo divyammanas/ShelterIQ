@@ -26,7 +26,6 @@ export const Dashboard: React.FC = () => {
     isDarkMode
   } = useApp();
 
-  // 3D Canvas visualizer toggles
   const [viewMode, setViewMode] = useState<'physical' | 'thermal'>('physical');
   const [envelopeOpacity, setEnvelopeOpacity] = useState<number>(0.75);
   const [visibilityStates, setVisibilityStates] = useState({
@@ -41,7 +40,6 @@ export const Dashboard: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const playTimerRef = useRef<number | null>(null);
 
-  // Play timeline animation
   useEffect(() => {
     if (isPlaying) {
       playTimerRef.current = window.setInterval(() => {
@@ -70,7 +68,6 @@ export const Dashboard: React.FC = () => {
     }));
   };
 
-  // Get active values at the slider's hour index
   const getActiveTimestepData = () => {
     if (!simResult || simResult.t_hours.length === 0) {
       return {
@@ -105,11 +102,9 @@ export const Dashboard: React.FC = () => {
 
   const current = getActiveTimestepData();
 
-  // Envelope thermal properties
   const getWallU = () => getUValue(shelter.walls.S || []).toFixed(2);
   const getRoofU = () => getUValue(shelter.roof || []).toFixed(2);
 
-  // Recommendations calculation
   const generateRecommendations = () => {
     if (!simResult) return [];
     const comfort_pct = (simResult.comfort_summary_hours.comfortable / 72.0) * 100;
@@ -301,7 +296,7 @@ export const Dashboard: React.FC = () => {
         {
           name: 'Conduction',
           type: 'line',
-          data: simResult.conduction_loss_W.map(v => -v), // map loss as negative flow direction
+          data: simResult.conduction_loss_W.map(v => -v),
           smooth: true,
           showSymbol: false,
           lineStyle: { width: 2 }
@@ -326,12 +321,10 @@ export const Dashboard: React.FC = () => {
     };
   };
 
-  // Radial points gauge parameters
   const score = simResult ? Number(simResult.design_score.toFixed(1)) : 0;
   const comfortHours = simResult ? Number(simResult.comfort_summary_hours.comfortable.toFixed(1)) : 0;
   const heatingEnergy = simResult ? Number(simResult.heating_energy_kWh.toFixed(2)) : 0;
   
-  // Calculate stability (standard deviation)
   const stdVal = simResult ? Math.sqrt(
     simResult.T_air.reduce((a, b) => {
       const mean = simResult.T_air.reduce((s, x) => s + x, 0) / simResult.T_air.length;
@@ -342,7 +335,6 @@ export const Dashboard: React.FC = () => {
   const minTemp = simResult ? simResult.min_T_air.toFixed(1) : '-';
   const maxTemp = simResult ? simResult.max_T_air.toFixed(1) : '-';
 
-  // SVG Gauge calculations
   const radius = 64;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (Math.min(score, 100) / 100) * circumference;
@@ -350,13 +342,10 @@ export const Dashboard: React.FC = () => {
   return (
     <div className="flex flex-col gap-6">
       
-      {/* Upper Grid Split */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
         
-        {/* Left Column (Charts, KPIs, Heat Balance) */}
         <div className="xl:col-span-7 flex flex-col gap-6">
           
-          {/* Temperature Profile Card */}
           <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
             <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-4 flex items-center gap-2">
               <Thermometer size={16} className="text-red-500" /> Temperature Profile
@@ -374,7 +363,6 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Compact KPIs Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex flex-col gap-1 shadow-sm">
               <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Indoor Min</span>
@@ -394,7 +382,6 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Instantaneous Heat Balance Card */}
           <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
             <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-4 flex items-center gap-2">
               <Zap size={16} className="text-blue-500" /> Instantaneous Heat Balance (Hour {activeHour.toFixed(1)}h)
@@ -433,7 +420,6 @@ export const Dashboard: React.FC = () => {
 
         </div>
 
-        {/* Right Column (3D Interactive Model Panel) */}
         <div className="xl:col-span-5 flex flex-col gap-4 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm self-stretch">
           <div className="flex items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-4">
             <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2">
@@ -467,7 +453,6 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* 3D Canvas element wrapper */}
           <div className="h-[320px] w-full relative">
             <ThreeDShelter
               viewMode={viewMode}
@@ -477,7 +462,6 @@ export const Dashboard: React.FC = () => {
             />
           </div>
 
-          {/* Toolbar Controls */}
           <div className="flex flex-col gap-3 p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl">
             <div className="flex flex-wrap gap-3 items-center justify-between">
               
@@ -516,7 +500,6 @@ export const Dashboard: React.FC = () => {
               </div>
             </div>
 
-            {/* Visibility checks */}
             <div className="flex flex-wrap gap-1.5 border-t border-zinc-200 dark:border-zinc-800 pt-3">
               {(['roof', 'walls', 'floor', 'openings', 'mass', 'arrows'] as const).map((key) => (
                 <button
@@ -534,7 +517,6 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Timeline Slider */}
           <div className="flex items-center gap-4 mt-2">
             <span className="text-xs font-bold text-zinc-400 dark:text-zinc-500">Hour:</span>
             <input
@@ -551,7 +533,6 @@ export const Dashboard: React.FC = () => {
 
       </div>
 
-      {/* Dynamic Summary Card */}
       <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
         <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-4 flex items-center gap-2">
           <Lightbulb size={16} className="text-amber-500" /> Current Design Specifications Summary
@@ -586,10 +567,8 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Grid Row (Flow breakdown & Score Gauge & Advisor Recommendations) */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
         
-        {/* Left: Flows Chart */}
         <div className="xl:col-span-7 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-4 flex items-center gap-2">
             <Timer size={16} className="text-blue-500" /> Energy Flow Breakdown
@@ -607,10 +586,8 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Right: Gauge & Advisor splits */}
         <div className="xl:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-6 self-stretch">
           
-          {/* Design Score Gauge */}
           <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col items-center justify-center relative">
             <div className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 self-start mb-2 flex items-center gap-1.5">
               <ShieldCheck size={14} className="text-blue-500" /> Design Score

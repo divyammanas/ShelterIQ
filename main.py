@@ -325,8 +325,6 @@ def get_optimization_results():
 
 
 if HAS_REACT_BUILD:
-    assets_dir = os.path.join(REACT_DIST, "assets")
-    if os.path.isdir(assets_dir):
     @app.get("/Icon.jpeg")
     def get_icon_jpeg():
         path = os.path.join(REACT_DIST, "Icon.jpeg")

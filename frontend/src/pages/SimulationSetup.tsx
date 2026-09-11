@@ -104,7 +104,6 @@ export const SimulationSetup: React.FC = () => {
   return (
     <div className="flex flex-col gap-6">
       
-      {/* Settings Grid */}
       <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
           <Sliders size={16} className="text-blue-500" /> Run Settings
@@ -183,7 +182,6 @@ export const SimulationSetup: React.FC = () => {
           </div>
         </div>
 
-        {/* Auxiliary Heating Setpoint */}
         <div className="border-t border-zinc-200 dark:border-zinc-800/80 pt-4 mt-2">
           <div className="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl">
             <div className="flex items-start gap-2.5">
@@ -223,7 +221,6 @@ export const SimulationSetup: React.FC = () => {
         </div>
       </div>
 
-      {/* Log Preview Table */}
       <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden flex flex-col">
         <div className="flex items-center justify-between p-5 border-b border-zinc-200 dark:border-zinc-800">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2">

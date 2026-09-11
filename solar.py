@@ -27,8 +27,6 @@ def surface_irradiance(ghi: float, hod: float, surface_orientation_deg: float,
     if ghi <= 0:
         return 0.0
 
-    # crude sun position: hour angle from solar noon (15 deg/hr), fixed
-    # declination for a winter design period (~ -20 deg, Ladakh winter)
     hour_angle_deg = 15.0 * (hod - 12.0)
     declination_deg = -20.0
     lat = np.radians(latitude_deg)
@@ -39,7 +37,6 @@ def surface_irradiance(ghi: float, hod: float, surface_orientation_deg: float,
     sin_alt = np.clip(sin_alt, 0.001, 1.0)
     solar_altitude = np.arcsin(sin_alt)
 
-    # solar azimuth (0=N,90=E,180=S,270=W), simplified
     cos_az = (np.sin(decl) - np.sin(lat) * sin_alt) / (np.cos(lat) * np.cos(solar_altitude) + 1e-9)
     cos_az = np.clip(cos_az, -1, 1)
     solar_azimuth = 180.0 + np.degrees(np.sign(ha) * np.arccos(cos_az)) if ha != 0 else 180.0

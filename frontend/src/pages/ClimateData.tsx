@@ -14,7 +14,6 @@ export const ClimateData: React.FC = () => {
 
   const handleSliderChange = (key: keyof typeof climateParams, value: number) => {
     updateClimateParams({ [key]: value });
-    // Trigger simulation rebuild after updating parameters
     setTimeout(() => runActiveSimulation(), 100);
   };
 
@@ -34,7 +33,6 @@ export const ClimateData: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       
-      {/* Left Column - Sliders */}
       <div className="lg:col-span-8 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-6">
         <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
           <Sun size={16} className="text-yellow-500" /> Site Climate Properties
@@ -145,7 +143,6 @@ export const ClimateData: React.FC = () => {
           </div>
         </div>
 
-        {/* Ladakh Info block */}
         <div className="mt-4 p-4 bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/50 dark:border-blue-900/30 rounded-xl text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed flex gap-3">
           <Info size={16} className="text-blue-500 shrink-0 mt-0.5" />
           <div>
@@ -157,7 +154,6 @@ export const ClimateData: React.FC = () => {
         </div>
       </div>
 
-      {/* Right Column - File Upload */}
       <div className="lg:col-span-4 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-6">
         <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
           <Upload size={16} className="text-blue-500" /> Import Custom Weather
