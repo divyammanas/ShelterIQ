@@ -76,9 +76,16 @@ export const SimulationSetup = () => {
     const sampledRows = getSampledRows();
     return (<div className="flex flex-col gap-6">
       
+<<<<<<< Updated upstream:frontend/src/pages/SimulationSetup.jsx
       <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
           <Sliders size={16} className="text-blue-500"/> Run Settings
+=======
+      {/* Settings Grid */}
+      <div className="bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl p-5 shadow-xs flex flex-col gap-4">
+        <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2 border-b border-slate-200 dark:border-[#1e2638] pb-3 shrink-0">
+          <Sliders size={15} className="text-blue-500" /> Solver Parameters
+>>>>>>> Stashed changes:frontend/src/pages/SimulationSetup.tsx
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -150,10 +157,18 @@ export const SimulationSetup = () => {
         </div>
       </div>
 
+<<<<<<< Updated upstream:frontend/src/pages/SimulationSetup.jsx
       <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden flex flex-col">
         <div className="flex items-center justify-between p-5 border-b border-zinc-200 dark:border-zinc-800">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2">
             <Table size={16} className="text-blue-500"/> Transient Log Preview
+=======
+      {/* Log Preview Table */}
+      <div className="bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl shadow-xs overflow-hidden flex flex-col">
+        <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-[#1e2638]">
+          <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
+            <Table size={15} className="text-blue-500" /> Transient Solution Matrix Preview
+>>>>>>> Stashed changes:frontend/src/pages/SimulationSetup.tsx
           </h3>
           <button onClick={exportTimeseriesCSV} disabled={!simResult} className="flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900 disabled:opacity-50 text-zinc-700 dark:text-zinc-300 text-xs font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 shadow-sm">
             <FileSpreadsheet size={14} className="text-emerald-500"/> Export Full CSV

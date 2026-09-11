@@ -16,8 +16,13 @@
 
     <aside>
       <div class="brand-section">
-        <div class="brand-logo">IQ</div>
-        <div class="brand-name">Shelter<span>IQ</span></div>
+        <div class="brand-logo">
+          <img src="frontend/Icon.jpeg" alt="ShelterIQ">
+        </div>
+        <div class="brand-info">
+          <div class="brand-name">Shelter<span>IQ</span></div>
+          <div class="brand-sub">Passive Heat Lab</div>
+        </div>
       </div>
 
       <nav>
@@ -37,10 +42,10 @@
           <i class="fas fa-play"></i> Simulation Setup
         </a>
         <a class="nav-item" data-tab="comparison">
-          <i class="fas fa-columns"></i> Portfolio Compare
+          <i class="fas fa-columns"></i> Design Compare
         </a>
         <a class="nav-item" data-tab="optimization">
-          <i class="fas fa-magic"></i> Auto-Optimizer
+          <i class="fas fa-sliders-h"></i> Parametric Optimizer
         </a>
         <a class="nav-item" data-tab="validation">
           <i class="fas fa-shield-alt"></i> ANSYS Validation
@@ -48,7 +53,7 @@
       </nav>
 
       <div class="sidebar-footer">
-        <p>ShelterIQ</p>
+        <p style="font-weight: 600; color: var(--text-muted);">ShelterIQ</p>
         <p>© 2026 Elite Force</p>
       </div>
     </aside>
@@ -63,7 +68,7 @@
         <div class="header-controls">
           <div class="status-badge">
             <span class="status-indicator"></span>
-            <span>Passive Model Ready</span>
+            <span>Simulation Engine: Ready</span>
           </div>
           <button class="btn btn-primary" id="btn-save-design">
             <i class="fas fa-save"></i> Save Portfolio
@@ -301,7 +306,7 @@
 
             <div class="ui-card" style="display: flex; flex-direction: column;">
               <div class="ui-card-header">
-                <span class="ui-card-title"><i class="fas fa-lightbulb"></i> Advisor Recommendations</span>
+                <span class="ui-card-title"><i class="fas fa-clipboard-check"></i> Thermal Diagnostics & Design Insights</span>
               </div>
               <div class="ui-card-body" id="recommendations-list" style="overflow-y: auto; max-height: 200px; padding: 12px; flex-grow: 1;">
               </div>
@@ -391,7 +396,7 @@
               </div>
               <div
                 style="margin-top: 16px; padding: 14px; background-color: var(--accent-light); border-radius: var(--radius-md); font-size: 12px; color: var(--text-muted); line-height: 1.4;">
-                <strong><i class="fas fa-magic" style="color: var(--accent);"></i> Dynamic Timeseries Mapping:</strong>
+                <strong><i class="fas fa-chart-line" style="color: var(--accent);"></i> Dynamic Timeseries Mapping:</strong>
                 <p>Uploading a custom CSV will instantly override the active climate model and re-simulate comfort
                   performance under your specific localized meteorological data.</p>
               </div>
@@ -794,13 +799,12 @@
           <!-- Right: Optimized results -->
           <div class="ui-card">
             <div class="ui-card-header">
-              <span class="ui-card-title"><i class="fas fa-trophy"></i> Top 5 Optimized Passive Shelter Picks</span>
+              <span class="ui-card-title"><i class="fas fa-layer-group"></i> Optimal Evaluated Envelope Assemblies</span>
             </div>
             <div class="ui-card-body" id="opt-results-list" class="opt-results-list">
               <div style="text-align: center; color: var(--text-muted); padding: 48px 0;">
-                <i class="fas fa-magic" style="font-size: 40px; color: var(--border); margin-bottom: 16px;"></i>
-                <p>Click "Run Optimization" on the left panel to execute random-search combined with local-refinement on
-                  the simulation engine.</p>
+                <i class="fas fa-calculator" style="font-size: 36px; color: var(--text-dim); margin-bottom: 16px;"></i>
+                <p>Execute seeded search space simulation to rank envelope parametric configurations by comfort performance.</p>
               </div>
             </div>
           </div>
