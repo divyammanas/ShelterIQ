@@ -57,7 +57,6 @@ def main():
     climate = synthetic_ladakh_winter(duration_h=72, dt_h=0.5)
     comfort_band = ComfortBand(t_min=16.0, t_max=26.0, t_marginal_low=8.0, t_marginal_high=30.0)
 
-    # 1) Baseline transient simulation --------------------------------
     baseline = build_baseline_shelter(mdb)
     water_mass = AddedMass("Water drums (thermal mass)", mdb.get("water"), volume_m3=0.6)
     result = simulate(baseline, climate, dt_h=0.5, added_masses=[water_mass],
@@ -68,14 +67,12 @@ def main():
     print(f"Indoor T range: {result.min_T_air:.1f}C to {result.max_T_air:.1f}C")
     print(f"Comfort hours: {result.comfort_summary_hours}")
 
-    # also run WITH ideal auxiliary heating to report heating demand
     result_heated = simulate(baseline, climate, dt_h=0.5, added_masses=[water_mass],
                               comfort_band=comfort_band, heating_setpoint_C=16.0,
                               T_air0=-2.0, T_mass0=-2.0)
     print(f"Estimated heating energy to hold 16C setpoint: "
           f"{result_heated.heating_energy_kWh:.2f} kWh over {climate.t_hours[-1]:.0f}h")
 
-    # --- dashboard plot ---
     fig, axs = plt.subplots(4, 1, figsize=(11, 13), sharex=True)
 
     axs[0].plot(result.t_hours, result.T_out, label="Ambient T (C)", color="tab:blue")
@@ -120,7 +117,6 @@ def main():
         "comfort_status": result.comfort_status,
     }).to_csv("/home/claude/thermal_engine/simulation_timeseries.csv", index=False)
 
-    # 2) Design comparison module --------------------------------------
     struct_alt = mdb.get("rammed_earth")
     insulation_thick = mdb.get("xps_insulation")
     alt_shelter = Shelter(length=6.0, width=4.0, height=2.6, shape="flat_roof_box",
@@ -148,7 +144,6 @@ def main():
     print("\n=== Design comparison ===")
     print(comp_df.to_string(index=False))
 
-    # 3) Optimization engine ---------------------------------------------
     space = SearchSpace(
         insulation_keys=["eps_insulation", "xps_insulation", "mineral_wool"],
         insulation_thicknesses_m=[0.05, 0.10, 0.15],

@@ -104,13 +104,11 @@ def simulate(shelter: Shelter, climate: ClimateSeries, dt_h: float = 0.5,
     windows = [o for o in shelter.openings if not o.is_door]
     doors = [o for o in shelter.openings if o.is_door]
 
-    # Static conductances -----------------------------------------------
     H_win_total = sum(o.u_value() * o.area for o in windows + doors)
     H_ve = 0.34 * shelter.ach * shelter.volume()  # W/K  (0.34 ~ rho*cp/3600)
     U_A = {el.name: (el.u_value(), el.area) for el in elements}
     H_ms = H_MS * (shelter.wall_area_net() + shelter.roof.area)  # internal surface area coupling
 
-    # Capacitances --------------------------------------------------------
     C_air = RHO_AIR * CP_AIR * shelter.volume()
     C_mass = sum(el.areal_heat_capacity() * el.area for el in elements)
     C_mass += sum(m.heat_capacity() for m in added_masses)
@@ -142,7 +140,6 @@ def simulate(shelter: Shelter, climate: ClimateSeries, dt_h: float = 0.5,
         # pyrefly: ignore [bad-argument-type]
         h_out_dyn = wind_film_coefficient(cl["wind"])
 
-        # --- sol-air temps + opaque conduction target for the mass node ---
         Hop_sum = 0.0
         Hop_Tsolair_sum = 0.0
         for el in elements:
@@ -164,7 +161,6 @@ def simulate(shelter: Shelter, climate: ClimateSeries, dt_h: float = 0.5,
             Hop_sum += U * A
             Hop_Tsolair_sum += U * A * T_solair
 
-        # --- window solar gain (direct, split air/mass) ---
         Q_win_solar = 0.0
         for w in windows:
             # pyrefly: ignore [bad-argument-type]
@@ -173,7 +169,6 @@ def simulate(shelter: Shelter, climate: ClimateSeries, dt_h: float = 0.5,
         Q_solar_air = 0.7 * Q_win_solar + internal_gains_W
         Q_solar_mass = 0.3 * Q_win_solar
 
-        # --- implicit (backward Euler) 2x2 solve ---
         # [ (C_air/dt + H_ve+H_win+H_ms)   -H_ms            ] [Ta]   [C_air/dt*Ta_old + (H_ve+H_win)*Tout + Qsolar_air]
         # [ -H_ms          (C_mass/dt + Hop_sum + H_ms)      ] [Tm] = [C_mass/dt*Tm_old + Hop_Tsolair_sum + Qsolar_mass]
         a11 = C_air / dt_sec + H_ve + H_win_total + H_ms
@@ -187,7 +182,6 @@ def simulate(shelter: Shelter, climate: ClimateSeries, dt_h: float = 0.5,
         b = np.array([b1, b2])
         Ta_new, Tm_new = np.linalg.solve(A, b)
 
-        # --- optional ideal auxiliary heating to hold setpoint ---
         q_heat = 0.0
         if heating_setpoint_C is not None and Ta_new < heating_setpoint_C:
             # re-solve with Ta forced to setpoint, back out required q_heat
@@ -206,7 +200,6 @@ def simulate(shelter: Shelter, climate: ClimateSeries, dt_h: float = 0.5,
         T_air[k], T_mass[k] = Ta_new, Tm_new
         heating_power[k] = q_heat
 
-        # --- bookkeeping for dashboards ---
         solar_gain[k] = Q_win_solar + Hop_Tsolair_sum - Hop_sum * T_out_k  # solar contribution vs a no-sun baseline
         cond_opaque_loss = Hop_sum * (Tm_new - T_out_k)
         cond_window_loss = H_win_total * (Ta_new - T_out_k)

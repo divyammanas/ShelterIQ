@@ -5,11 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ShelterIQ</title>
-  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="styles.css">
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="icon" href="frontend/Icon.jpeg">  
 </head>
@@ -17,7 +14,6 @@
 <body>
   <div id="app-container">
 
-    <!-- Sidebar Navigation -->
     <aside>
       <div class="brand-section">
         <div class="brand-logo">IQ</div>
@@ -57,10 +53,8 @@
       </div>
     </aside>
 
-    <!-- Main Content Area -->
     <main>
 
-      <!-- Top header bar -->
       <header>
         <div class="header-title-area">
           <h1 id="header-design-name">Passive Shelter Design – Extreme Climate</h1>
@@ -77,17 +71,12 @@
         </div>
       </header>
 
-      <!-- ====================================================================
-           1. Dashboard Panel
-           ==================================================================== -->
       <div class="content-panel active" id="dashboard-panel">
 
         <div class="dashboard-grid-container" style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; align-items: start;">
           
-          <!-- Left Column -->
           <div class="dashboard-col-left" style="display: flex; flex-direction: column; gap: 20px;">
             
-            <!-- Temperature Profile Card -->
             <div class="ui-card">
               <div class="ui-card-header">
                 <span class="ui-card-title"><i class="fas fa-temperature-high"></i> Temperature Profile</span>
@@ -97,7 +86,6 @@
               </div>
             </div>
 
-            <!-- Compact KPI Cards -->
             <div class="compact-kpi-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
               <div class="kpi-card-compact" style="background-color: var(--bg-secondary); border: 1px solid var(--border-light); padding: 12px; border-radius: var(--radius-md); display: flex; flex-direction: column; gap: 4px;">
                 <span class="kpi-lbl" style="font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Indoor Min</span>
@@ -117,7 +105,6 @@
               </div>
             </div>
 
-            <!-- Heat Balance Card -->
             <div class="ui-card">
               <div class="ui-card-header">
                 <span class="ui-card-title"><i class="fas fa-balance-scale"></i> Instantaneous Heat Balance</span>
@@ -317,7 +304,6 @@
                 <span class="ui-card-title"><i class="fas fa-lightbulb"></i> Advisor Recommendations</span>
               </div>
               <div class="ui-card-body" id="recommendations-list" style="overflow-y: auto; max-height: 200px; padding: 12px; flex-grow: 1;">
-                <!-- Recommendations populated dynamically -->
               </div>
             </div>
           </div>
@@ -325,9 +311,6 @@
 
       </div>
 
-      <!-- ====================================================================
-           2. Climate Data Panel
-           ==================================================================== -->
       <div class="content-panel" id="climate-panel">
         <div class="dashboard-row">
 
@@ -418,9 +401,6 @@
         </div>
       </div>
 
-      <!-- ====================================================================
-           3. Shelter Design Panel
-           ==================================================================== -->
       <div class="content-panel" id="design-panel">
         <div class="dashboard-row">
 
@@ -549,44 +529,6 @@
                 Layers order is from <strong>Outside (top)</strong> to <strong>Inside (bottom)</strong>.
               </div>
 
-              <!-- Dynamic rows -->
-              <div id="layer-list" class="layers-list">
-                <!-- Javascript will render rows -->
-              </div>
-
-              <button class="btn btn-secondary" id="btn-add-layer" style="margin-top: 12px; align-self: flex-start;">
-                <i class="fas fa-plus"></i> Add Layer
-              </button>
-
-              <!-- Visual thickness block -->
-              <div style="margin-top: 24px; border-top: 1px solid var(--border-light); padding-top: 16px;">
-                <span style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Layers Assembly Cross-Section
-                  Preview:</span>
-                <div class="layer-summary-bar" id="layer-summary-bar"></div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- ====================================================================
-           4. Materials Panel
-           ==================================================================== -->
-      <div class="content-panel" id="materials-panel">
-        <div class="dashboard-row">
-
-          <!-- Custom Material Creator -->
-          <div class="ui-card" style="align-self: flex-start;">
-            <div class="ui-card-header">
-              <span class="ui-card-title"><i class="fas fa-calculator"></i> Register Custom Material</span>
-            </div>
-            <div class="ui-card-body">
-              <div class="form-grid" style="grid-template-columns: 1fr;">
-                <div class="form-group">
-                  <label>Material Name</label>
-                  <input type="text" id="mat-name" placeholder="e.g. Hempcrete / Straw clay">
                 </div>
                 <div class="form-group">
                   <label>Conductivity (k) [W/mK]</label>

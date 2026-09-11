@@ -57,7 +57,6 @@ class BuildingElement:
         kappa = 0.0
         depth_used = 0.0
         max_depth = 0.10  # m — typical thermal penetration depth over a day
-        # layers ordered outside->inside; walk from the inside (reverse)
         for l in reversed(self.layers):
             remaining = max_depth - depth_used
             if remaining <= 0:
@@ -139,7 +138,6 @@ class Shelter:
                                 floor_layers: List[Layer]):
         """Convenience: same layer stack on all 4 walls, split by compass face."""
         face_bearings = {"N": 0.0, "E": 90.0, "S": 180.0, "W": 270.0}
-        # allocate openings' area away from gross per-face area proportionally
         per_face_area = self.wall_area_gross() / 4.0
         for face, bearing in face_bearings.items():
             openings_here = [o for o in self.openings if o.orientation_deg == bearing]
