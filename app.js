@@ -65,7 +65,6 @@ function parseCSV(text) {
   return result;
 }
 
-// Predefined Materials Database
 const DEFAULT_MATERIALS = {
   "concrete_dense": { name: "Dense Concrete", k: 1.75, rho: 2300, cp: 1000, alpha: 0.65, epsilon: 0.9, is_pcm: false },
   "concrete_light": { name: "Lightweight Concrete", k: 0.38, rho: 1000, cp: 1000, alpha: 0.6, epsilon: 0.9, is_pcm: false },
