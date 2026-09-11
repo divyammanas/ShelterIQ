@@ -67,7 +67,7 @@ export const AppProvider = ({ children }) => {
     });
     const [climate, setClimate] = useState(() => syntheticLadakhWinter(72, 0.5, -8.0, 9.0, 650, 3.5, 35, 15));
     const [simDuration, setSimDurationState] = useState(72);
-    const [simTimestep, setSimTimestep] = useState(0.5);
+    const [simTimestep, setSimTimestepState] = useState(0.5);
     const [internalGains, setInternalGains] = useState(100.0);
     const [heatingEnabled, setHeatingEnabled] = useState(false);
     const [heatingSetpoint, setHeatingSetpoint] = useState(16.0);
@@ -119,6 +119,13 @@ export const AppProvider = ({ children }) => {
     const setSimDuration = (val) => {
         setSimDurationState(val);
         setClimate(syntheticLadakhWinter(val, simTimestep, climateParams.tMean, climateParams.tAmp, climateParams.ghiPeak, climateParams.windMean, climateParams.rhMean, climateParams.cloudMean));
+    };
+    const setSimTimestep = (val) => {
+        const nextTimestep = Number(val);
+        if (!Number.isFinite(nextTimestep) || nextTimestep <= 0)
+            return;
+        setSimTimestepState(nextTimestep);
+        setClimate(syntheticLadakhWinter(simDuration, nextTimestep, climateParams.tMean, climateParams.tAmp, climateParams.ghiPeak, climateParams.windMean, climateParams.rhMean, climateParams.cloudMean));
     };
     const updateClimateParams = (updates) => {
         setClimateParams(prev => {

@@ -8,7 +8,7 @@ import { getUValue, formatDisplayNumber } from '../services/physicsEngine';
 const formatHeatLoss = (value) => `-${Math.abs(Number(value)).toFixed(0)}`;
 
 export const Dashboard = () => {
-    const { shelter, simResult, activeHour, setActiveHour, thermalMassType, isDarkMode } = useApp();
+    const { shelter, simResult, activeHour, setActiveHour, simTimestep, thermalMassType, isDarkMode } = useApp();
     const [viewMode, setViewMode] = useState('physical');
     const [envelopeOpacity, setEnvelopeOpacity] = useState(0.75);
     const [visibilityStates, setVisibilityStates] = useState({
@@ -45,7 +45,7 @@ export const Dashboard = () => {
         if (isPlaying) {
             playTimerRef.current = window.setInterval(() => {
                 setActiveHour((prev) => {
-                    const next = prev + 0.5;
+                    const next = prev + simTimestep;
                     const maxH = simResult ? simResult.t_hours[simResult.t_hours.length - 1] : 72;
                     return next > maxH ? 0 : next;
                 });
@@ -61,7 +61,7 @@ export const Dashboard = () => {
             if (playTimerRef.current)
                 clearInterval(playTimerRef.current);
         };
-    }, [isPlaying, simResult]);
+    }, [isPlaying, simResult, simTimestep]);
     const toggleVisibility = (key) => {
         setVisibilityStates(prev => ({
             ...prev,
@@ -455,7 +455,7 @@ export const Dashboard = () => {
 
           <div className="flex items-center gap-4 mt-2">
             <span className="text-xs font-bold text-zinc-400 dark:text-zinc-500">Hour:</span>
-            <input type="range" min="0" max={simResult ? simResult.t_hours[simResult.t_hours.length - 1] : 72} step="0.5" value={activeHour} onChange={(e) => setActiveHour(parseFloat(e.target.value))} className="flex-1"/>
+              <input type="range" min="0" max={simResult ? simResult.t_hours[simResult.t_hours.length - 1] : 72} step={simTimestep} value={activeHour} onChange={(e) => setActiveHour(parseFloat(e.target.value))} className="flex-1"/>
           </div>
         </div>
 
