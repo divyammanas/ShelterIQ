@@ -2,13 +2,22 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { MaterialDatabase, syntheticLadakhWinter, simulate, designScore, parseCSV, LCG } from '../services/physicsEngine';
 const AppContext = createContext(undefined);
+const ASSEMBLY_STORAGE_KEY = 'shelterIQ_saved_assemblies';
 export const AppProvider = ({ children }) => {
     const mdb = React.useMemo(() => new MaterialDatabase(), []);
     const [isDarkMode, setIsDarkMode] = useState(() => {
         const saved = localStorage.getItem('shelterIQ_theme');
         return saved !== null ? saved === 'dark' : true;
     });
-    const [savedDesigns, setSavedDesigns] = useState([]);
+    const [savedAssemblies, setSavedAssemblies] = useState(() => {
+        try {
+            const stored = localStorage.getItem(ASSEMBLY_STORAGE_KEY);
+            return stored ? JSON.parse(stored) : [];
+        }
+        catch {
+            return [];
+        }
+    });
     const [wallLayers, setWallLayers] = useState([
         { material: mdb.get("stone_granite"), thickness: 0.30 },
         { material: mdb.get("eps_insulation"), thickness: 0.10 }
@@ -58,7 +67,7 @@ export const AppProvider = ({ children }) => {
     });
     const [climate, setClimate] = useState(() => syntheticLadakhWinter(72, 0.5, -8.0, 9.0, 650, 3.5, 35, 15));
     const [simDuration, setSimDurationState] = useState(72);
-    const [simTimestep, setSimTimestep] = useState(0.5);
+    const [simTimestep, setSimTimestepState] = useState(0.5);
     const [internalGains, setInternalGains] = useState(100.0);
     const [heatingEnabled, setHeatingEnabled] = useState(false);
     const [heatingSetpoint, setHeatingSetpoint] = useState(16.0);
@@ -80,6 +89,9 @@ export const AppProvider = ({ children }) => {
             root.classList.remove('dark');
         }
     }, [isDarkMode]);
+    useEffect(() => {
+        localStorage.setItem(ASSEMBLY_STORAGE_KEY, JSON.stringify(savedAssemblies));
+    }, [savedAssemblies]);
     useEffect(() => {
         if (simResult && simResult.t_hours.length > 0) {
             const maxH = simResult.t_hours[simResult.t_hours.length - 1];
@@ -107,6 +119,13 @@ export const AppProvider = ({ children }) => {
     const setSimDuration = (val) => {
         setSimDurationState(val);
         setClimate(syntheticLadakhWinter(val, simTimestep, climateParams.tMean, climateParams.tAmp, climateParams.ghiPeak, climateParams.windMean, climateParams.rhMean, climateParams.cloudMean));
+    };
+    const setSimTimestep = (val) => {
+        const nextTimestep = Number(val);
+        if (!Number.isFinite(nextTimestep) || nextTimestep <= 0)
+            return;
+        setSimTimestepState(nextTimestep);
+        setClimate(syntheticLadakhWinter(simDuration, nextTimestep, climateParams.tMean, climateParams.tAmp, climateParams.ghiPeak, climateParams.windMean, climateParams.rhMean, climateParams.cloudMean));
     };
     const updateClimateParams = (updates) => {
         setClimateParams(prev => {
@@ -159,6 +178,23 @@ export const AppProvider = ({ children }) => {
                     volume_m3: qty * 0.02
                 }]);
         }
+    };
+    const saveAssembly = (name) => {
+        const assembly = {
+            id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+            name: name.trim() || `Assembly ${savedAssemblies.length + 1}`,
+            savedAt: new Date().toISOString(),
+            shelter: JSON.parse(JSON.stringify({ ...shelter, walls: { N: wallLayers, E: wallLayers, S: wallLayers, W: wallLayers }, roof: roofLayers, floor: floorLayers })),
+            wallLayers: JSON.parse(JSON.stringify(wallLayers)),
+            roofLayers: JSON.parse(JSON.stringify(roofLayers)),
+            floorLayers: JSON.parse(JSON.stringify(floorLayers)),
+            addedMasses: JSON.parse(JSON.stringify(addedMasses)),
+            climateParams: { ...climateParams }
+        };
+        setSavedAssemblies(prev => [...prev, assembly]);
+    };
+    const removeAssembly = (id) => {
+        setSavedAssemblies(prev => prev.filter(assembly => assembly.id !== id));
     };
     const runActiveSimulation = async () => {
         setIsSimulating(true);
@@ -371,28 +407,6 @@ export const AppProvider = ({ children }) => {
             setIsOptimizing(false);
         }
     };
-    const addDesignToPortfolio = (name) => {
-        if (!simResult)
-            return;
-        const designName = name || `Design Case ${savedDesigns.length + 1}`;
-        let total_loss_kWh = 0;
-        for (let k = 1; k < simResult.t_hours.length; k++) {
-            const dt = simResult.t_hours[k] - simResult.t_hours[k - 1];
-            const lossVal = 0.5 * (simResult.conduction_loss_W[k] + simResult.conduction_loss_W[k - 1]) * dt;
-            total_loss_kWh += Math.max(lossVal, 0.0);
-        }
-        total_loss_kWh /= 1000.0;
-        const newDesign = {
-            name: designName,
-            score: designScore(simResult, simDuration),
-            min_T: Number(simResult.min_T_air.toFixed(1)),
-            max_T: Number(simResult.max_T_air.toFixed(1)),
-            comfort_h: Number(simResult.comfort_summary_hours.comfortable.toFixed(1)),
-            heating_energy: Number(simResult.heating_energy_kWh.toFixed(2)),
-            conduction_loss: Number(total_loss_kWh.toFixed(2))
-        };
-        setSavedDesigns(prev => [...prev, newDesign]);
-    };
     const loadDesignPreset = (p) => {
         const structMat = mdb.get(p.struct);
         const insMat = mdb.get(p.ins);
@@ -426,46 +440,6 @@ export const AppProvider = ({ children }) => {
     };
     useEffect(() => {
         const fetchInitialData = async () => {
-            try {
-                const res = await axios.get('/comparison_table.csv');
-                const rows = parseCSV(res.data);
-                if (rows.length > 0) {
-                    const parsed = rows.map(r => ({
-                        name: String(r.design ?? r.name ?? "Unnamed Design"),
-                        score: Number(r.design_score ?? r.score ?? 0.0),
-                        min_T: Number(r.min_T_air_C ?? r.min_T ?? 0.0),
-                        max_T: Number(r.max_T_air_C ?? r.max_T ?? 0.0),
-                        comfort_h: Number(r.comfortable_h ?? r.comfort_h ?? 0.0),
-                        heating_energy: Number(r.estimated_heating_kWh ?? r.heating_energy ?? 0.0),
-                        conduction_loss: Number(r.total_heat_loss_kWh ?? 0.0)
-                    }));
-                    setSavedDesigns(parsed);
-                    console.log("Loaded initial portfolio CSV successfully.");
-                }
-            }
-            catch (e) {
-                console.warn("Could not fetch comparison_table.csv from server. Using fallback static design states.");
-                setSavedDesigns([
-                    {
-                        name: "Baseline: Stone + EPS10cm",
-                        score: 74.7,
-                        min_T: 5.0,
-                        max_T: 16.0,
-                        comfort_h: 72.0,
-                        heating_energy: 98.47,
-                        conduction_loss: 100.07
-                    },
-                    {
-                        name: "Alt: Rammed Earth + XPS15cm, low ACH",
-                        score: 79.7,
-                        min_T: 5.0,
-                        max_T: 16.0,
-                        comfort_h: 72.0,
-                        heating_energy: 77.16,
-                        conduction_loss: 74.03
-                    }
-                ]);
-            }
             try {
                 const res = await axios.get('/optimization_results.csv');
                 const rows = parseCSV(res.data);
@@ -524,8 +498,9 @@ export const AppProvider = ({ children }) => {
     }, []);
     return (<AppContext.Provider value={{
             mdb,
-            savedDesigns,
-            setSavedDesigns,
+            savedAssemblies,
+            saveAssembly,
+            removeAssembly,
             wallLayers,
             setWallLayers,
             roofLayers,
@@ -573,7 +548,6 @@ export const AppProvider = ({ children }) => {
             isOptimizing,
             runActiveSimulation,
             runOptimizationMC,
-            addDesignToPortfolio,
             loadDesignPreset,
             isDarkMode,
             setIsDarkMode

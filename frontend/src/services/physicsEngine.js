@@ -251,7 +251,12 @@ export function surfaceIrradiance(ghi, hod, surface_orientation_deg, surface_til
     return Math.max(total * cloud_derate, 0.0);
 }
 export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], internal_gains_W = 100.0, comfort_band = { t_min: 18.0, t_max: 26.0, t_marginal_low: 12.0, t_marginal_high: 30.0 }, heating_setpoint_C = null, T_air0 = 5.0, T_mass0 = 5.0) {
-    const t_axis = climate.t_hours;
+    const duration_h = Number(climate.t_hours[climate.t_hours.length - 1] || 0);
+    const step = Math.max(Number(dt_h) || 0.5, 0.001);
+    const t_axis = [];
+    for (let hour = 0; hour <= duration_h + 1e-9; hour += step) {
+        t_axis.push(Number(hour.toFixed(10)));
+    }
     const n = t_axis.length;
     const windows = shelter.openings.filter(o => !o.is_door);
     const H_win_total = shelter.openings.reduce((sum, o) => sum + getOpeningUValue(o) * o.area, 0.0);
@@ -375,7 +380,7 @@ export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], intern
     const score = designScore({ comfort_summary_hours: summary, heating_energy_kWh, T_air }, t_axis[t_axis.length - 1]);
     return {
         t_hours: t_axis,
-        T_out: climate.T_out,
+        T_out: t_axis.map((hour) => climateAt(climate, hour).T_out),
         T_air,
         T_mass,
         solar_gain_W: solar_gain,

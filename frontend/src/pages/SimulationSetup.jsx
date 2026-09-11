@@ -8,7 +8,7 @@ export const SimulationSetup = () => {
         setTimeout(() => runActiveSimulation(), 100);
     };
     const handleSelectChange = (setter, val) => {
-        setter(val);
+      setter(Number(val));
         setTimeout(() => runActiveSimulation(), 100);
     };
     const handleToggleChange = (val) => {
@@ -95,9 +95,9 @@ export const SimulationSetup = () => {
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Simulation Timestep (dt)</label>
             <select value={simTimestep} onChange={(e) => handleSelectChange(setSimTimestep, parseFloat(e.target.value))} className="w-full bg-zinc-50 dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-zinc-100 font-medium">
-              <option value="0.1">0.1 Hour (6 Mins)</option>
-              <option value="0.5">0.5 Hour (30 Mins)</option>
-              <option value="1.0">1.0 Hour (60 Mins)</option>
+              <option value={0.1}>0.1 Hour (6 Mins)</option>
+              <option value={0.5}>0.5 Hour (30 Mins)</option>
+              <option value={1}>1.0 Hour (60 Mins)</option>
             </select>
           </div>
 
@@ -111,7 +111,7 @@ export const SimulationSetup = () => {
 
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 flex justify-between">
-              <span>Initial Air Temp (T_air0)</span>
+                <span>Initial Indoor Air Temp (T_air0)</span>
               <span className="font-bold text-zinc-800 dark:text-zinc-200 font-mono">{T_air0.toFixed(1)}°C</span>
             </label>
             <input type="range" min="-15" max="15" step="0.5" value={T_air0} onChange={(e) => handleSliderChange(setT_air0, parseFloat(e.target.value))}/>
@@ -119,7 +119,7 @@ export const SimulationSetup = () => {
 
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 flex justify-between">
-              <span>Initial Mass Temp (T_mass0)</span>
+                <span>Initial Thermal Mass Temp (T_mass0)</span>
               <span className="font-bold text-zinc-800 dark:text-zinc-200 font-mono">{T_mass0.toFixed(1)}°C</span>
             </label>
             <input type="range" min="-15" max="15" step="0.5" value={T_mass0} onChange={(e) => handleSliderChange(setT_mass0, parseFloat(e.target.value))}/>
