@@ -1,10 +1,12 @@
-import React from 'react';
-import { LayoutGrid, AppWindow, Cpu, Layers } from 'lucide-react';
+import React, { useState } from 'react';
+import { LayoutGrid, AppWindow, Cpu, Layers, Save } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { LayerEditor } from '../components/LayerEditor';
 import { DEFAULT_MATERIALS } from '../services/physicsEngine';
 export const ShelterDesign = () => {
-    const { shelter, setShelter, updateShelterOpenings, updateThermalMass, thermalMassType, thermalMassQty, runActiveSimulation } = useApp();
+    const { shelter, setShelter, updateShelterOpenings, updateThermalMass, thermalMassType, thermalMassQty, runActiveSimulation, saveAssembly, savedAssemblies } = useApp();
+    const [assemblyName, setAssemblyName] = useState('');
+    const [saveMessage, setSaveMessage] = useState('');
     const handleSliderChange = (key, value) => {
         setShelter(prev => ({
             ...prev,
@@ -45,7 +47,26 @@ export const ShelterDesign = () => {
             return 'm²';
         return '';
     };
+    const handleSaveAssembly = () => {
+        saveAssembly(assemblyName);
+        setAssemblyName('');
+        setSaveMessage('Assembly saved');
+        window.setTimeout(() => setSaveMessage(''), 2500);
+    };
     return (<div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="lg:col-span-12 flex flex-wrap items-center justify-between gap-3 bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/50 dark:border-blue-900/30 rounded-xl p-4">
+        <div>
+          <h2 className="text-sm font-extrabold text-zinc-950 dark:text-white">Save this material assembly</h2>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Store the current design for comparison under active weather conditions.</p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <input value={assemblyName} onChange={(e) => setAssemblyName(e.target.value)} placeholder={`Assembly ${savedAssemblies.length + 1}`} className="w-44 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-blue-500/50" />
+          <button type="button" onClick={handleSaveAssembly} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors">
+            <Save size={14} /> Save Assembly
+          </button>
+          {saveMessage && <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">{saveMessage}</span>}
+        </div>
+      </div>
       
       <div className="lg:col-span-6 flex flex-col gap-6">
         

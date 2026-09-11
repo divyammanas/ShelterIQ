@@ -36,8 +36,8 @@ export const Layout = () => {
                 };
             case '/comparison':
                 return {
-                    title: "Portfolio Design Comparisons",
-                    subtitle: "Evaluate comfort ratings and energy performance across alternative assemblies"
+                title: "Design Compare",
+                subtitle: "Compare material assemblies under the active climate profile"
                 };
             case '/optimization':
                 return {
@@ -62,7 +62,7 @@ export const Layout = () => {
         { path: '/design', label: 'Shelter Design', icon: Home },
         { path: '/materials', label: 'Materials Catalog', icon: Database },
         { path: '/simulation', label: 'Simulation Setup', icon: Play },
-        { path: '/comparison', label: 'Portfolio Compare', icon: Columns },
+        { path: '/comparison', label: 'Design Compare', icon: Columns },
         { path: '/optimization', label: 'Auto-Optimizer', icon: Sparkles },
         { path: '/validation', label: 'ANSYS Validation', icon: ShieldCheck },
     ];
