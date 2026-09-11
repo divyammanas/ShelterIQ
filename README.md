@@ -140,6 +140,25 @@ The current code imports NumPy, Pandas, and Matplotlib. Install them with:
 pip install numpy pandas matplotlib
 ```
 
+For the React frontend, install Node.js dependencies and create the production build:
+
+```bash
+cd frontend
+npm ci
+npm run build
+```
+
+During development, use `npm run dev` inside `frontend`. The build output in
+`frontend/dist` is generated and ignored by Git; logos and favicon assets come
+from the tracked `frontend/src/assets` and `frontend/public` directories.
+
+After building the frontend, start the API and production app from the project root:
+
+```bash
+cd ..
+python main.py
+```
+
 ### 4. Run the demo
 
 ```bash
