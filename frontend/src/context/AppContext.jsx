@@ -115,25 +115,6 @@ export const AppProvider = ({ children }) => {
             return next;
         });
     };
-    const importClimateCSV = (csvText) => {
-        try {
-            const rows = parseCSV(csvText);
-            if (rows.length === 0)
-                return;
-            const t_hours = rows.map(r => Number(r.hour ?? r.time ?? 0));
-            const T_out = rows.map(r => Number(r.T_out_C ?? r.temp ?? 0));
-            const ghi = rows.map(r => Number(r.GHI_Wm2 ?? r.solar ?? 0));
-            const wind = rows.map(r => Number(r.wind_ms ?? r.wind ?? 0));
-            const rh = rows.map(r => Number(r.RH_pct ?? r.humidity ?? 0));
-            const cloud = rows.map(r => Number(r.cloud_pct ?? r.cloud ?? 0));
-            setClimate({ t_hours, T_out, ghi, wind, rh, cloud });
-            setSimDurationState(Math.round(t_hours[t_hours.length - 1]));
-            console.log("Loaded climate CSV containing " + t_hours.length + " timesteps.");
-        }
-        catch (err) {
-            console.error("Invalid weather CSV file structure", err);
-        }
-    };
     const updateShelterOpenings = (width, height, shgc, glazingKey) => {
         setShelter(prev => {
             const openings = [...prev.openings];
@@ -567,7 +548,6 @@ export const AppProvider = ({ children }) => {
             setClimate,
             climateParams,
             updateClimateParams,
-            importClimateCSV,
             simDuration,
             setSimDuration,
             simTimestep,

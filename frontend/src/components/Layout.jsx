@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import logoImg from '../assets/logo.jpg';
-import { LineChart, CloudSun, Home, Database, Play, Columns, Sparkles, ShieldCheck, Save, Sun, Moon, Menu, X } from 'lucide-react';
+import { LineChart, CloudSun, Home, Database, Play, Columns, Sparkles, ShieldCheck, Sun, Moon, Menu, X } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 export const Layout = () => {
-    const { isDarkMode, setIsDarkMode, addDesignToPortfolio, isSimulating } = useApp();
+  const { isDarkMode, setIsDarkMode, isSimulating } = useApp();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [showSaveModal, setShowSaveModal] = useState(false);
-    const [designName, setDesignName] = useState('');
     const location = useLocation();
     const getPageHeader = () => {
         switch (location.pathname) {
@@ -68,11 +66,6 @@ export const Layout = () => {
         { path: '/optimization', label: 'Auto-Optimizer', icon: Sparkles },
         { path: '/validation', label: 'ANSYS Validation', icon: ShieldCheck },
     ];
-    const handleSaveDesign = () => {
-        addDesignToPortfolio(designName.trim() || undefined);
-        setDesignName('');
-        setShowSaveModal(false);
-    };
     const headerMeta = getPageHeader();
     return (<div className="min-h-screen flex flex-col md:flex-row bg-zinc-50 dark:bg-[#09090b] text-zinc-950 dark:text-zinc-50 transition-colors duration-200">
       
@@ -154,11 +147,6 @@ export const Layout = () => {
               <span>{isSimulating ? 'Simulating...' : 'Passive Model Ready'}</span>
             </div>
 
-            <button onClick={() => setShowSaveModal(true)} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all duration-150 shadow-sm shadow-blue-500/10">
-              <Save size={14}/>
-              <span className="hidden sm:inline">Save Portfolio</span>
-            </button>
-
             <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#0c0c0f] text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors">
               {isDarkMode ? <Sun size={16}/> : <Moon size={16}/>}
             </button>
@@ -170,27 +158,5 @@ export const Layout = () => {
         </main>
       </div>
 
-      {showSaveModal && (<div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/50 backdrop-blur-sm p-4">
-          <div className="bg-white dark:bg-[#0c0c0f] rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-2xl w-full max-w-md p-6">
-            <h3 className="text-lg font-extrabold text-zinc-950 dark:text-white flex items-center gap-2">
-              <Save className="text-blue-500"/> Save Design to Portfolio
-            </h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
-              Add your current customized insulation, structural cores, and openings assembly to the portfolio matrix for side-by-side rankings.
-            </p>
-            <div className="mt-4">
-              <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Design Identifier Name</label>
-              <input type="text" value={designName} onChange={(e) => setDesignName(e.target.value)} placeholder="e.g. Slate + XPS 15cm, Triple Glaze" className="w-full mt-1.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 text-zinc-950 dark:text-white" onKeyDown={(e) => e.key === 'Enter' && handleSaveDesign()}/>
-            </div>
-            <div className="flex gap-3 justify-end mt-6">
-              <button onClick={() => setShowSaveModal(false)} className="px-4 py-2 rounded-xl text-xs font-semibold border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-transparent text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50 hover:bg-zinc-50 dark:hover:bg-zinc-900/50">
-                Cancel
-              </button>
-              <button onClick={handleSaveDesign} className="px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
-                Save Assembly
-              </button>
-            </div>
-          </div>
-        </div>)}
     </div>);
 };
