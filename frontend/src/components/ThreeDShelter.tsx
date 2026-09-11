@@ -248,19 +248,24 @@ export const ThreeDShelter: React.FC<ThreeDShelterProps> = ({
       if (!canvasRef.current || !containerRef.current || !cameraRef.current || !rendererRef.current) return;
       const width = containerRef.current.clientWidth;
       const height = containerRef.current.clientHeight;
+      if (width <= 0 || height <= 0) return;
       
       rendererRef.current.setSize(width, height, false);
       cameraRef.current.aspect = width / height;
       cameraRef.current.updateProjectionMatrix();
     };
     
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(containerRef.current);
     window.addEventListener('resize', handleResize);
+    handleResize();
     
     // Cleanup
     return () => {
       if (animFrameIdRef.current) {
         cancelAnimationFrame(animFrameIdRef.current);
       }
+      resizeObserver.disconnect();
       window.removeEventListener('resize', handleResize);
       canvas.removeEventListener("mousedown", onMouseDown);
       canvas.removeEventListener("mousemove", onMouseMove);

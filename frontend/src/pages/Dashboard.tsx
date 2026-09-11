@@ -10,7 +10,9 @@ import {
   Lightbulb,
   Play,
   Pause,
-  RotateCw
+  RotateCw,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { ThreeDShelter } from '../components/ThreeDShelter';
@@ -38,7 +40,28 @@ export const Dashboard: React.FC = () => {
   });
   const [isRotating, setIsRotating] = useState<boolean>(true);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [isViewerFullscreen, setIsViewerFullscreen] = useState<boolean>(false);
+  const viewerPanelRef = useRef<HTMLDivElement>(null);
   const playTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsViewerFullscreen(document.fullscreenElement === viewerPanelRef.current);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
+  const toggleViewerFullscreen = async () => {
+    if (!viewerPanelRef.current) return;
+
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+    } else {
+      await viewerPanelRef.current.requestFullscreen();
+    }
+  };
 
   useEffect(() => {
     if (isPlaying) {
@@ -420,7 +443,12 @@ export const Dashboard: React.FC = () => {
 
         </div>
 
-        <div className="xl:col-span-5 flex flex-col gap-4 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm self-stretch">
+        <div
+          ref={viewerPanelRef}
+          className={`xl:col-span-5 flex flex-col gap-4 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm self-stretch ${
+            isViewerFullscreen ? 'w-screen h-screen overflow-y-auto rounded-none border-0' : ''
+          }`}
+        >
           <div className="flex items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-4">
             <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2">
               <Box size={16} className="text-blue-500" /> Interactive 3D Model
@@ -450,10 +478,19 @@ export const Dashboard: React.FC = () => {
               <span className="text-xs font-mono font-bold bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-2 py-1 rounded-lg">
                 {activeHour.toFixed(1)}h
               </span>
+              <button
+                type="button"
+                onClick={toggleViewerFullscreen}
+                title={isViewerFullscreen ? 'Exit fullscreen' : 'View 3D model fullscreen'}
+                aria-label={isViewerFullscreen ? 'Exit fullscreen' : 'View 3D model fullscreen'}
+                className="p-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-50 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors"
+              >
+                {isViewerFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+              </button>
             </div>
           </div>
 
-          <div className="h-[320px] w-full relative">
+          <div className={`${isViewerFullscreen ? 'flex-1 min-h-[420px]' : 'h-[320px]'} w-full relative`}>
             <ThreeDShelter
               viewMode={viewMode}
               envelopeOpacity={envelopeOpacity}
