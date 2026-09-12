@@ -103,3 +103,30 @@ def fetch_live_weather_stub(lat: float, lon: float, duration_h: float):
         "Live weather API integration not yet wired — use synthetic_ladakh_winter() "
         "or from_csv() for now."
     )
+
+
+def from_leh_dataset(scenario: str = "typical_winter_72h",
+                     start_date: str = None,
+                     end_date: str = None,
+                     year: int = None,
+                     duration_h: float = None) -> ClimateSeries:
+    """
+    Adapter that loads a slice from the enriched 5-year Leh weather dataset
+    and maps it directly to the existing ClimateSeries dataclass:
+      temperature_c       -> T_out
+      ghi_w_m2             -> ghi
+      wind_speed_m_s       -> wind
+      relative_humidity    -> rh
+      cloud_cover_pct      -> cloud
+    """
+    from weather_dataset import get_weather_dataset
+    ds = get_weather_dataset()
+    t, T, g, w, rh, c = ds.get_climate_series(
+        scenario=scenario,
+        start_date=start_date,
+        end_date=end_date,
+        year=year,
+        duration_h=duration_h
+    )
+    return ClimateSeries(t, T, g, w, rh, c)
+

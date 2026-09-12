@@ -40,6 +40,7 @@ class BuildingElement:
             # slab-on-grade floor (soil + coupling effects dominate over
             # the slab's own conductance for typical shelter footprints;
             # ~1.5-2.0 m2K/W is a common design-stage approximation).
+            
             r += R_SI_IN + 1.8
         return r
 

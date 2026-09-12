@@ -89,6 +89,10 @@ export const SimulationSetup = () => {
               <option value="24">24 Hours (1 Day)</option>
               <option value="48">48 Hours (2 Days)</option>
               <option value="72">72 Hours (3 Days)</option>
+              <option value="168">168 Hours (7 Days)</option>
+              {simDuration !== 24 && simDuration !== 48 && simDuration !== 72 && simDuration !== 168 && (
+                <option value={simDuration}>{simDuration} Hours (Dataset Range)</option>
+              )}
             </select>
           </div>
 

@@ -14,11 +14,12 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from materials import MaterialDatabase, Material
 from geometry import Shelter, Layer, Opening
-from climate import ClimateSeries, synthetic_ladakh_winter
+from climate import ClimateSeries, synthetic_ladakh_winter, from_leh_dataset
 from comfort import ComfortBand
 from thermal_engine import simulate, AddedMass, SimulationResult
 from compare import DesignCase, run_comparison, design_score
 from optimize import SearchSpace, optimize as run_optimize
+from weather_dataset import get_weather_dataset
 
 app = FastAPI(title="ShelterIQ Simulation & Optimization Engine API")
 
@@ -91,9 +92,13 @@ class SimSettingsSchema(BaseModel):
 
 class SimulateRequest(BaseModel):
     shelter: ShelterSchema
-    climate: ClimateSchema
+    climate: Optional[ClimateSchema] = None
     settings: SimSettingsSchema
     added_masses: List[AddedMassSchema]
+    scenario: Optional[str] = None
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    year: Optional[int] = None
 
 def map_to_material(m: MaterialSchema) -> Material:
     return Material(
@@ -146,18 +151,57 @@ def map_to_shelter(s: ShelterSchema) -> Shelter:
     shelter.build_uniform_envelope(wall_layers, roof_layers, floor_layers)
     return shelter
 
+@app.get("/api/climate/summary")
+def get_climate_summary():
+    try:
+        ds = get_weather_dataset()
+        return ds.get_summary()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/climate/scenarios")
+def get_climate_scenarios():
+    try:
+        ds = get_weather_dataset()
+        return ds.get_scenarios()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/climate/hourly")
+def get_climate_hourly(
+    start: Optional[str] = None,
+    end: Optional[str] = None,
+    year: Optional[int] = None,
+    scenario: Optional[str] = None,
+    limit: int = 2000
+):
+    try:
+        ds = get_weather_dataset()
+        return ds.get_slice_dict(start_date=start, end_date=end, year=year, scenario=scenario, max_points=limit)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
 @app.post("/api/simulate")
 def api_simulate(req: SimulateRequest):
     try:
         shelter_obj = map_to_shelter(req.shelter)
-        climate_obj = ClimateSeries(
-            t_hours=np.array(req.climate.t_hours),
-            T_out=np.array(req.climate.T_out),
-            ghi=np.array(req.climate.ghi),
-            wind=np.array(req.climate.wind),
-            rh=np.array(req.climate.rh),
-            cloud=np.array(req.climate.cloud)
-        )
+        if req.scenario or req.start_date or req.year or req.climate is None:
+            climate_obj = from_leh_dataset(
+                scenario=req.scenario or "typical_winter_72h",
+                start_date=req.start_date,
+                end_date=req.end_date,
+                year=req.year,
+                duration_h=float(req.settings.duration)
+            )
+        else:
+            climate_obj = ClimateSeries(
+                t_hours=np.array(req.climate.t_hours),
+                T_out=np.array(req.climate.T_out),
+                ghi=np.array(req.climate.ghi),
+                wind=np.array(req.climate.wind),
+                rh=np.array(req.climate.rh),
+                cloud=np.array(req.climate.cloud)
+            )
         
         masses = [
             AddedMass(
@@ -194,7 +238,12 @@ def api_simulate(req: SimulateRequest):
             "estimated_heating_kWh": round(result.heating_energy_kWh, 2),
             "thermal_stability_stdC": round(stability, 2)
         }
-        score = design_score(row_metrics, max_comfort_h=float(req.settings.duration))
+        total_duration = float(climate_obj.t_hours[-1] - climate_obj.t_hours[0]) if len(climate_obj.t_hours) > 1 else float(req.settings.duration)
+        score = design_score(
+            row_metrics,
+            max_comfort_h=max(1.0, total_duration),
+            max_heating_kWh=max(50.0, 150.0 * (total_duration / 72.0))
+        )
         
         return {
             "t_hours": result.t_hours.tolist(),
@@ -221,22 +270,35 @@ def api_simulate(req: SimulateRequest):
 
 class OptimizeRequest(BaseModel):
     shelter: ShelterSchema
-    climate: ClimateSchema
+    climate: Optional[ClimateSchema] = None
     settings: SimSettingsSchema
     n_random: int = 35
+    scenario: Optional[str] = None
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    year: Optional[int] = None
 
 @app.post("/api/optimize")
 def api_optimize(req: OptimizeRequest):
     try:
         shelter_obj = map_to_shelter(req.shelter)
-        climate_obj = ClimateSeries(
-            t_hours=np.array(req.climate.t_hours),
-            T_out=np.array(req.climate.T_out),
-            ghi=np.array(req.climate.ghi),
-            wind=np.array(req.climate.wind),
-            rh=np.array(req.climate.rh),
-            cloud=np.array(req.climate.cloud)
-        )
+        if req.scenario or req.start_date or req.year or req.climate is None:
+            climate_obj = from_leh_dataset(
+                scenario=req.scenario or "typical_winter_72h",
+                start_date=req.start_date,
+                end_date=req.end_date,
+                year=req.year,
+                duration_h=float(req.settings.duration)
+            )
+        else:
+            climate_obj = ClimateSeries(
+                t_hours=np.array(req.climate.t_hours),
+                T_out=np.array(req.climate.T_out),
+                ghi=np.array(req.climate.ghi),
+                wind=np.array(req.climate.wind),
+                rh=np.array(req.climate.rh),
+                cloud=np.array(req.climate.cloud)
+            )
         
         mdb = MaterialDatabase()
         space = SearchSpace(

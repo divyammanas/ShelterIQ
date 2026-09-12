@@ -65,6 +65,10 @@ export const AppProvider = ({ children }) => {
         rhMean: 35,
         cloudMean: 15
     });
+    const [climateSource, setClimateSource] = useState('real');
+    const [selectedScenario, setSelectedScenario] = useState('typical_winter_72h');
+    const [climateSummary, setClimateSummary] = useState(null);
+    const [availableScenarios, setAvailableScenarios] = useState([]);
     const [climate, setClimate] = useState(() => syntheticLadakhWinter(72, 0.5, -8.0, 9.0, 650, 3.5, 35, 15));
     const [simDuration, setSimDurationState] = useState(72);
     const [simTimestep, setSimTimestepState] = useState(0.5);
@@ -119,22 +123,101 @@ export const AppProvider = ({ children }) => {
     }, [wallLayers, roofLayers, floorLayers]);
     const setSimDuration = (val) => {
         setSimDurationState(val);
-        setClimate(syntheticLadakhWinter(val, simTimestep, climateParams.tMean, climateParams.tAmp, climateParams.ghiPeak, climateParams.windMean, climateParams.rhMean, climateParams.cloudMean));
+        if (climateSource === 'synthetic') {
+            setClimate(syntheticLadakhWinter(val, simTimestep, climateParams.tMean, climateParams.tAmp, climateParams.ghiPeak, climateParams.windMean, climateParams.rhMean, climateParams.cloudMean));
+        }
     };
     const setSimTimestep = (val) => {
         const nextTimestep = Number(val);
         if (!Number.isFinite(nextTimestep) || nextTimestep <= 0)
             return;
         setSimTimestepState(nextTimestep);
-        setClimate(syntheticLadakhWinter(simDuration, nextTimestep, climateParams.tMean, climateParams.tAmp, climateParams.ghiPeak, climateParams.windMean, climateParams.rhMean, climateParams.cloudMean));
+        if (climateSource === 'synthetic') {
+            setClimate(syntheticLadakhWinter(simDuration, nextTimestep, climateParams.tMean, climateParams.tAmp, climateParams.ghiPeak, climateParams.windMean, climateParams.rhMean, climateParams.cloudMean));
+        }
     };
     const updateClimateParams = (updates) => {
         setClimateParams(prev => {
             const next = { ...prev, ...updates };
-            setClimate(syntheticLadakhWinter(simDuration, simTimestep, next.tMean, next.tAmp, next.ghiPeak, next.windMean, next.rhMean, next.cloudMean));
+            if (climateSource === 'synthetic') {
+                setClimate(syntheticLadakhWinter(simDuration, simTimestep, next.tMean, next.tAmp, next.ghiPeak, next.windMean, next.rhMean, next.cloudMean));
+            }
             return next;
         });
     };
+    const selectRealClimateScenario = async (scenarioId) => {
+        setSelectedScenario(scenarioId);
+        setClimateSource('real');
+        try {
+            const res = await axios.get(`/api/climate/hourly?scenario=${scenarioId}`);
+            const data = res.data;
+            const records = data.records || [];
+            if (records.length > 0) {
+                const t_hours = records.map((_, i) => i * 1.0);
+                const T_out = records.map(r => r.temperature_c);
+                const ghi = records.map(r => r.ghi_w_m2);
+                const wind = records.map(r => r.wind_speed_m_s);
+                const rh = records.map(r => r.relative_humidity);
+                const cloud = records.map(r => r.cloud_cover_pct);
+
+                const nextClimate = {
+                    t_hours,
+                    T_out,
+                    ghi,
+                    wind,
+                    rh,
+                    cloud,
+                    at: (t_hour) => {
+                        const idx = Math.min(Math.max(0, Math.floor(t_hour)), t_hours.length - 1);
+                        const nextIdx = Math.min(idx + 1, t_hours.length - 1);
+                        const frac = t_hour - idx;
+                        return {
+                            T_out: T_out[idx] + (T_out[nextIdx] - T_out[idx]) * frac,
+                            ghi: ghi[idx] + (ghi[nextIdx] - ghi[idx]) * frac,
+                            wind: wind[idx] + (wind[nextIdx] - wind[idx]) * frac,
+                            rh: rh[idx] + (rh[nextIdx] - rh[idx]) * frac,
+                            cloud: cloud[idx] + (cloud[nextIdx] - cloud[idx]) * frac,
+                        };
+                    }
+                };
+                setClimate(nextClimate);
+                setSimDurationState(t_hours.length);
+                if (data.stats) {
+                    setClimateParams({
+                        latitude: 34.15,
+                        tMean: data.stats.mean_temp,
+                        tAmp: Math.max(1, (data.stats.max_temp - data.stats.min_temp) / 2),
+                        ghiPeak: Math.round(data.stats.max_ghi),
+                        windMean: data.stats.mean_wind,
+                        rhMean: Math.round(data.stats.mean_rh),
+                        cloudMean: 20
+                    });
+                }
+            }
+        } catch (err) {
+            console.warn("Failed to load real climate scenario hourly data:", err);
+        }
+    };
+    const switchToSynthetic = () => {
+        setClimateSource('synthetic');
+        setClimate(syntheticLadakhWinter(simDuration, simTimestep, climateParams.tMean, climateParams.tAmp, climateParams.ghiPeak, climateParams.windMean, climateParams.rhMean, climateParams.cloudMean));
+    };
+    useEffect(() => {
+        const initClimate = async () => {
+            try {
+                const [sumRes, scenRes] = await Promise.all([
+                    axios.get('/api/climate/summary'),
+                    axios.get('/api/climate/scenarios')
+                ]);
+                setClimateSummary(sumRes.data);
+                setAvailableScenarios(scenRes.data);
+                await selectRealClimateScenario('typical_winter_72h');
+            } catch (err) {
+                console.warn("Initial climate fetch info:", err);
+            }
+        };
+        initClimate();
+    }, []);
     const updateShelterOpenings = (width, height, shgc, glazingKey) => {
         setShelter(prev => {
             const openings = [...prev.openings];
@@ -271,7 +354,8 @@ export const AppProvider = ({ children }) => {
                 shelter: shelterPayload,
                 climate: climatePayload,
                 settings: settingsPayload,
-                added_masses: addedMassesPayload
+                added_masses: addedMassesPayload,
+                scenario: climateSource === 'real' ? selectedScenario : undefined
             });
             const data = res.data;
             if (overrideScore != null) {
@@ -353,7 +437,8 @@ export const AppProvider = ({ children }) => {
                 shelter: shelterPayload,
                 climate: climatePayload,
                 settings: settingsPayload,
-                n_random: 35
+                n_random: 35,
+                scenario: climateSource === 'real' ? selectedScenario : undefined
             });
             setOptResults(res.data);
             setOptLogs(prev => prev + "Backend Optimization Complete! Best Score: " + res.data[0].score.toFixed(1) + "\n");
@@ -573,6 +658,14 @@ export const AppProvider = ({ children }) => {
             climate,
             setClimate,
             climateParams,
+            climateSource,
+            setClimateSource,
+            selectedScenario,
+            setSelectedScenario,
+            climateSummary,
+            availableScenarios,
+            selectRealClimateScenario,
+            switchToSynthetic,
             updateClimateParams,
             simDuration,
             setSimDuration,
