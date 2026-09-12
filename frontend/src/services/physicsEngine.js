@@ -250,7 +250,14 @@ export function surfaceIrradiance(ghi, hod, surface_orientation_deg, surface_til
     const cloud_derate = 1.0 - 0.75 * (cloud_pct / 100.0);
     return Math.max(total * cloud_derate, 0.0);
 }
-export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], internal_gains_W = 100.0, comfort_band = { t_min: 18.0, t_max: 26.0, t_marginal_low: 12.0, t_marginal_high: 30.0 }, heating_setpoint_C = null, T_air0 = 5.0, T_mass0 = 5.0) {
+export const DEFAULT_COMFORT_BAND = {
+    t_min: 16.0,
+    t_max: 26.0,
+    t_marginal_low: 8.0,
+    t_marginal_high: 30.0
+};
+export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], internal_gains_W = 100.0, comfort_band = DEFAULT_COMFORT_BAND, heating_setpoint_C = null, T_air0 = 5.0, T_mass0 = 5.0) {
+    const active_comfort_band = (comfort_band && comfort_band.t_min != null) ? comfort_band : DEFAULT_COMFORT_BAND;
     const duration_h = Number(climate.t_hours[climate.t_hours.length - 1] || 0);
     const step = Math.max(Number(dt_h) || 0.5, 0.001);
     const t_axis = [];
@@ -367,7 +374,7 @@ export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], intern
         T_air[k] = Ta_new;
         T_mass[k] = Tm_new;
         heating_power[k] = q_heat;
-        comfort_status[k] = classifyComfort(Ta_new, comfort_band);
+        comfort_status[k] = classifyComfort(Ta_new, active_comfort_band);
         solar_gain[k] = cl.ghi > 0 ? Math.max(0.0, Q_win_solar + Q_opaque_solar) : 0.0;
         const cond_opaque_loss = Hop_nonground * (Tm_new - T_out_k) + Hop_ground * (Tm_new - GROUND_TEMP_C);
         const cond_window_loss = H_win_total * (Ta_new - T_out_k);
@@ -409,10 +416,11 @@ export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], intern
         design_score: score
     };
 }
-export function classifyComfort(T, band) {
-    if (T >= band.t_min && T <= band.t_max)
+export function classifyComfort(T, band = DEFAULT_COMFORT_BAND) {
+    const b = (band && band.t_min != null) ? band : DEFAULT_COMFORT_BAND;
+    if (T >= b.t_min - 0.05 && T <= b.t_max + 0.05)
         return "comfortable";
-    if ((T >= band.t_marginal_low && T < band.t_min) || (T > band.t_max && T <= band.t_marginal_high))
+    if ((T >= b.t_marginal_low - 0.05 && T < b.t_min - 0.05) || (T > b.t_max + 0.05 && T <= b.t_marginal_high + 0.05))
         return "marginal";
     return "uncomfortable";
 }

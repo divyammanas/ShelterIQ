@@ -272,7 +272,7 @@ function surfaceIrradiance(ghi, hod, surface_orientation_deg, surface_tilt_deg, 
 }
 
 // 2-Node RC solver (Backward Euler)
-function simulate(shelter, climate, dt_h = 0.5, added_masses = [], internal_gains_W = 100.0, comfort_band = { t_min: 18.0, t_max: 26.0, t_marginal_low: 12.0, t_marginal_high: 30.0 }, heating_setpoint_C = null, T_air0 = 5.0, T_mass0 = 5.0) {
+function simulate(shelter, climate, dt_h = 0.5, added_masses = [], internal_gains_W = 100.0, comfort_band = { t_min: 16.0, t_max: 26.0, t_marginal_low: 8.0, t_marginal_high: 30.0 }, heating_setpoint_C = 16.0, T_air0 = 5.0, T_mass0 = 5.0) {
   let t_axis = climate.t_hours;
   let n = t_axis.length;
   

@@ -5,16 +5,23 @@ import { simulate, designScore, formatDisplayNumber } from '../services/physicsE
 import { AutoOptimizer } from './AutoOptimizer';
 
 const getResults = (assembly, climate, simTimestep, optResults, comfortBand, heatingEnabled, heatingSetpoint, T_air0, T_mass0, internalGains) => {
+  const effHeatingEnabled = assembly.heatingEnabled !== undefined ? assembly.heatingEnabled : heatingEnabled;
+  const effHeatingSetpoint = assembly.heatingSetpoint ?? heatingSetpoint ?? 16.0;
+  const effHeating = effHeatingEnabled ? effHeatingSetpoint : null;
+  const effTair0 = assembly.T_air0 ?? T_air0 ?? 5.0;
+  const effTmass0 = assembly.T_mass0 ?? T_mass0 ?? 5.0;
+  const band = comfortBand || { t_min: 16.0, t_max: 26.0, t_marginal_low: 8.0, t_marginal_high: 30.0 };
+
   const result = simulate(
     assembly.shelter,
     climate,
     simTimestep,
     assembly.addedMasses,
     internalGains ?? 100,
-    comfortBand || { t_min: 16, t_max: 26, t_marginal_low: 8, t_marginal_high: 30 },
-    heatingEnabled ? heatingSetpoint : null,
-    T_air0 ?? -2,
-    T_mass0 ?? -2
+    band,
+    effHeating,
+    effTair0,
+    effTmass0
   );
   let score = assembly.presetScore != null ? Number(assembly.presetScore) : null;
   if (score == null && optResults && optResults.length > 0) {
