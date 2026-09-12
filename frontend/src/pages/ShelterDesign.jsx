@@ -1,17 +1,51 @@
 import React, { useState } from 'react';
-import { LayoutGrid, AppWindow, Cpu, Layers, Save } from 'lucide-react';
+import { LayoutGrid, AppWindow, Cpu, Layers, Save, Sparkles, Check } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { LayerEditor } from '../components/LayerEditor';
 import { DEFAULT_MATERIALS } from '../services/physicsEngine';
 export const ShelterDesign = () => {
-    const { shelter, setShelter, updateShelterOpenings, updateThermalMass, thermalMassType, thermalMassQty, runActiveSimulation, saveAssembly, savedAssemblies } = useApp();
+    const { shelter, setShelter, updateShelterOpenings, updateThermalMass, thermalMassType, thermalMassQty, runActiveSimulation, saveAssembly, savedAssemblies, optResults, loadDesignPreset, loadedPreset, setLoadedPreset } = useApp();
     const [assemblyName, setAssemblyName] = useState('');
     const [saveMessage, setSaveMessage] = useState('');
+
+    const getMaterialLabel = (key) => {
+        const safeKey = String(key ?? '');
+        switch (safeKey) {
+            case 'eps_insulation': return 'EPS';
+            case 'xps_insulation': return 'XPS';
+            case 'mineral_wool': return 'Mineral Wool';
+            case 'stone_granite': return 'Granite';
+            case 'rammed_earth': return 'Rammed Earth';
+            case 'concrete_light': return 'Light Concrete';
+            default: return safeKey ? safeKey.replace(/_/g, ' ') : 'Material';
+        }
+    };
+
+    const normalizedPicks = (optResults ?? []).map((result, idx) => {
+        const params = result?.params ?? {};
+        return {
+            ...result,
+            id: result?.id ?? idx,
+            params: {
+                struct: params.struct ?? params.structure ?? 'stone_granite',
+                sthick: Number(params.sthick ?? params.structure_thickness_m ?? 0.30),
+                ins: params.ins ?? params.insulation ?? 'xps_insulation',
+                thick: Number(params.thick ?? params.insulation_thickness_m ?? 0.10),
+                orient: Number(params.orient ?? params.orientation_deg ?? 180),
+                win_f: Number(params.win_f ?? params.window_fraction ?? 0.15),
+                ach_val: Number(params.ach_val ?? params.ach ?? 0.5),
+            }
+        };
+    });
+
     const handleSliderChange = (key, value) => {
         setShelter(prev => ({
             ...prev,
             [key]: value
         }));
+        if (loadedPreset && !loadedPreset.isModified) {
+            setLoadedPreset(prev => prev ? { ...prev, isModified: true } : null);
+        }
         setTimeout(() => runActiveSimulation(), 100);
     };
     const handleWindowChange = (updates) => {
@@ -21,6 +55,9 @@ export const ShelterDesign = () => {
         const shgc = updates.shgc !== undefined ? updates.shgc : (win?.shgc || 0.55);
         const glazingKey = updates.glazing !== undefined ? updates.glazing : 'glass_double_lowE';
         updateShelterOpenings(width, height, shgc, glazingKey);
+        if (loadedPreset && !loadedPreset.isModified) {
+            setLoadedPreset(prev => prev ? { ...prev, isModified: true } : null);
+        }
         setTimeout(() => runActiveSimulation(), 100);
     };
     const activeWindow = shelter.openings.find(o => !o.is_door) || {
@@ -54,6 +91,66 @@ export const ShelterDesign = () => {
         window.setTimeout(() => setSaveMessage(''), 2500);
     };
     return (<div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      {/* AutoOptimizer Presets quick loader */}
+      <div className="lg:col-span-12 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm flex flex-col gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 dark:border-zinc-800/80 pb-2">
+          <div className="flex items-center gap-2">
+            <Sparkles size={16} className="text-blue-500" />
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-800 dark:text-zinc-200">
+              Load AutoOptimizer Presets
+            </h3>
+            {loadedPreset && (
+              <span className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                loadedPreset.isModified
+                  ? 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800'
+                  : 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800'
+              }`}>
+                <Check size={10} /> Preset #{Number(loadedPreset.id ?? 0) + 1} {loadedPreset.isModified ? '(Modified)' : 'Active'}
+              </span>
+            )}
+          </div>
+          <span className="text-[11px] text-zinc-400">
+            Click any top-scoring preset to load its envelope materials, orientation & ventilation directly into this design
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5">
+          {normalizedPicks.slice(0, 5).map((pick, idx) => {
+            const isSelected = loadedPreset?.id !== undefined && loadedPreset?.id === (pick.id ?? idx);
+            return (
+              <button
+                key={pick.id ?? idx}
+                type="button"
+                onClick={() => loadDesignPreset(pick.params, { id: pick.id ?? idx, score: pick.score })}
+                className={`flex flex-col text-left p-2.5 rounded-xl border transition-all ${
+                  isSelected
+                    ? 'bg-blue-50/80 dark:bg-blue-950/50 border-blue-500 ring-2 ring-blue-500/30 shadow-xs'
+                    : 'bg-zinc-50/50 dark:bg-zinc-900/40 border-zinc-200 dark:border-zinc-800/80 hover:bg-zinc-100 dark:hover:bg-zinc-800/60'
+                }`}
+              >
+                <div className="flex items-center justify-between gap-1 mb-1">
+                  <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded ${
+                    isSelected ? 'bg-blue-600 text-white' : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300'
+                  }`}>
+                    #{idx + 1}
+                  </span>
+                  <span className="font-mono text-[11px] font-extrabold text-blue-600 dark:text-blue-400">
+                    {Number(pick.score ?? 0).toFixed(1)}
+                  </span>
+                </div>
+                <p className="text-[11px] font-bold text-zinc-800 dark:text-zinc-200 truncate">
+                  {getMaterialLabel(pick.params.struct)} + {getMaterialLabel(pick.params.ins)}
+                </p>
+                <div className="flex items-center justify-between text-[9px] text-zinc-400 mt-1">
+                  <span>{Math.round(Number(pick.params.orient))}° Azimuth</span>
+                  <span>{Math.round(Number(pick.params.win_f) * 100)}% Win</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="lg:col-span-12 flex flex-wrap items-center justify-between gap-3 bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/50 dark:border-blue-900/30 rounded-xl p-4">
         <div>
           <h2 className="text-sm font-extrabold text-zinc-950 dark:text-white">Save this material assembly</h2>

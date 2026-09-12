@@ -1,27 +1,61 @@
 import React, { useState } from 'react';
-import { Award, Trash2, Thermometer, Wind, Sun, Droplets, Eye, EyeOff } from 'lucide-react';
+import { Award, Trash2, Thermometer, Wind, Sun, Droplets, Eye, EyeOff, Sparkles } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { simulate, designScore, formatDisplayNumber } from '../services/physicsEngine';
+import { AutoOptimizer } from './AutoOptimizer';
 
-const getResults = (assembly, climate, simTimestep) => {
-  const result = simulate(assembly.shelter, climate, simTimestep, assembly.addedMasses, 100, { t_min: 16, t_max: 26, t_marginal_low: 8, t_marginal_high: 30 }, null, -2, -2);
-  const score = designScore(result, climate.t_hours[climate.t_hours.length - 1] || 72);
+const getResults = (assembly, climate, simTimestep, optResults) => {
+  const result = simulate(
+    assembly.shelter,
+    climate,
+    simTimestep,
+    assembly.addedMasses,
+    100,
+    { t_min: 16, t_max: 26, t_marginal_low: 8, t_marginal_high: 30 },
+    16.0,
+    -2,
+    -2
+  );
+  let score = assembly.presetScore != null ? Number(assembly.presetScore) : null;
+  if (score == null && optResults && optResults.length > 0) {
+    // Match against presets by parameters if saved without explicit presetScore
+    const orient = Math.round(assembly.shelter?.orientation_deg ?? 180);
+    const structThick = Math.round((assembly.wallLayers?.[0]?.thickness ?? 0) * 100);
+    const insThick = Math.round((assembly.wallLayers?.[1]?.thickness ?? 0) * 100);
+    for (const pick of optResults) {
+      const p = pick.params || {};
+      const pOrient = Math.round(Number(p.orient ?? 180));
+      const pSthick = Math.round(Number(p.sthick ?? 0) * 100);
+      const pThick = Math.round(Number(p.thick ?? 0) * 100);
+      if (orient === pOrient && structThick === pSthick && insThick === pThick && pick.score != null) {
+        score = Number(pick.score);
+        break;
+      }
+    }
+  }
+  if (score == null) {
+    score = designScore(result, climate.t_hours[climate.t_hours.length - 1] || 72);
+  }
   return { result, score };
 };
 
 export const DesignCompare = () => {
-  const { savedAssemblies, removeAssembly, climate, climateParams, simTimestep } = useApp();
+  const { savedAssemblies, removeAssembly, climate, climateParams, simTimestep, optResults } = useApp();
   const [expandedAssemblyId, setExpandedAssemblyId] = useState(null);
-  const comparisons = savedAssemblies.map((assembly) => ({ assembly, ...getResults(assembly, climate, simTimestep) }));
+  const comparisons = savedAssemblies.map((assembly) => ({ assembly, ...getResults(assembly, climate, simTimestep, optResults) }));
 
   return (
     <div className="flex flex-col gap-6">
+
+      {/* Page header info bar */}
       <div className="bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/50 dark:border-blue-900/30 rounded-xl p-5">
         <div className="flex items-start gap-3">
           <Award size={18} className="text-blue-500 shrink-0 mt-0.5" />
           <div>
             <h2 className="text-sm font-extrabold text-zinc-950 dark:text-white">Design Compare</h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed">Saved material assemblies are simulated against the current active weather profile, results update when the climate settings change.</p>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed">
+              Saved material assemblies are simulated against the current active weather profile, results update when the climate settings change.
+            </p>
             <div className="flex flex-wrap gap-x-4 gap-y-2 mt-3 text-[10px] font-mono text-blue-600 dark:text-blue-400">
               <span className="flex items-center gap-1"><Thermometer size={12} /> {climateParams.tMean.toFixed(1)}°C mean / {climateParams.tAmp.toFixed(1)}°C swing</span>
               <span className="flex items-center gap-1"><Sun size={12} /> {formatDisplayNumber(climateParams.ghiPeak)} W/m² solar peak</span>
@@ -32,8 +66,9 @@ export const DesignCompare = () => {
         </div>
       </div>
 
+      {/* Saved Assembly Comparison Cards — full width */}
       {comparisons.length === 0 ? (
-        <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-10 shadow-sm text-center text-zinc-400 font-semibold">
+        <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-10 shadow-sm text-center text-zinc-400 font-semibold text-sm">
           No saved assemblies yet. Save an assembly from Shelter Design to compare it here.
         </div>
       ) : (
@@ -45,13 +80,33 @@ export const DesignCompare = () => {
                   <span className="text-[10px] font-bold text-blue-500 uppercase tracking-wider">Saved assembly</span>
                   <h3 className="text-sm font-extrabold text-zinc-950 dark:text-white mt-1">{assembly.name}</h3>
                 </div>
-                <button type="button" onClick={() => removeAssembly(assembly.id)} title="Remove saved assembly" aria-label={`Remove ${assembly.name}`} className="p-1.5 rounded-lg text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20"><Trash2 size={14} /></button>
+                <button
+                  type="button"
+                  onClick={() => removeAssembly(assembly.id)}
+                  title="Remove saved assembly"
+                  aria-label={`Remove ${assembly.name}`}
+                  className="p-1.5 rounded-lg text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20"
+                >
+                  <Trash2 size={14} />
+                </button>
               </div>
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/60 p-3"><span className="text-[10px] font-bold uppercase text-zinc-400">Score</span><p className="text-xl font-extrabold font-mono mt-1 text-blue-600 dark:text-blue-400">{formatDisplayNumber(score)}</p></div>
-                <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/60 p-3"><span className="text-[10px] font-bold uppercase text-zinc-400">Comfort</span><p className="text-xl font-extrabold font-mono mt-1">{formatDisplayNumber(result.comfort_summary_hours.comfortable)} h</p></div>
-                <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/60 p-3"><span className="text-[10px] font-bold uppercase text-zinc-400">Heating</span><p className="text-xl font-extrabold font-mono mt-1">{formatDisplayNumber(result.heating_energy_kWh)} kWh</p></div>
-                <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/60 p-3"><span className="text-[10px] font-bold uppercase text-zinc-400">Indoor range</span><p className="text-sm font-extrabold font-mono mt-2">{formatDisplayNumber(result.min_T_air)}° / {formatDisplayNumber(result.max_T_air)}°C</p></div>
+                <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/60 p-3">
+                  <span className="text-[10px] font-bold uppercase text-zinc-400">Score</span>
+                  <p className="text-xl font-extrabold font-mono mt-1 text-blue-600 dark:text-blue-400">{formatDisplayNumber(score)}</p>
+                </div>
+                <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/60 p-3">
+                  <span className="text-[10px] font-bold uppercase text-zinc-400">Comfort</span>
+                  <p className="text-xl font-extrabold font-mono mt-1">{formatDisplayNumber(result.comfort_summary_hours.comfortable)} h</p>
+                </div>
+                <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/60 p-3">
+                  <span className="text-[10px] font-bold uppercase text-zinc-400">Heating</span>
+                  <p className="text-xl font-extrabold font-mono mt-1">{formatDisplayNumber(result.heating_energy_kWh)} kWh</p>
+                </div>
+                <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/60 p-3">
+                  <span className="text-[10px] font-bold uppercase text-zinc-400">Indoor range</span>
+                  <p className="text-sm font-extrabold font-mono mt-2">{formatDisplayNumber(result.min_T_air)}° / {formatDisplayNumber(result.max_T_air)}°C</p>
+                </div>
               </div>
               <button
                 type="button"
@@ -65,20 +120,36 @@ export const DesignCompare = () => {
                 <div className="flex flex-col gap-3 border-t border-zinc-200 dark:border-zinc-800 pt-4">
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Walls</span>
-                    {assembly.wallLayers.map((layer, index) => <p key={`wall-${index}`} className="text-xs text-zinc-700 dark:text-zinc-300 mt-1">{layer.material.name} <span className="font-mono text-zinc-400">{formatDisplayNumber(layer.thickness)} m</span></p>)}
+                    {assembly.wallLayers.map((layer, index) => (
+                      <p key={`wall-${index}`} className="text-xs text-zinc-700 dark:text-zinc-300 mt-1">
+                        {layer.material.name} <span className="font-mono text-zinc-400">{formatDisplayNumber(layer.thickness)} m</span>
+                      </p>
+                    ))}
                   </div>
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Roof</span>
-                    {assembly.roofLayers.map((layer, index) => <p key={`roof-${index}`} className="text-xs text-zinc-700 dark:text-zinc-300 mt-1">{layer.material.name} <span className="font-mono text-zinc-400">{formatDisplayNumber(layer.thickness)} m</span></p>)}
+                    {assembly.roofLayers.map((layer, index) => (
+                      <p key={`roof-${index}`} className="text-xs text-zinc-700 dark:text-zinc-300 mt-1">
+                        {layer.material.name} <span className="font-mono text-zinc-400">{formatDisplayNumber(layer.thickness)} m</span>
+                      </p>
+                    ))}
                   </div>
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Floor</span>
-                    {assembly.floorLayers.map((layer, index) => <p key={`floor-${index}`} className="text-xs text-zinc-700 dark:text-zinc-300 mt-1">{layer.material.name} <span className="font-mono text-zinc-400">{formatDisplayNumber(layer.thickness)} m</span></p>)}
+                    {assembly.floorLayers.map((layer, index) => (
+                      <p key={`floor-${index}`} className="text-xs text-zinc-700 dark:text-zinc-300 mt-1">
+                        {layer.material.name} <span className="font-mono text-zinc-400">{formatDisplayNumber(layer.thickness)} m</span>
+                      </p>
+                    ))}
                   </div>
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Glazing and thermal mass</span>
-                    <p className="text-xs text-zinc-700 dark:text-zinc-300 mt-1">Glazing: {assembly.shelter.openings.filter((opening) => !opening.is_door).map((opening) => opening.glazing?.name || 'Opaque').join(', ') || 'None'}</p>
-                    <p className="text-xs text-zinc-700 dark:text-zinc-300 mt-1">Mass: {assembly.addedMasses.length > 0 ? assembly.addedMasses.map((mass) => mass.name).join(', ') : 'None'}</p>
+                    <p className="text-xs text-zinc-700 dark:text-zinc-300 mt-1">
+                      Glazing: {assembly.shelter.openings.filter((o) => !o.is_door).map((o) => o.glazing?.name || 'Opaque').join(', ') || 'None'}
+                    </p>
+                    <p className="text-xs text-zinc-700 dark:text-zinc-300 mt-1">
+                      Mass: {assembly.addedMasses.length > 0 ? assembly.addedMasses.map((m) => m.name).join(', ') : 'None'}
+                    </p>
                   </div>
                 </div>
               )}
@@ -87,6 +158,20 @@ export const DesignCompare = () => {
           ))}
         </div>
       )}
+
+      {/* Visual divider */}
+      <div className="flex items-center gap-4 pt-2">
+        <div className="flex-1 h-px bg-zinc-200 dark:bg-zinc-800" />
+        <div className="flex items-center gap-2 shrink-0">
+          <Sparkles size={12} className="text-blue-500" />
+          <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Auto Optimizer</span>
+        </div>
+        <div className="flex-1 h-px bg-zinc-200 dark:bg-zinc-800" />
+      </div>
+
+      {/* Auto Optimizer — full width below comparison cards */}
+      <AutoOptimizer />
+
     </div>
   );
 };
