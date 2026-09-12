@@ -51,12 +51,12 @@ export const MaterialsCatalog = () => {
         setTimeout(() => runActiveSimulation(), 100);
     };
     const getMaterialType = (m) => {
-        if (m.is_pcm)
-            return 'pcm';
-        if (m.k < 0.05)
-            return 'insulation';
-        if (m.rho > 1800)
-            return 'structure';
+        // Use category field from CSV-sourced materials when present
+        if (m.category) return m.category.toLowerCase();
+        // Fallback heuristic for legacy materials without a category field
+        if (m.is_pcm) return 'pcm';
+        if (m.k < 0.05) return 'insulation';
+        if (m.rho > 1800) return 'structure';
         return 'timber';
     };
     const getBadgeStyle = (type) => {
@@ -64,9 +64,26 @@ export const MaterialsCatalog = () => {
             case 'pcm':
                 return 'bg-purple-50 dark:bg-purple-950/20 text-purple-600 dark:text-purple-400 border-purple-100 dark:border-purple-900/30';
             case 'insulation':
+            case 'bio-based insulation':
                 return 'bg-sky-50 dark:bg-sky-950/20 text-sky-600 dark:text-sky-400 border-sky-100 dark:border-sky-900/30';
             case 'structure':
+            case 'structural':
+            case 'masonry':
+            case 'stone':
                 return 'bg-zinc-50 dark:bg-zinc-800/80 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800/50';
+            case 'glazing':
+            case 'air cavity':
+                return 'bg-cyan-50 dark:bg-cyan-950/20 text-cyan-600 dark:text-cyan-400 border-cyan-100 dark:border-cyan-900/30';
+            case 'thermal storage':
+            case 'water':
+                return 'bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-900/30';
+            case 'metal':
+                return 'bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800/50';
+            case 'finish':
+                return 'bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 border-rose-100 dark:border-rose-900/30';
+            case 'wood':
+            case 'polymer':
+            case 'timber':
             default:
                 return 'bg-amber-50 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400 border-amber-100 dark:border-amber-900/30';
         }
@@ -172,6 +189,11 @@ export const MaterialsCatalog = () => {
                         <span className="font-mono">{m.pcm_props.L.toLocaleString()} J/kg</span>
                       </div>
                     </div>)}
+                  {m.source && (
+                    <div className="border-t border-zinc-200 dark:border-zinc-800 pt-1.5 mt-1.5">
+                      <span className="text-[9px] text-zinc-400 dark:text-zinc-500 italic leading-tight block">{m.source}</span>
+                    </div>
+                  )}
                 </div>
               </div>);
         })}

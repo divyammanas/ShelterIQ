@@ -86,7 +86,89 @@ export const DEFAULT_MATERIALS = {
     "pcm_salt_hydrate": {
         name: "PCM Salt Hydrate", k: 1.1, rho: 1560, cp: 2200, alpha: 0.6, epsilon: 0.9,
         is_pcm: true, pcm_props: { T_melt: 29.0, L: 190000, band: 2.0 }
-    }
+    },
+
+    // -----------------------------------------------------------------------
+    // CSV-sourced materials: ShelterIQ_materials_filtered.csv
+    // Keys are slugified material_name values (same algorithm as backend).
+    // Existing keys above are NOT duplicated here — they remain authoritative.
+    // category + source are stored here so the catalog can display them
+    // without a separate API call.
+    // -----------------------------------------------------------------------
+
+    // Structural
+    "normal_weight_concrete":    { name: "Normal-weight concrete",    k: 1.7,   rho: 2300,  cp: 880,  epsilon: 0.94, alpha: 0.6,  is_pcm: false, category: "Structural", source: "ASHRAE Ch.26 / NIST reference data" },
+    "high_strength_concrete":    { name: "High-strength concrete",    k: 2.0,   rho: 2400,  cp: 840,  epsilon: 0.94, alpha: 0.6,  is_pcm: false, category: "Structural", source: "ASHRAE Ch.26 / engineering reference" },
+
+    // Masonry
+    "aerated_autoclaved_concrete_aac": { name: "Aerated autoclaved concrete (AAC)", k: 0.12,  rho: 550,   cp: 1000, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Masonry", source: "ASHRAE Ch.26 / engineering reference" },
+    "dense_concrete_block":      { name: "Dense concrete block",      k: 1.1,   rho: 2100,  cp: 840,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Masonry", source: "ASHRAE Ch.26 / NIST reference data" },
+    "lightweight_concrete_block":{ name: "Lightweight concrete block",k: 0.3,   rho: 1000,  cp: 840,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Masonry", source: "ASHRAE Ch.26 / NIST reference data" },
+    "common_clay_brick":         { name: "Common clay brick",         k: 0.6,   rho: 1800,  cp: 840,  epsilon: 0.9,  alpha: 0.71, is_pcm: false, category: "Masonry", source: "ASHRAE Ch.26 / NIST reference data" },
+    "engineering_brick":         { name: "Engineering brick",         k: 1.1,   rho: 2100,  cp: 840,  epsilon: 0.9,  alpha: 0.71, is_pcm: false, category: "Masonry", source: "ASHRAE Ch.26 / engineering reference" },
+    "adobe_mud_brick":           { name: "Adobe / mud brick",         k: 0.7,   rho: 1600,  cp: 900,  epsilon: 0.9,  alpha: 0.65, is_pcm: false, category: "Masonry", source: "Building-material literature / engineering reference" },
+
+    // Stone
+    "granite":               { name: "Granite",                   k: 2.8,   rho: 2700,  cp: 790,  epsilon: 0.9,  alpha: 0.65, is_pcm: false, category: "Stone", source: "NIST/engineering reference" },
+    "limestone":                 { name: "Limestone",                 k: 1.3,   rho: 2300,  cp: 900,  epsilon: 0.9,  alpha: 0.65, is_pcm: false, category: "Stone", source: "NIST/engineering reference" },
+    "sandstone":                 { name: "Sandstone",                 k: 1.8,   rho: 2200,  cp: 800,  epsilon: 0.9,  alpha: 0.65, is_pcm: false, category: "Stone", source: "NIST/engineering reference" },
+    "marble":                    { name: "Marble",                    k: 2.9,   rho: 2700,  cp: 880,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Stone", source: "Engineering reference" },
+    "slate":                     { name: "Slate",                     k: 2.2,   rho: 2700,  cp: 800,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Stone", source: "Engineering reference" },
+
+    // Finish
+    "gypsum_plaster":            { name: "Gypsum plaster",            k: 0.35,  rho: 950,   cp: 840,  epsilon: 0.9,  alpha: 0.5,  is_pcm: false, category: "Finish", source: "NIST reference / building-material literature" },
+    "gypsum_board":              { name: "Gypsum board",              k: 0.16,  rho: 800,   cp: 1090, epsilon: 0.9,  alpha: 0.5,  is_pcm: false, category: "Finish", source: "NIST / ASHRAE reference" },
+    "cement_plaster":            { name: "Cement plaster",            k: 0.72,  rho: 1800,  cp: 840,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Finish", source: "Engineering reference" },
+    "lime_plaster":              { name: "Lime plaster",              k: 0.7,   rho: 1700,  cp: 840,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Finish", source: "Building-material literature" },
+    "ceramic_tile":              { name: "Ceramic tile",              k: 1.3,   rho: 2000,  cp: 840,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Finish", source: "Engineering reference" },
+
+    // Wood
+    "hardwood_timber":           { name: "Hardwood timber",           k: 0.18,  rho: 700,   cp: 1600, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Wood", source: "ASHRAE / building-material literature" },
+    "plywood":                   { name: "Plywood",                   k: 0.13,  rho: 550,   cp: 1200, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Wood", source: "ASHRAE / engineering reference" },
+    "osb_board":                 { name: "OSB board",                 k: 0.13,  rho: 600,   cp: 1500, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Wood", source: "Engineering reference" },
+
+    // Insulation
+    "cork_board":                { name: "Cork board",                k: 0.043, rho: 120,   cp: 1800, epsilon: 0.9,  alpha: 0.7,  is_pcm: false, category: "Insulation", source: "NIST SRD 81 / building-material literature" },
+    "expanded_perlite":          { name: "Expanded perlite",          k: 0.05,  rho: 150,   cp: 900,  epsilon: 0.9,  alpha: 0.55, is_pcm: false, category: "Insulation", source: "ASHRAE / NIST reference" },
+    "vermiculite":               { name: "Vermiculite",               k: 0.065, rho: 120,   cp: 1000, epsilon: 0.9,  alpha: 0.55, is_pcm: false, category: "Insulation", source: "ASHRAE / NIST SRD 81" },
+    "glass_fiber_batt":          { name: "Glass fiber batt",          k: 0.04,  rho: 20,    cp: 800,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Insulation", source: "ASHRAE Ch.26 / NIST SRD 81" },
+    "rock_wool_batt":            { name: "Rock wool batt",            k: 0.035, rho: 45,    cp: 800,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Insulation", source: "ASHRAE Ch.26 / NIST SRD 81" },
+    "cellular_glass":            { name: "Cellular glass",            k: 0.05,  rho: 120,   cp: 840,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Insulation", source: "NIST SRD 81 / ASHRAE" },
+    "polyurethane_foam":         { name: "Polyurethane foam",         k: 0.025, rho: 35,    cp: 1400, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Insulation", source: "ASHRAE / NIST SRD 81" },
+    "polyisocyanurate_foam":     { name: "Polyisocyanurate foam",     k: 0.023, rho: 35,    cp: 1400, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Insulation", source: "ASHRAE / manufacturer-reference range" },
+    "phenolic_foam":             { name: "Phenolic foam",             k: 0.02,  rho: 40,    cp: 1400, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Insulation", source: "Engineering/manufacturer reference" },
+
+    // Bio-based insulation
+    "hemp_lime_hempcrete":       { name: "Hemp-lime (hempcrete)",     k: 0.07,  rho: 300,   cp: 1500, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Bio-based insulation", source: "Building-material literature" },
+    "sheep_wool_insulation":     { name: "Sheep wool insulation",     k: 0.04,  rho: 25,    cp: 1500, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Bio-based insulation", source: "Building-material literature" },
+    "wood_fiber_insulation_board":{ name: "Wood fiber insulation board", k: 0.045, rho: 160, cp: 2100, epsilon: 0.9, alpha: 0.6,  is_pcm: false, category: "Bio-based insulation", source: "Building-material literature" },
+    "cellulose_loose_fill":      { name: "Cellulose loose-fill",      k: 0.04,  rho: 50,    cp: 1800, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Bio-based insulation", source: "ASHRAE / building-material literature" },
+    "coconut_coir_fiber":        { name: "Coconut coir fiber",        k: 0.045, rho: 100,   cp: 1500, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Bio-based insulation", source: "Building-material literature" },
+
+    // Polymer
+    "polyethylene":              { name: "Polyethylene",              k: 0.4,   rho: 940,   cp: 1900, epsilon: 0.9,  alpha: 0.5,  is_pcm: false, category: "Polymer", source: "Engineering material reference" },
+    "pvc":                       { name: "PVC",                       k: 0.17,  rho: 1400,  cp: 900,  epsilon: 0.9,  alpha: 0.5,  is_pcm: false, category: "Polymer", source: "ASHRAE / engineering reference" },
+    "rubber":                    { name: "Rubber",                    k: 0.16,  rho: 1100,  cp: 1400, epsilon: 0.9,  alpha: 0.5,  is_pcm: false, category: "Polymer", source: "NIST SRD 81 / engineering reference" },
+
+    // Glazing
+    "glass":                 { name: "Glass",                     k: 1.0,   rho: 2500,  cp: 750,  epsilon: 0.95, alpha: 0.85, is_pcm: false, category: "Glazing", source: "ASHRAE Ch.26 / NIST reference" },
+    "double_glazing_air_gap":    { name: "Double glazing, air gap",   k: 2.7,   rho: 2500,  cp: 750,  epsilon: 0.84, alpha: 0.7,  is_pcm: false, category: "Glazing", source: "ASHRAE / glazing reference" },
+    "low_e_double_glazing":      { name: "Low-E double glazing",      k: 1.4,   rho: 2500,  cp: 750,  epsilon: 0.84, alpha: 0.5,  is_pcm: false, category: "Glazing", source: "ASHRAE / glazing reference" },
+
+    // Air cavity
+    "air_gap_still":             { name: "Air gap, still",            k: 0.026, rho: 1.2,   cp: 1007, epsilon: 0.9,  alpha: 0.1,  is_pcm: false, category: "Air cavity", source: "ASHRAE air-space reference" },
+
+    // Thermal storage
+    "water_csv":                 { name: "Water",                     k: 0.6,   rho: 1000,  cp: 4180, epsilon: 0.96, alpha: 0.1,  is_pcm: false, category: "Thermal storage", source: "Engineering thermophysical reference" },
+
+    // PCM (no latent heat data in CSV — registered as plain thermal-mass materials)
+    "paraffin_pcm":              { name: "Paraffin PCM",              k: 0.2,   rho: 900,   cp: 2000, epsilon: 0.9,  alpha: 0.7,  is_pcm: false, category: "PCM", source: "PCM literature / manufacturer-dependent" },
+    "salt_hydrate_pcm_cacl2_6h2o":{ name: "Salt-hydrate PCM (CaCl2·6H2O)", k: 0.5, rho: 1710, cp: 1400, epsilon: 0.9, alpha: 0.7, is_pcm: false, category: "PCM", source: "PCM literature / manufacturer-dependent" },
+    "eutectic_pcm_organic":      { name: "Eutectic PCM, organic",     k: 0.2,   rho: 850,   cp: 2000, epsilon: 0.9,  alpha: 0.7,  is_pcm: false, category: "PCM", source: "PCM literature / manufacturer-dependent" },
+
+    // Metal
+    "aluminum":                  { name: "Aluminum",                  k: 205.0, rho: 2700,  cp: 900,  epsilon: 0.2,  alpha: 0.3,  is_pcm: false, category: "Metal", source: "Engineering thermophysical reference" },
+    "steel":                     { name: "Steel",                     k: 50.0,  rho: 7850,  cp: 490,  epsilon: 0.8,  alpha: 0.6,  is_pcm: false, category: "Metal", source: "Engineering thermophysical reference" }
 };
 export class MaterialDatabase {
     db;

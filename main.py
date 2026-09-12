@@ -20,8 +20,17 @@ from thermal_engine import simulate, AddedMass, SimulationResult
 from compare import DesignCase, run_comparison, design_score
 from optimize import SearchSpace, optimize as run_optimize
 from weather_dataset import get_weather_dataset
+from materials import get_material_dataset as _get_material_dataset
 
 app = FastAPI(title="ShelterIQ Simulation & Optimization Engine API")
+
+# Load material dataset once at startup (singleton, mirrors weather_dataset pattern)
+try:
+    _material_dataset = _get_material_dataset()
+except FileNotFoundError as _e:
+    import warnings as _startup_warnings
+    _startup_warnings.warn(f"Material dataset not loaded: {_e}")
+    _material_dataset = None
 
 app.add_middleware(
     CORSMiddleware,
@@ -150,6 +159,40 @@ def map_to_shelter(s: ShelterSchema) -> Shelter:
     )
     shelter.build_uniform_envelope(wall_layers, roof_layers, floor_layers)
     return shelter
+
+# ---------------------------------------------------------------------------
+# Material dataset endpoints
+# ---------------------------------------------------------------------------
+
+@app.get("/api/materials")
+def get_materials_list():
+    """
+    Returns [{id, name, category, source}] for every material in the CSV dataset.
+    Only sends the fields needed for the frontend selector — not the full property set.
+    """
+    if _material_dataset is None:
+        raise HTTPException(status_code=503, detail="Material dataset not available.")
+    return _material_dataset.list_with_meta()
+
+
+@app.get("/api/materials/{material_id}")
+def get_material_detail(material_id: str):
+    """
+    Returns the full thermal properties for a single material from the CSV dataset.
+    Response: {name, category, thermal_conductivity, density, specific_heat,
+               emissivity, solar_absorptivity, source}
+    """
+    if _material_dataset is None:
+        raise HTTPException(status_code=503, detail="Material dataset not available.")
+    try:
+        return _material_dataset.get_detail(material_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail=f"Material '{material_id}' not found in dataset.")
+
+
+# ---------------------------------------------------------------------------
+# Climate endpoints
+# ---------------------------------------------------------------------------
 
 @app.get("/api/climate/summary")
 def get_climate_summary():

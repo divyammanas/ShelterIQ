@@ -112,3 +112,220 @@ class MaterialDatabase:
                 "PCM": m.is_pcm,
             })
         return rows
+
+
+# ---------------------------------------------------------------------------
+# CSV-backed material dataset (loaded once at startup, singleton pattern)
+# Mirrors weather_dataset.py architecture.
+# ---------------------------------------------------------------------------
+
+import csv as _csv
+import os as _os
+import math as _math
+import re as _re
+import warnings as _warnings
+from typing import List as _List
+
+CSV_REQUIRED_COLUMNS = [
+    "material_name",
+    "category",
+    "k_W_mK",
+    "density_kg_m3",
+    "cp_J_kgK",
+    "emissivity",
+    "solar_absorptivity",
+    "source",
+]
+
+
+def _slugify(name: str) -> str:
+    """Convert a material name to a stable lowercase underscore key."""
+    slug = name.lower()
+    slug = _re.sub(r"[^a-z0-9]+", "_", slug)
+    slug = slug.strip("_")
+    return slug
+
+
+class MaterialDataset:
+    """
+    In-memory store for the CSV-backed material library.
+
+    Loads ``data/ShelterIQ_materials_filtered.csv`` (or a caller-supplied
+    path) once, validates required columns, maps CSV fields to
+    ShelterIQ's Material model, and exposes a stable key-based lookup.
+
+    PCM-category rows in the CSV carry no latent-heat data, so they are
+    registered as plain (non-PCM) materials with is_pcm=False.  The full
+    PCM definitions (pcm_rt21, pcm_salt_hydrate) remain in DEFAULT_MATERIALS
+    and are not affected.
+    """
+
+    def __init__(self, csv_path: Optional[str] = None):
+        if csv_path is None:
+            base_dir = _os.path.dirname(_os.path.abspath(__file__))
+            candidates = [
+                _os.path.join(base_dir, "data", "ShelterIQ_materials_filtered.csv"),
+                _os.path.join(base_dir, "ShelterIQ_materials_filtered.csv"),
+            ]
+            for cp in candidates:
+                if _os.path.isfile(cp):
+                    csv_path = cp
+                    break
+
+        if not csv_path or not _os.path.isfile(csv_path):
+            raise FileNotFoundError(
+                "ShelterIQ_materials_filtered.csv not found. "
+                "Expected at data/ShelterIQ_materials_filtered.csv"
+            )
+
+        self.csv_path = csv_path
+        # key → Material
+        self._materials: Dict[str, Material] = {}
+        # key → metadata (category, source, original name)
+        self._meta: Dict[str, Dict] = {}
+        self._load()
+
+    def _load(self):
+        with open(self.csv_path, mode="r", newline="", encoding="utf-8") as f:
+            reader = _csv.DictReader(f)
+            fieldnames = reader.fieldnames or []
+            missing = [c for c in CSV_REQUIRED_COLUMNS if c not in fieldnames]
+            if missing:
+                raise ValueError(
+                    f"CSV {self.csv_path} is missing required columns: {missing}"
+                )
+            rows = list(reader)
+
+        loaded = 0
+        skipped = 0
+        seen_keys: Dict[str, int] = {}  # key → count, for duplicate detection
+
+        for row in rows:
+            name = row.get("material_name", "").strip()
+            if not name:
+                skipped += 1
+                continue
+
+            # Parse numeric fields; skip row if any required numeric is invalid
+            try:
+                k_val = float(row["k_W_mK"])
+                rho_val = float(row["density_kg_m3"])
+                cp_val = float(row["cp_J_kgK"])
+                eps_val = float(row["emissivity"])
+                alpha_val = float(row["solar_absorptivity"])
+            except (ValueError, KeyError):
+                _warnings.warn(
+                    f"MaterialDataset: skipping row '{name}' — non-numeric property value."
+                )
+                skipped += 1
+                continue
+
+            # Validate finite, positive values
+            if not all(_math.isfinite(v) for v in [k_val, rho_val, cp_val, eps_val, alpha_val]):
+                _warnings.warn(
+                    f"MaterialDataset: skipping row '{name}' — non-finite property value."
+                )
+                skipped += 1
+                continue
+            if k_val <= 0 or rho_val <= 0 or cp_val <= 0:
+                _warnings.warn(
+                    f"MaterialDataset: skipping row '{name}' — non-positive k/rho/cp."
+                )
+                skipped += 1
+                continue
+
+            key = _slugify(name)
+
+            # Disambiguate duplicate slugs
+            if key in seen_keys:
+                seen_keys[key] += 1
+                key = f"{key}_{seen_keys[key]}"
+            else:
+                seen_keys[key] = 1
+
+            material = Material(
+                name=name,
+                k=k_val,
+                rho=rho_val,
+                cp=cp_val,
+                epsilon=eps_val,
+                alpha=alpha_val,
+                is_pcm=False,   # CSV PCM rows have no T_melt/L; keep is_pcm=False
+                pcm_props=None,
+            )
+            self._materials[key] = material
+            self._meta[key] = {
+                "category": row.get("category", "").strip(),
+                "source": row.get("source", "").strip(),
+                "original_name": name,
+            }
+            loaded += 1
+
+        if loaded == 0:
+            raise ValueError(f"MaterialDataset: no valid rows loaded from {self.csv_path}")
+
+        if skipped:
+            _warnings.warn(f"MaterialDataset: skipped {skipped} invalid row(s) from {self.csv_path}")
+
+        self._loaded_count = loaded
+
+    def get(self, key: str) -> Material:
+        if key not in self._materials:
+            raise KeyError(f"Unknown CSV material '{key}'.")
+        return self._materials[key]
+
+    def list_keys(self) -> _List[str]:
+        return list(self._materials.keys())
+
+    def list_with_meta(self) -> _List[Dict]:
+        """
+        Returns a list of {id, name, category, source} dicts — enough for
+        the frontend material-selector without sending the full property set.
+        """
+        result = []
+        for key, mat in self._materials.items():
+            meta = self._meta[key]
+            result.append({
+                "id": key,
+                "name": mat.name,
+                "category": meta["category"],
+                "source": meta["source"],
+            })
+        return result
+
+    def get_detail(self, key: str) -> Dict:
+        """
+        Returns the full property dict for a single material — used by
+        the GET /api/materials/{material_id} endpoint.
+        """
+        mat = self.get(key)
+        meta = self._meta[key]
+        return {
+            "id": key,
+            "name": mat.name,
+            "category": meta["category"],
+            "thermal_conductivity": mat.k,
+            "density": mat.rho,
+            "specific_heat": mat.cp,
+            "emissivity": mat.epsilon,
+            "solar_absorptivity": mat.alpha,
+            "source": meta["source"],
+        }
+
+    @property
+    def loaded_count(self) -> int:
+        return self._loaded_count
+
+
+# ---------------------------------------------------------------------------
+# Singleton
+# ---------------------------------------------------------------------------
+
+_global_material_dataset: Optional["MaterialDataset"] = None
+
+
+def get_material_dataset() -> MaterialDataset:
+    global _global_material_dataset
+    if _global_material_dataset is None:
+        _global_material_dataset = MaterialDataset()
+    return _global_material_dataset
