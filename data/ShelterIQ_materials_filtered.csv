@@ -1,0 +1,49 @@
+material_id,material_name,category,k_W_mK,density_kg_m3,cp_J_kgK,emissivity,solar_absorptivity,source
+1,Normal-weight concrete,Structural,1.7,2300.0,880,0.94,0.6,ASHRAE Ch.26 / NIST reference data
+2,High-strength concrete,Structural,2.0,2400.0,840,0.94,0.6,ASHRAE Ch.26 / engineering reference
+3,Aerated autoclaved concrete (AAC),Masonry,0.12,550.0,1000,0.9,0.6,ASHRAE Ch.26 / engineering reference
+4,Dense concrete block,Masonry,1.1,2100.0,840,0.9,0.6,ASHRAE Ch.26 / NIST reference data
+5,Lightweight concrete block,Masonry,0.3,1000.0,840,0.9,0.6,ASHRAE Ch.26 / NIST reference data
+6,Common clay brick,Masonry,0.6,1800.0,840,0.9,0.71,ASHRAE Ch.26 / NIST reference data
+7,Engineering brick,Masonry,1.1,2100.0,840,0.9,0.71,ASHRAE Ch.26 / engineering reference
+8,Adobe / mud brick,Masonry,0.7,1600.0,900,0.9,0.65,Building-material literature / engineering reference
+9,Granite,Stone,2.8,2700.0,790,0.9,0.65,NIST/engineering reference
+10,Limestone,Stone,1.3,2300.0,900,0.9,0.65,NIST/engineering reference
+11,Sandstone,Stone,1.8,2200.0,800,0.9,0.65,NIST/engineering reference
+12,Marble,Stone,2.9,2700.0,880,0.9,0.6,Engineering reference
+13,Slate,Stone,2.2,2700.0,800,0.9,0.6,Engineering reference
+14,Gypsum plaster,Finish,0.35,950.0,840,0.9,0.5,NIST reference / building-material literature
+15,Gypsum board,Finish,0.16,800.0,1090,0.9,0.5,NIST / ASHRAE reference
+16,Cement plaster,Finish,0.72,1800.0,840,0.9,0.6,Engineering reference
+17,Lime plaster,Finish,0.7,1700.0,840,0.9,0.6,Building-material literature
+18,Ceramic tile,Finish,1.3,2000.0,840,0.9,0.6,Engineering reference
+19,Hardwood timber,Wood,0.18,700.0,1600,0.9,0.6,ASHRAE / building-material literature
+20,Plywood,Wood,0.13,550.0,1200,0.9,0.6,ASHRAE / engineering reference
+21,OSB board,Wood,0.13,600.0,1500,0.9,0.6,Engineering reference
+22,Cork board,Insulation,0.043,120.0,1800,0.9,0.7,NIST SRD 81 / building-material literature
+23,Expanded perlite,Insulation,0.05,150.0,900,0.9,0.55,ASHRAE / NIST reference
+24,Vermiculite,Insulation,0.065,120.0,1000,0.9,0.55,ASHRAE / NIST SRD 81
+25,Glass fiber batt,Insulation,0.04,20.0,800,0.9,0.6,ASHRAE Ch.26 / NIST SRD 81
+26,Rock wool batt,Insulation,0.035,45.0,800,0.9,0.6,ASHRAE Ch.26 / NIST SRD 81
+27,Cellular glass,Insulation,0.05,120.0,840,0.9,0.6,NIST SRD 81 / ASHRAE
+28,Polyurethane foam,Insulation,0.025,35.0,1400,0.9,0.6,ASHRAE / NIST SRD 81
+29,Polyisocyanurate foam,Insulation,0.023,35.0,1400,0.9,0.6,ASHRAE / manufacturer-reference range
+30,Phenolic foam,Insulation,0.02,40.0,1400,0.9,0.6,Engineering/manufacturer reference
+31,Hemp-lime (hempcrete),Bio-based insulation,0.07,300.0,1500,0.9,0.6,Building-material literature
+32,Sheep wool insulation,Bio-based insulation,0.04,25.0,1500,0.9,0.6,Building-material literature
+33,Wood fiber insulation board,Bio-based insulation,0.045,160.0,2100,0.9,0.6,Building-material literature
+34,Cellulose loose-fill,Bio-based insulation,0.04,50.0,1800,0.9,0.6,ASHRAE / building-material literature
+35,Coconut coir fiber,Bio-based insulation,0.045,100.0,1500,0.9,0.6,Building-material literature
+36,Polyethylene,Polymer,0.4,940.0,1900,0.9,0.5,Engineering material reference
+37,PVC,Polymer,0.17,1400.0,900,0.9,0.5,ASHRAE / engineering reference
+38,Rubber,Polymer,0.16,1100.0,1400,0.9,0.5,NIST SRD 81 / engineering reference
+39,Glass,Glazing,1.0,2500.0,750,0.95,0.85,ASHRAE Ch.26 / NIST reference
+40,"Double glazing, air gap",Glazing,2.7,2500.0,750,0.84,0.7,ASHRAE / glazing reference
+41,Low-E double glazing,Glazing,1.4,2500.0,750,0.84,0.5,ASHRAE / glazing reference
+42,"Air gap, still",Air cavity,0.026,1.2,1007,0.9,0.1,ASHRAE air-space reference
+43,Water,Thermal storage,0.6,1000.0,4180,0.96,0.1,Engineering thermophysical reference
+44,Paraffin PCM,PCM,0.2,900.0,2000,0.9,0.7,PCM literature / manufacturer-dependent
+45,Salt-hydrate PCM (CaCl2·6H2O),PCM,0.5,1710.0,1400,0.9,0.7,PCM literature / manufacturer-dependent
+46,"Eutectic PCM, organic",PCM,0.2,850.0,2000,0.9,0.7,PCM literature / manufacturer-dependent
+47,Aluminum,Metal,205.0,2700.0,900,0.2,0.3,Engineering thermophysical reference
+48,Steel,Metal,50.0,7850.0,490,0.8,0.6,Engineering thermophysical reference
