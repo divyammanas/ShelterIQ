@@ -315,25 +315,36 @@ export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], intern
         }
         let Hop_sum = 0.0;
         let Hop_Tsolair_sum = 0.0;
+        let Q_opaque_solar = 0.0;
+        let Hop_ground = 0.0;
+        let Hop_nonground = 0.0;
         for (const el of elements) {
             const U = getUValue(el.layers, el.is_ground_contact);
             const A = el.area;
             let T_solair;
             if (el.is_ground_contact) {
                 T_solair = GROUND_TEMP_C;
+                Hop_ground += U * A;
             }
             else {
+                Hop_nonground += U * A;
                 const I_surf = surfaceIrradiance(cl.ghi, hod, el.orientation_deg, el.tilt_deg, cl.cloud);
                 const alpha = el.layers.length > 0 ? el.layers[0].material.alpha : 0.6;
-                T_solair = T_out_k + (alpha * I_surf / h_out_dyn) - (el.tilt_deg < 10 ? (I_surf === 0 ? 4.0 : 0.0) : 0.0);
+                const solar_dt = (cl.ghi > 0 && I_surf > 0) ? (alpha * I_surf / h_out_dyn) : 0.0;
+                T_solair = T_out_k + solar_dt - (el.tilt_deg < 10 ? (I_surf === 0 ? 4.0 : 0.0) : 0.0);
+                if (solar_dt > 0) {
+                    Q_opaque_solar += U * A * solar_dt;
+                }
             }
             Hop_sum += U * A;
             Hop_Tsolair_sum += U * A * T_solair;
         }
         let Q_win_solar = 0.0;
-        for (const w of windows) {
-            const I_surf = surfaceIrradiance(cl.ghi, hod, w.orientation_deg, 90.0, cl.cloud);
-            Q_win_solar += I_surf * w.shgc * w.area;
+        if (cl.ghi > 0) {
+            for (const w of windows) {
+                const I_surf = surfaceIrradiance(cl.ghi, hod, w.orientation_deg, 90.0, cl.cloud);
+                Q_win_solar += I_surf * w.shgc * w.area;
+            }
         }
         const Q_solar_air = 0.7 * Q_win_solar + internal_gains_W;
         const Q_solar_mass = 0.3 * Q_win_solar;
@@ -357,8 +368,8 @@ export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], intern
         T_mass[k] = Tm_new;
         heating_power[k] = q_heat;
         comfort_status[k] = classifyComfort(Ta_new, comfort_band);
-        solar_gain[k] = Q_win_solar + Hop_Tsolair_sum - Hop_sum * T_out_k;
-        const cond_opaque_loss = Hop_sum * (Tm_new - T_out_k);
+        solar_gain[k] = cl.ghi > 0 ? Math.max(0.0, Q_win_solar + Q_opaque_solar) : 0.0;
+        const cond_opaque_loss = Hop_nonground * (Tm_new - T_out_k) + Hop_ground * (Tm_new - GROUND_TEMP_C);
         const cond_window_loss = H_win_total * (Ta_new - T_out_k);
         conduction_loss[k] = cond_opaque_loss + cond_window_loss;
         ventilation_loss[k] = H_ve * (Ta_new - T_out_k);

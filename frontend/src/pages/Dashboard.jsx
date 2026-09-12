@@ -361,7 +361,7 @@ export const Dashboard = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               <div className="flex flex-col gap-1 border-b border-zinc-100 dark:border-zinc-800 pb-3">
                 <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Solar Gain</span>
-                <span className="text-sm font-bold text-yellow-500 font-mono">+{current.solar_gain.toFixed(0)} W</span>
+                <span className="text-sm font-bold text-yellow-500 font-mono">{current.solar_gain > 0 ? `+${current.solar_gain.toFixed(0)}` : '0'} W</span>
               </div>
               <div className="flex flex-col gap-1 border-b border-zinc-100 dark:border-zinc-800 pb-3">
                 <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Conduction</span>
