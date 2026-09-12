@@ -68,11 +68,12 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
         const compassMat = new THREE.MeshBasicMaterial({ color: 0x475569, side: THREE.DoubleSide });
         const compass = new THREE.Mesh(compassGeom, compassMat);
         compass.rotation.x = Math.PI / 2;
+        compass.position.y = 0.02;
         scene.add(compass);
-        createCompassLabel(scene, "N", 0, 0, 7.9, 0xef4444);
-        createCompassLabel(scene, "S", 0, 0, -7.9, 0x475569);
-        createCompassLabel(scene, "E", -7.9, 0, 0, 0x475569);
-        createCompassLabel(scene, "W", 7.9, 0, 0, 0x475569);
+        createCompassLabel(scene, "N", 0, 0, 8.0, 0xef4444, true);
+        createCompassLabel(scene, "S", 0, 0, -8.0, 0x64748b, false);
+        createCompassLabel(scene, "E", -8.0, 0, 0, 0x64748b, false);
+        createCompassLabel(scene, "W", 8.0, 0, 0, 0x64748b, false);
         const shelterGroup = new THREE.Group();
         scene.add(shelterGroup);
         shelterGroupRef.current = shelterGroup;
@@ -212,50 +213,66 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
         thermalMassQty,
         isDarkMode
     ]);
-    const createCompassLabel = (scene, char, x, y, z, colorVal) => {
-        const mat = new THREE.LineBasicMaterial({ color: colorVal, linewidth: 2 });
-        const points = [];
-        if (char === "N") {
-            points.push(new THREE.Vector3(-0.15, 0, -0.2));
-            points.push(new THREE.Vector3(-0.15, 0, 0.2));
-            points.push(new THREE.Vector3(-0.15, 0, 0.2));
-            points.push(new THREE.Vector3(0.15, 0, -0.2));
-            points.push(new THREE.Vector3(0.15, 0, -0.2));
-            points.push(new THREE.Vector3(0.15, 0, 0.2));
-        }
-        else if (char === "S") {
-            points.push(new THREE.Vector3(0.15, 0, -0.2));
-            points.push(new THREE.Vector3(-0.15, 0, -0.2));
-            points.push(new THREE.Vector3(-0.15, 0, 0));
-            points.push(new THREE.Vector3(0.15, 0, 0));
-            points.push(new THREE.Vector3(0.15, 0, 0.2));
-            points.push(new THREE.Vector3(-0.15, 0, 0.2));
-        }
-        else if (char === "E") {
-            points.push(new THREE.Vector3(0.15, 0, -0.2));
-            points.push(new THREE.Vector3(-0.15, 0, -0.2));
-            points.push(new THREE.Vector3(-0.15, 0, 0.2));
-            points.push(new THREE.Vector3(0.15, 0, 0.2));
-            const midMat = new THREE.LineBasicMaterial({ color: colorVal });
-            const midGeom = new THREE.BufferGeometry().setFromPoints([
-                new THREE.Vector3(-0.15, 0, 0),
-                new THREE.Vector3(0.05, 0, 0)
-            ]);
-            const midLine = new THREE.Line(midGeom, midMat);
-            midLine.position.set(x, y, z);
-            scene.add(midLine);
-        }
-        else if (char === "W") {
-            points.push(new THREE.Vector3(-0.18, 0, -0.2));
-            points.push(new THREE.Vector3(-0.06, 0, 0.2));
-            points.push(new THREE.Vector3(0, 0, -0.05));
-            points.push(new THREE.Vector3(0.06, 0, 0.2));
-            points.push(new THREE.Vector3(0.18, 0, -0.2));
-        }
-        const geom = new THREE.BufferGeometry().setFromPoints(points);
-        const line = new THREE.Line(geom, mat);
-        line.position.set(x, y, z);
-        scene.add(line);
+    const createCompassLabel = (scene, char, x, y, z, colorVal, isNorth = false) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 128;
+        canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+        if (!ctx)
+            return;
+
+        const cx = 64, cy = 64, radius = 50;
+
+        // Circular badge background
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.fillStyle = isNorth
+            ? 'rgba(239, 68, 68, 0.2)'
+            : 'rgba(15, 23, 42, 0.85)';
+        ctx.fill();
+
+        // Border ring
+        ctx.strokeStyle = isNorth
+            ? '#ef4444'
+            : '#64748b';
+        ctx.lineWidth = isNorth ? 4 : 3;
+        ctx.stroke();
+
+        // Direction letter
+        ctx.font = 'bold 54px Inter, system-ui, Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = isNorth
+            ? '#ef4444'
+            : '#f1f5f9';
+        ctx.fillText(char, cx, cy + 2);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        const spriteMat = new THREE.SpriteMaterial({
+            map: texture,
+            transparent: true,
+            depthTest: true,
+            depthWrite: false
+        });
+        const sprite = new THREE.Sprite(spriteMat);
+        sprite.position.set(x, y + 0.35, z);
+        sprite.scale.set(0.95, 0.95, 1);
+        scene.add(sprite);
+
+        // Ground anchor tick connecting to the ring
+        const dir = new THREE.Vector3(x, 0, z).normalize();
+        const tickGeom = new THREE.BufferGeometry().setFromPoints([
+            dir.clone().multiplyScalar(7.2).setY(0.02),
+            dir.clone().multiplyScalar(7.8).setY(0.02)
+        ]);
+        const tickMat = new THREE.LineBasicMaterial({
+            color: colorVal,
+            linewidth: 2,
+            transparent: true,
+            opacity: 0.8
+        });
+        const tickLine = new THREE.Line(tickGeom, tickMat);
+        scene.add(tickLine);
     };
     const getMaterialColor = (material) => {
         if (material.is_pcm)
@@ -867,22 +884,25 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
         shelterGroup.rotation.y = -shelter.orientation_deg * Math.PI / 180.0;
         const hod = activeHour % 24;
         const isDaylight = hod >= 7.5 && hod <= 16.5;
-        let alt = 0, az = 0;
+        let alt = 0;
+        let sunX = 0, sunY = -5.0, sunZ = 13;
+        const sunDist = 13;
         if (isDaylight) {
             const t_noon = hod - 12;
             alt = 35 * Math.cos((t_noon / 4.5) * (Math.PI / 2));
-            az = 180 - t_noon * 20;
+            const altRad = alt * Math.PI / 180.0;
+            const phi = (t_noon / 4.5) * (Math.PI / 2);
+            sunX = sunDist * Math.cos(altRad) * Math.sin(phi);
+            sunY = Math.max(sunDist * Math.sin(altRad), -5.0);
+            sunZ = -sunDist * Math.cos(altRad) * Math.cos(phi);
         }
         else {
             alt = -40;
-            az = 0;
+            const altRad = alt * Math.PI / 180.0;
+            sunX = 0;
+            sunY = -5.0;
+            sunZ = sunDist * Math.cos(altRad);
         }
-        const altRad = alt * Math.PI / 180.0;
-        const azRad = az * Math.PI / 180.0;
-        const sunDist = 13;
-        const sunX = sunDist * Math.cos(altRad) * Math.sin(azRad);
-        const sunY = Math.max(sunDist * Math.sin(altRad), -5.0);
-        const sunZ = sunDist * Math.cos(altRad) * Math.cos(azRad);
         if (sunMeshRef.current) {
             sunMeshRef.current.position.set(sunX, sunY, sunZ);
         }
