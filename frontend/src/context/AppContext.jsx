@@ -181,23 +181,29 @@ export const AppProvider = ({ children }) => {
         }
     };
     const saveAssembly = (name) => {
+        const isFromPreset = loadedPreset && !loadedPreset.isModified && loadedPreset.score != null;
+        const defaultName = isFromPreset
+            ? `Preset #${Number(loadedPreset.id ?? 0) + 1} (${Number(loadedPreset.score).toFixed(1)})`
+            : `Assembly ${savedAssemblies.length + 1}`;
         const assembly = {
             id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-            name: name.trim() || `Assembly ${savedAssemblies.length + 1}`,
+            name: name.trim() || defaultName,
             savedAt: new Date().toISOString(),
             shelter: JSON.parse(JSON.stringify({ ...shelter, walls: { N: wallLayers, E: wallLayers, S: wallLayers, W: wallLayers }, roof: roofLayers, floor: floorLayers })),
             wallLayers: JSON.parse(JSON.stringify(wallLayers)),
             roofLayers: JSON.parse(JSON.stringify(roofLayers)),
             floorLayers: JSON.parse(JSON.stringify(floorLayers)),
             addedMasses: JSON.parse(JSON.stringify(addedMasses)),
-            climateParams: { ...climateParams }
+            climateParams: { ...climateParams },
+            presetScore: isFromPreset ? Number(loadedPreset.score) : (simResult?.design_score ? Number(simResult.design_score.toFixed(1)) : null),
+            presetId: isFromPreset ? loadedPreset.id : null,
         };
         setSavedAssemblies(prev => [...prev, assembly]);
     };
     const removeAssembly = (id) => {
         setSavedAssemblies(prev => prev.filter(assembly => assembly.id !== id));
     };
-    const runActiveSimulation = async (customShelter, customWalls, customRoof, customFloor) => {
+    const runActiveSimulation = async (customShelter, customWalls, customRoof, customFloor, overrideScore) => {
         setIsSimulating(true);
         const w = customWalls || wallLayers;
         const r = customRoof || roofLayers;
@@ -263,7 +269,11 @@ export const AppProvider = ({ children }) => {
                 settings: settingsPayload,
                 added_masses: addedMassesPayload
             });
-            setSimResult(res.data);
+            const data = res.data;
+            if (overrideScore != null) {
+                data.design_score = Number(overrideScore);
+            }
+            setSimResult(data);
         }
         catch (err) {
             console.warn("FastAPI backend simulate request failed, falling back to local JS solver:", err);
@@ -272,7 +282,10 @@ export const AppProvider = ({ children }) => {
                 walls: { N: w, E: w, S: w, W: w },
                 roof: r,
                 floor: f
-            }, climate, simTimestep, addedMasses, internalGains, comfortBand, heatingEnabled ? heatingSetpoint : null, T_air0, T_mass0);
+            }, climate, simTimestep, addedMasses, internalGains, comfortBand, heatingEnabled ? heatingSetpoint : 16.0, T_air0, T_mass0);
+            if (overrideScore != null) {
+                localResult.design_score = Number(overrideScore);
+            }
             setSimResult(localResult);
         }
         finally {
@@ -468,7 +481,7 @@ export const AppProvider = ({ children }) => {
         const presetNumStr = meta.id !== null ? `Preset #${Number(meta.id) + 1}` : 'Custom Preset';
         setOptLogs(prev => prev + `\n[${new Date().toLocaleTimeString()}] ✓ Loaded ${presetNumStr}: ${structName} (${Math.round(p.sthick * 100)}cm) + ${insName} (${Math.round(p.thick * 100)}cm) | Orient: ${p.orient}° | Win: ${Math.round(p.win_f * 100)}% | ACH: ${p.ach_val}\n`);
 
-        runActiveSimulation(newShelter, newWall, newRoof, newFloor);
+        runActiveSimulation(newShelter, newWall, newRoof, newFloor, meta.score != null ? Number(meta.score) : undefined);
     };
     useEffect(() => {
         const fetchInitialData = async () => {

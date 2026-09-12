@@ -4,16 +4,45 @@ import { useApp } from '../context/AppContext';
 import { simulate, designScore, formatDisplayNumber } from '../services/physicsEngine';
 import { AutoOptimizer } from './AutoOptimizer';
 
-const getResults = (assembly, climate, simTimestep) => {
-  const result = simulate(assembly.shelter, climate, simTimestep, assembly.addedMasses, 100, { t_min: 16, t_max: 26, t_marginal_low: 8, t_marginal_high: 30 }, null, -2, -2);
-  const score = designScore(result, climate.t_hours[climate.t_hours.length - 1] || 72);
+const getResults = (assembly, climate, simTimestep, optResults) => {
+  const result = simulate(
+    assembly.shelter,
+    climate,
+    simTimestep,
+    assembly.addedMasses,
+    100,
+    { t_min: 16, t_max: 26, t_marginal_low: 8, t_marginal_high: 30 },
+    16.0,
+    -2,
+    -2
+  );
+  let score = assembly.presetScore != null ? Number(assembly.presetScore) : null;
+  if (score == null && optResults && optResults.length > 0) {
+    // Match against presets by parameters if saved without explicit presetScore
+    const orient = Math.round(assembly.shelter?.orientation_deg ?? 180);
+    const structThick = Math.round((assembly.wallLayers?.[0]?.thickness ?? 0) * 100);
+    const insThick = Math.round((assembly.wallLayers?.[1]?.thickness ?? 0) * 100);
+    for (const pick of optResults) {
+      const p = pick.params || {};
+      const pOrient = Math.round(Number(p.orient ?? 180));
+      const pSthick = Math.round(Number(p.sthick ?? 0) * 100);
+      const pThick = Math.round(Number(p.thick ?? 0) * 100);
+      if (orient === pOrient && structThick === pSthick && insThick === pThick && pick.score != null) {
+        score = Number(pick.score);
+        break;
+      }
+    }
+  }
+  if (score == null) {
+    score = designScore(result, climate.t_hours[climate.t_hours.length - 1] || 72);
+  }
   return { result, score };
 };
 
 export const DesignCompare = () => {
-  const { savedAssemblies, removeAssembly, climate, climateParams, simTimestep } = useApp();
+  const { savedAssemblies, removeAssembly, climate, climateParams, simTimestep, optResults } = useApp();
   const [expandedAssemblyId, setExpandedAssemblyId] = useState(null);
-  const comparisons = savedAssemblies.map((assembly) => ({ assembly, ...getResults(assembly, climate, simTimestep) }));
+  const comparisons = savedAssemblies.map((assembly) => ({ assembly, ...getResults(assembly, climate, simTimestep, optResults) }));
 
   return (
     <div className="flex flex-col gap-6">
