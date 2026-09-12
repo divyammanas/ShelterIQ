@@ -35,13 +35,14 @@ export const AnsysValidation = () => {
             xAxis: {
                 type: 'category',
                 data: t.map(x => `Hr ${x}`),
-                axisLabel: { textStyle },
+                axisLabel: { ...textStyle },
                 axisLine: { lineStyle: { color: gridBorderColor } }
             },
             yAxis: {
                 type: 'value',
                 name: 'Temp (°C)',
-                axisLabel: { textStyle },
+                nameTextStyle: { ...textStyle },
+                axisLabel: { ...textStyle },
                 axisLine: { lineStyle: { color: gridBorderColor } },
                 splitLine: { lineStyle: { color: gridBorderColor } }
             },

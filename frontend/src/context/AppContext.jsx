@@ -1,6 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { MaterialDatabase, syntheticLadakhWinter, simulate, designScore, parseCSV, LCG } from '../services/physicsEngine';
+import {
+    FALLBACK_CLIMATE_SUMMARY,
+    FALLBACK_SCENARIOS_META,
+    FALLBACK_SCENARIO_DATA,
+    createClimateFromRecords
+} from '../data/lehWeatherFallback';
 const AppContext = createContext(undefined);
 const ASSEMBLY_STORAGE_KEY = 'shelterIQ_saved_assemblies';
 export const AppProvider = ({ children }) => {
@@ -56,20 +62,27 @@ export const AppProvider = ({ children }) => {
         t_marginal_low: 8.0,
         t_marginal_high: 30.0
     });
-    const [climateParams, setClimateParams] = useState({
-        latitude: 34.0,
-        tMean: -8.0,
-        tAmp: 9.0,
-        ghiPeak: 650,
-        windMean: 3.5,
-        rhMean: 35,
-        cloudMean: 15
+    const [climateParams, setClimateParams] = useState(() => {
+        const initialStats = FALLBACK_SCENARIO_DATA['typical_winter_72h']?.stats;
+        return {
+            latitude: 34.15,
+            tMean: initialStats ? initialStats.mean_temp : -8.0,
+            tAmp: initialStats ? Math.max(1, (initialStats.max_temp - initialStats.min_temp) / 2) : 9.0,
+            ghiPeak: initialStats ? Math.round(initialStats.max_ghi) : 650,
+            windMean: initialStats ? initialStats.mean_wind : 3.5,
+            rhMean: initialStats ? Math.round(initialStats.mean_rh) : 35,
+            cloudMean: 15
+        };
     });
     const [climateSource, setClimateSource] = useState('real');
     const [selectedScenario, setSelectedScenario] = useState('typical_winter_72h');
-    const [climateSummary, setClimateSummary] = useState(null);
-    const [availableScenarios, setAvailableScenarios] = useState([]);
-    const [climate, setClimate] = useState(() => syntheticLadakhWinter(72, 0.5, -8.0, 9.0, 650, 3.5, 35, 15));
+    const [climateSummary, setClimateSummary] = useState(FALLBACK_CLIMATE_SUMMARY);
+    const [availableScenarios, setAvailableScenarios] = useState(FALLBACK_SCENARIOS_META);
+    const [backendAvailable, setBackendAvailable] = useState(false);
+    const [climate, setClimate] = useState(() => {
+        const fallback = createClimateFromRecords(FALLBACK_SCENARIO_DATA['typical_winter_72h']?.records);
+        return fallback || syntheticLadakhWinter(72, 0.5, -8.0, 9.0, 650, 3.5, 35, 15);
+    });
     const [simDuration, setSimDurationState] = useState(72);
     const [simTimestep, setSimTimestepState] = useState(0.5);
     const [internalGains, setInternalGains] = useState(100.0);
@@ -148,54 +161,49 @@ export const AppProvider = ({ children }) => {
     const selectRealClimateScenario = async (scenarioId) => {
         setSelectedScenario(scenarioId);
         setClimateSource('real');
-        try {
-            const res = await axios.get(`/api/climate/hourly?scenario=${scenarioId}`);
-            const data = res.data;
-            const records = data.records || [];
-            if (records.length > 0) {
-                const t_hours = records.map((_, i) => i * 1.0);
-                const T_out = records.map(r => r.temperature_c);
-                const ghi = records.map(r => r.ghi_w_m2);
-                const wind = records.map(r => r.wind_speed_m_s);
-                const rh = records.map(r => r.relative_humidity);
-                const cloud = records.map(r => r.cloud_cover_pct);
+        let records = [];
+        let stats = null;
 
-                const nextClimate = {
-                    t_hours,
-                    T_out,
-                    ghi,
-                    wind,
-                    rh,
-                    cloud,
-                    at: (t_hour) => {
-                        const idx = Math.min(Math.max(0, Math.floor(t_hour)), t_hours.length - 1);
-                        const nextIdx = Math.min(idx + 1, t_hours.length - 1);
-                        const frac = t_hour - idx;
-                        return {
-                            T_out: T_out[idx] + (T_out[nextIdx] - T_out[idx]) * frac,
-                            ghi: ghi[idx] + (ghi[nextIdx] - ghi[idx]) * frac,
-                            wind: wind[idx] + (wind[nextIdx] - wind[idx]) * frac,
-                            rh: rh[idx] + (rh[nextIdx] - rh[idx]) * frac,
-                            cloud: cloud[idx] + (cloud[nextIdx] - cloud[idx]) * frac,
-                        };
-                    }
-                };
-                setClimate(nextClimate);
-                setSimDurationState(t_hours.length);
-                if (data.stats) {
-                    setClimateParams({
-                        latitude: 34.15,
-                        tMean: data.stats.mean_temp,
-                        tAmp: Math.max(1, (data.stats.max_temp - data.stats.min_temp) / 2),
-                        ghiPeak: Math.round(data.stats.max_ghi),
-                        windMean: data.stats.mean_wind,
-                        rhMean: Math.round(data.stats.mean_rh),
-                        cloudMean: 20
-                    });
+        // If backend is active, try to fetch scenario records
+        if (backendAvailable) {
+            try {
+                const res = await axios.get(`/api/climate/hourly?scenario=${scenarioId}`);
+                const data = res.data;
+                if (data && typeof data === 'object' && Array.isArray(data.records) && data.records.length > 0) {
+                    records = data.records;
+                    stats = data.stats;
                 }
+            } catch {
+                // fall through to embedded fallback
             }
-        } catch (err) {
-            console.warn("Failed to load real climate scenario hourly data:", err);
+        }
+
+        // Fallback to high-fidelity embedded scenario dataset
+        if (records.length === 0) {
+            const fallbackItem = FALLBACK_SCENARIO_DATA[scenarioId] || FALLBACK_SCENARIO_DATA['typical_winter_72h'];
+            if (fallbackItem) {
+                records = fallbackItem.records || [];
+                stats = fallbackItem.stats || null;
+            }
+        }
+
+        if (records.length > 0) {
+            const nextClimate = createClimateFromRecords(records);
+            if (nextClimate) {
+                setClimate(nextClimate);
+                setSimDurationState(nextClimate.t_hours.length);
+            }
+            if (stats) {
+                setClimateParams({
+                    latitude: 34.15,
+                    tMean: stats.mean_temp != null ? stats.mean_temp : -8.0,
+                    tAmp: (stats.max_temp != null && stats.min_temp != null) ? Math.max(1, (stats.max_temp - stats.min_temp) / 2) : 9.0,
+                    ghiPeak: stats.max_ghi != null ? Math.round(stats.max_ghi) : 650,
+                    windMean: stats.mean_wind != null ? stats.mean_wind : 3.5,
+                    rhMean: stats.mean_rh != null ? Math.round(stats.mean_rh) : 35,
+                    cloudMean: 15
+                });
+            }
         }
     };
     const switchToSynthetic = () => {
@@ -203,20 +211,40 @@ export const AppProvider = ({ children }) => {
         setClimate(syntheticLadakhWinter(simDuration, simTimestep, climateParams.tMean, climateParams.tAmp, climateParams.ghiPeak, climateParams.windMean, climateParams.rhMean, climateParams.cloudMean));
     };
     useEffect(() => {
+        let isMounted = true;
         const initClimate = async () => {
             try {
-                const [sumRes, scenRes] = await Promise.all([
-                    axios.get('/api/climate/summary'),
-                    axios.get('/api/climate/scenarios')
-                ]);
-                setClimateSummary(sumRes.data);
-                setAvailableScenarios(scenRes.data);
-                await selectRealClimateScenario('typical_winter_72h');
-            } catch (err) {
-                console.warn("Initial climate fetch info:", err);
+                const scenRes = await axios.get('/api/climate/scenarios');
+                // Strictly verify that response is a JSON array and NOT Vite index.html fallback
+                if (Array.isArray(scenRes?.data) && scenRes.data.length > 0) {
+                    if (isMounted) {
+                        setAvailableScenarios(scenRes.data);
+                        setBackendAvailable(true);
+                    }
+                    try {
+                        const sumRes = await axios.get('/api/climate/summary');
+                        if (isMounted && sumRes?.data && typeof sumRes.data === 'object' && typeof sumRes.data.total_records === 'number') {
+                            setClimateSummary(sumRes.data);
+                        }
+                    } catch {
+                        // ignore
+                    }
+                    await selectRealClimateScenario(selectedScenario || 'typical_winter_72h');
+                    return;
+                }
+            } catch {
+                // Backend API is offline
+            }
+            // Offline / Static mode: ensure verified fallback dataset is used
+            if (isMounted) {
+                setBackendAvailable(false);
+                setAvailableScenarios(FALLBACK_SCENARIOS_META);
+                setClimateSummary(FALLBACK_CLIMATE_SUMMARY);
+                await selectRealClimateScenario(selectedScenario || 'typical_winter_72h');
             }
         };
         initClimate();
+        return () => { isMounted = false; };
     }, []);
     const updateShelterOpenings = (width, height, shgc, glazingKey) => {
         setShelter(prev => {
@@ -349,42 +377,48 @@ export const AppProvider = ({ children }) => {
             heating_enabled: heatingEnabled,
             heating_setpoint: heatingSetpoint
         };
-        try {
-            const res = await axios.post('/api/simulate', {
-                shelter: shelterPayload,
-                climate: climatePayload,
-                settings: settingsPayload,
-                added_masses: addedMassesPayload,
-                scenario: climateSource === 'real' ? selectedScenario : undefined
-            });
-            const data = res.data;
-            if (overrideScore != null) {
-                data.design_score = Number(overrideScore);
+        if (backendAvailable) {
+            try {
+                const res = await axios.post('/api/simulate', {
+                    shelter: shelterPayload,
+                    climate: climatePayload,
+                    settings: settingsPayload,
+                    added_masses: addedMassesPayload,
+                    scenario: climateSource === 'real' ? selectedScenario : undefined
+                });
+                const data = res.data;
+                if (data && typeof data === 'object' && Array.isArray(data.t_hours)) {
+                    if (overrideScore != null) {
+                        data.design_score = Number(overrideScore);
+                    }
+                    setSimResult(data);
+                    setIsSimulating(false);
+                    return;
+                }
             }
-            setSimResult(data);
-        }
-        catch (err) {
-            console.warn("FastAPI backend simulate request failed, falling back to local JS solver:", err);
-            const effHeating = heatingEnabled ? (heatingSetpoint ?? 16.0) : null;
-            const localResult = simulate({
-                ...s,
-                walls: { N: w, E: w, S: w, W: w },
-                roof: r,
-                floor: f
-            }, climate, simTimestep, addedMasses, internalGains, comfortBand, effHeating, T_air0, T_mass0);
-            if (overrideScore != null) {
-                localResult.design_score = Number(overrideScore);
+            catch {
+                // Backend call failed, gracefully run local JS solver
             }
-            setSimResult(localResult);
         }
-        finally {
-            setIsSimulating(false);
+
+        const effHeating = heatingEnabled ? (heatingSetpoint ?? 16.0) : null;
+        const localResult = simulate({
+            ...s,
+            walls: { N: w, E: w, S: w, W: w },
+            roof: r,
+            floor: f
+        }, climate, simTimestep, addedMasses, internalGains, comfortBand, effHeating, T_air0, T_mass0);
+        if (overrideScore != null) {
+            localResult.design_score = Number(overrideScore);
         }
+        setSimResult(localResult);
+        setIsSimulating(false);
     };
     const runOptimizationMC = async () => {
         setIsOptimizing(true);
         setOptLogs("Initiating design search space optimization...\n");
-        const activeWalls = {};
+        try {
+            const activeWalls = {};
         const faces = ['N', 'E', 'S', 'W'];
         faces.forEach(face => {
             activeWalls[face] = wallLayers.map(l => ({
@@ -431,21 +465,29 @@ export const AppProvider = ({ children }) => {
             heating_enabled: heatingEnabled,
             heating_setpoint: heatingSetpoint
         };
-        try {
-            setOptLogs(prev => prev + "Contacting server-side optimizer API...\n");
-            const res = await axios.post('/api/optimize', {
-                shelter: shelterPayload,
-                climate: climatePayload,
-                settings: settingsPayload,
-                n_random: 35,
-                scenario: climateSource === 'real' ? selectedScenario : undefined
-            });
-            setOptResults(res.data);
-            setOptLogs(prev => prev + "Backend Optimization Complete! Best Score: " + res.data[0].score.toFixed(1) + "\n");
+        if (backendAvailable) {
+            try {
+                setOptLogs(prev => prev + "Contacting server-side optimizer API...\n");
+                const res = await axios.post('/api/optimize', {
+                    shelter: shelterPayload,
+                    climate: climatePayload,
+                    settings: settingsPayload,
+                    n_random: 35,
+                    scenario: climateSource === 'real' ? selectedScenario : undefined
+                });
+                if (Array.isArray(res.data) && res.data.length > 0) {
+                    setOptResults(res.data);
+                    setOptLogs(prev => prev + "Backend Optimization Complete! Best Score: " + res.data[0].score.toFixed(1) + "\n");
+                    setIsOptimizing(false);
+                    return;
+                }
+            }
+            catch {
+                // Backend API call failed, run local Monte Carlo
+            }
         }
-        catch (err) {
-            console.warn("Backend optimization API failed. Falling back to local Monte Carlo simulation...");
-            setOptLogs(prev => prev + "Backend failed. Running local Monte Carlo search...\n");
+
+        setOptLogs(prev => prev + "Running local high-speed Monte Carlo search...\n");
             const optSpace = {
                 insulations: ["eps_insulation", "xps_insulation", "mineral_wool"],
                 thicknesses: [0.05, 0.10, 0.15],
@@ -604,7 +646,7 @@ export const AppProvider = ({ children }) => {
                         const winMatch = designStr.match(/win=(\d+)%/);
                         if (winMatch)
                             params.win_f = parseFloat(winMatch[1]) / 100.0;
-                        const achMatch = designStr.match(/ACH=([\d\.]+)/);
+                        const achMatch = designStr.match(/ACH=([\d.]+)/);
                         if (achMatch)
                             params.ach_val = parseFloat(achMatch[1]);
                         return {
@@ -673,8 +715,6 @@ export const AppProvider = ({ children }) => {
             setSimTimestep,
             internalGains,
             setInternalGains,
-            comfortBand,
-            setComfortBand,
             heatingEnabled,
             setHeatingEnabled,
             heatingSetpoint,

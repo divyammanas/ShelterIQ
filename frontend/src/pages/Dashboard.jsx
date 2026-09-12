@@ -196,13 +196,14 @@ export const Dashboard = () => {
             xAxis: {
                 type: 'category',
                 data: simResult.t_hours.map(h => `${h}h`),
-                axisLabel: { textStyle },
+                axisLabel: { ...textStyle },
                 axisLine: { lineStyle: { color: gridBorderColor } }
             },
             yAxis: {
                 type: 'value',
                 name: 'Temp (°C)',
-                axisLabel: { textStyle },
+                nameTextStyle: { ...textStyle },
+                axisLabel: { ...textStyle },
                 axisLine: { lineStyle: { color: gridBorderColor } },
                 splitLine: { lineStyle: { color: gridBorderColor } }
             },
@@ -263,13 +264,14 @@ export const Dashboard = () => {
             xAxis: {
                 type: 'category',
                 data: simResult.t_hours.map(h => `${h}h`),
-                axisLabel: { textStyle },
+                axisLabel: { ...textStyle },
                 axisLine: { lineStyle: { color: gridBorderColor } }
             },
             yAxis: {
                 type: 'value',
                 name: 'Heat Flow (W)',
-                axisLabel: { textStyle },
+                nameTextStyle: { ...textStyle },
+                axisLabel: { ...textStyle },
                 axisLine: { lineStyle: { color: gridBorderColor } },
                 splitLine: { lineStyle: { color: gridBorderColor } }
             },

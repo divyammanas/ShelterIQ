@@ -213,7 +213,7 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
         thermalMassQty,
         isDarkMode
     ]);
-    const createCompassLabel = (scene, char, x, y, z, colorVal, isNorth = false) => {
+    function createCompassLabel(scene, char, x, y, z, colorVal, isNorth = false) {
         const canvas = document.createElement('canvas');
         canvas.width = 128;
         canvas.height = 128;
@@ -248,6 +248,7 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
         ctx.fillText(char, cx, cy + 2);
 
         const texture = new THREE.CanvasTexture(canvas);
+        texture.flipY = false;
         const spriteMat = new THREE.SpriteMaterial({
             map: texture,
             transparent: true,
@@ -345,6 +346,7 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
         ctx.textBaseline = 'middle';
         ctx.fillText(text, 128, 32);
         const texture = new THREE.CanvasTexture(canvas);
+        texture.flipY = false;
         const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true });
         const sprite = new THREE.Sprite(spriteMat);
         sprite.position.copy(pos);
@@ -476,7 +478,7 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
             });
         }
     };
-    const rebuildGeometry = () => {
+    function rebuildGeometry() {
         if (!shelter || !shelterGroupRef.current || !arrowGroupRef.current)
             return;
         const shelterGroup = shelterGroupRef.current;
