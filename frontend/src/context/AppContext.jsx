@@ -79,6 +79,7 @@ export const AppProvider = ({ children }) => {
     const [optResults, setOptResults] = useState([]);
     const [optLogs, setOptLogs] = useState("Waiting to execute optimizer search space...");
     const [isOptimizing, setIsOptimizing] = useState(false);
+    const [loadedPreset, setLoadedPreset] = useState(null);
     useEffect(() => {
         localStorage.setItem('shelterIQ_theme', isDarkMode ? 'dark' : 'light');
         const root = window.document.documentElement;
@@ -196,28 +197,33 @@ export const AppProvider = ({ children }) => {
     const removeAssembly = (id) => {
         setSavedAssemblies(prev => prev.filter(assembly => assembly.id !== id));
     };
-    const runActiveSimulation = async () => {
+    const runActiveSimulation = async (customShelter, customWalls, customRoof, customFloor) => {
         setIsSimulating(true);
+        const w = customWalls || wallLayers;
+        const r = customRoof || roofLayers;
+        const f = customFloor || floorLayers;
+        const s = customShelter || shelter;
+
         const activeWalls = {};
         const faces = ['N', 'E', 'S', 'W'];
         faces.forEach(face => {
-            activeWalls[face] = wallLayers.map(l => ({
+            activeWalls[face] = w.map(l => ({
                 material: { ...l.material },
                 thickness: l.thickness
             }));
         });
         const shelterPayload = {
-            length: shelter.length,
-            width: shelter.width,
-            height: shelter.height,
-            shape: shelter.shape,
-            orientation_deg: shelter.orientation_deg,
-            roof_pitch_deg: shelter.roof_pitch_deg,
-            ach: shelter.ach,
+            length: s.length,
+            width: s.width,
+            height: s.height,
+            shape: s.shape,
+            orientation_deg: s.orientation_deg,
+            roof_pitch_deg: s.roof_pitch_deg,
+            ach: s.ach,
             walls: activeWalls,
-            roof: roofLayers.map(l => ({ material: { ...l.material }, thickness: l.thickness })),
-            floor: floorLayers.map(l => ({ material: { ...l.material }, thickness: l.thickness })),
-            openings: shelter.openings.map(o => ({
+            roof: r.map(l => ({ material: { ...l.material }, thickness: l.thickness })),
+            floor: f.map(l => ({ material: { ...l.material }, thickness: l.thickness })),
+            openings: s.openings.map(o => ({
                 name: o.name,
                 width: o.width,
                 height: o.height,
@@ -262,10 +268,10 @@ export const AppProvider = ({ children }) => {
         catch (err) {
             console.warn("FastAPI backend simulate request failed, falling back to local JS solver:", err);
             const localResult = simulate({
-                ...shelter,
-                walls: { N: wallLayers, E: wallLayers, S: wallLayers, W: wallLayers },
-                roof: roofLayers,
-                floor: floorLayers
+                ...s,
+                walls: { N: w, E: w, S: w, W: w },
+                roof: r,
+                floor: f
             }, climate, simTimestep, addedMasses, internalGains, comfortBand, heatingEnabled ? heatingSetpoint : null, T_air0, T_mass0);
             setSimResult(localResult);
         }
@@ -391,7 +397,7 @@ export const AppProvider = ({ children }) => {
                     floor: floor_l
                 };
                 const res = simulate(mockShelter, climate, simTimestep, addedMasses, internalGains, comfortBand, 16.0, T_air0, T_mass0);
-                const score = designScore(res, 72.0);
+                const score = designScore(res, simDuration);
                 candidates.push({
                     score,
                     params: { ins, thick, struct, sthick, orient, win_f, ach_val }
@@ -407,7 +413,7 @@ export const AppProvider = ({ children }) => {
             setIsOptimizing(false);
         }
     };
-    const loadDesignPreset = (p) => {
+    const loadDesignPreset = (p, presetMeta = {}) => {
         const structMat = mdb.get(p.struct);
         const insMat = mdb.get(p.ins);
         const newWall = [
@@ -415,7 +421,7 @@ export const AppProvider = ({ children }) => {
             { material: insMat, thickness: p.thick }
         ];
         const newRoof = [
-            { material: structMat, thickness: Math.max(p.sthick * 0.6, 0.05) },
+            { material: structMat, thickness: Math.max(Number((p.sthick * 0.6).toFixed(2)), 0.05) },
             { material: insMat, thickness: p.thick }
         ];
         const newFloor = [
@@ -426,17 +432,43 @@ export const AppProvider = ({ children }) => {
         setFloorLayers(newFloor);
         const south_wall_area = shelter.length * shelter.height;
         const win_area = Math.max(south_wall_area * p.win_f, 0.1);
-        const win_w = Math.min(Math.sqrt(win_area), shelter.length * 0.8);
-        const win_h = win_area / win_w;
-        setShelter(prev => ({
-            ...prev,
+        const win_w = Number(Math.min(Math.sqrt(win_area), shelter.length * 0.8).toFixed(2));
+        const win_h = Number((win_area / win_w).toFixed(2));
+        const newOpenings = [
+            { name: "South Window", width: win_w, height: win_h, area: Number((win_w * win_h).toFixed(2)), glazing: mdb.get("glass_double_lowE"), shgc: 0.55, orientation_deg: 180.0, is_door: false },
+            { name: "Entry Door", width: 0.9, height: 2.0, area: 1.8, is_door: true, u_value_override: 1.8, orientation_deg: p.orient, shgc: 0.0 }
+        ];
+        const newShelter = {
+            ...shelter,
             orientation_deg: p.orient,
             ach: p.ach_val,
-            openings: [
-                { name: "South Window", width: win_w, height: win_h, area: win_w * win_h, glazing: mdb.get("glass_double_lowE"), shgc: 0.55, orientation_deg: 180.0, is_door: false },
-                { name: "Entry Door", width: 0.9, height: 2.0, area: 1.8, is_door: true, u_value_override: 1.8, orientation_deg: p.orient, shgc: 0.0 }
-            ]
-        }));
+            openings: newOpenings,
+            walls: {
+                N: JSON.parse(JSON.stringify(newWall)),
+                E: JSON.parse(JSON.stringify(newWall)),
+                S: JSON.parse(JSON.stringify(newWall)),
+                W: JSON.parse(JSON.stringify(newWall))
+            },
+            roof: JSON.parse(JSON.stringify(newRoof)),
+            floor: JSON.parse(JSON.stringify(newFloor))
+        };
+        setShelter(newShelter);
+
+        const meta = {
+            id: presetMeta.id !== undefined ? presetMeta.id : null,
+            score: presetMeta.score !== undefined ? presetMeta.score : null,
+            params: { ...p },
+            isModified: false,
+            loadedAt: Date.now()
+        };
+        setLoadedPreset(meta);
+
+        const structName = structMat?.name || p.struct;
+        const insName = insMat?.name || p.ins;
+        const presetNumStr = meta.id !== null ? `Preset #${Number(meta.id) + 1}` : 'Custom Preset';
+        setOptLogs(prev => prev + `\n[${new Date().toLocaleTimeString()}] ✓ Loaded ${presetNumStr}: ${structName} (${Math.round(p.sthick * 100)}cm) + ${insName} (${Math.round(p.thick * 100)}cm) | Orient: ${p.orient}° | Win: ${Math.round(p.win_f * 100)}% | ACH: ${p.ach_val}\n`);
+
+        runActiveSimulation(newShelter, newWall, newRoof, newFloor);
     };
     useEffect(() => {
         const fetchInitialData = async () => {
@@ -549,6 +581,8 @@ export const AppProvider = ({ children }) => {
             runActiveSimulation,
             runOptimizationMC,
             loadDesignPreset,
+            loadedPreset,
+            setLoadedPreset,
             isDarkMode,
             setIsDarkMode
         }}>

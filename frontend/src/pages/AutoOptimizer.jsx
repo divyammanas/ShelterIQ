@@ -3,7 +3,7 @@ import { Sparkles, Play, Import, ListCollapse, Award, Loader2, Check } from 'luc
 import { useApp } from '../context/AppContext';
 import { formatDisplayNumber, parseCSV } from '../services/physicsEngine';
 export const AutoOptimizer = () => {
-    const { optResults, setOptResults, optLogs, setOptLogs, isOptimizing, runOptimizationMC, loadDesignPreset, runActiveSimulation } = useApp();
+    const { optResults, setOptResults, optLogs, setOptLogs, isOptimizing, runOptimizationMC, loadDesignPreset, loadedPreset } = useApp();
     const fileInputRef = useRef(null);
     const logRef = useRef(null);
     React.useEffect(() => {
@@ -63,21 +63,39 @@ export const AutoOptimizer = () => {
         };
         reader.readAsText(file);
     };
-    const handleApplyPreset = (params) => {
-        loadDesignPreset(params);
-        setTimeout(() => runActiveSimulation(), 150);
+    const handleApplyPreset = (params, id, score) => {
+        loadDesignPreset(params, { id, score });
     };
     const getMaterialLabel = (key) => {
-        switch (key) {
+        const safeKey = String(key ?? '');
+        switch (safeKey) {
             case 'eps_insulation': return 'EPS';
             case 'xps_insulation': return 'XPS';
             case 'mineral_wool': return 'Mineral Wool';
             case 'stone_granite': return 'Granite';
             case 'rammed_earth': return 'Rammed Earth';
             case 'concrete_light': return 'Light Concrete';
-            default: return key.replace('_', ' ');
+            default: return safeKey ? safeKey.replace(/_/g, ' ') : 'Unknown material';
         }
     };
+
+    const normalizedResults = (optResults ?? []).map((result, idx) => {
+        const params = result?.params ?? {};
+        return {
+            ...result,
+            id: result?.id ?? idx,
+            params: {
+                struct: params.struct ?? params.structure ?? 'stone_granite',
+                sthick: Number(params.sthick ?? params.structure_thickness_m ?? 0.30),
+                ins: params.ins ?? params.insulation ?? 'xps_insulation',
+                thick: Number(params.thick ?? params.insulation_thickness_m ?? 0.10),
+                orient: Number(params.orient ?? params.orientation_deg ?? 180),
+                win_f: Number(params.win_f ?? params.window_fraction ?? 0.15),
+                ach_val: Number(params.ach_val ?? params.ach ?? 0.5),
+            }
+        };
+    });
+
     return (<div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       
       <div className="lg:col-span-5 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-6">
@@ -130,43 +148,92 @@ export const AutoOptimizer = () => {
 
       </div>
 
-      <div className="lg:col-span-7 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-6">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
-          <Award size={16} className="text-blue-500"/> Top 5 Optimized Passive Shelter Picks
-        </h3>
+      <div className="lg:col-span-7 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-5">
+        <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-3">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2">
+            <Award size={16} className="text-blue-500"/> Top 5 Optimized Passive Shelter Picks
+          </h3>
+          {loadedPreset && (
+            <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-full flex items-center gap-1">
+              <Check size={10} /> Preset #{Number(loadedPreset.id ?? 0) + 1} Loaded
+            </span>
+          )}
+        </div>
+
+        {loadedPreset && (
+          <div className="flex items-center justify-between bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-900/60 rounded-xl px-3.5 py-2.5 text-xs text-blue-900 dark:text-blue-200">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>
+                <strong>Preset #{Number(loadedPreset.id ?? 0) + 1}</strong> is currently loaded into your active Shelter Design and simulation.
+              </span>
+            </div>
+            <a href="#/design" className="font-extrabold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 text-[11px] shrink-0 ml-3">
+              View in Shelter Design →
+            </a>
+          </div>
+        )}
 
         <div className="space-y-4 max-h-[500px] overflow-y-auto pr-1">
-          {optResults.map((result, idx) => (<div key={idx} className="p-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:shadow-sm transition-all">
-              <div className="flex-1 flex flex-col gap-3">
-                <div className="flex items-center gap-2.5">
-                  <span className="flex items-center justify-center w-5 h-5 rounded-lg bg-blue-600/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 font-extrabold text-[10px]">
-                    #{idx + 1}
-                  </span>
-                  <h4 className="font-extrabold text-xs text-zinc-900 dark:text-white">
-                    {getMaterialLabel(result.params.struct)} ({Math.round(result.params.sthick * 100)}cm) + {getMaterialLabel(result.params.ins)} ({Math.round(result.params.thick * 100)}cm)
-                  </h4>
+          {normalizedResults.map((result, idx) => {
+            const isLoaded = loadedPreset?.id !== undefined && loadedPreset?.id === (result.id ?? idx);
+            return (
+              <div
+                key={result.id ?? idx}
+                className={`p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
+                  isLoaded
+                    ? 'bg-blue-50/60 dark:bg-blue-950/30 border-2 border-blue-500 shadow-md ring-2 ring-blue-500/20'
+                    : 'bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 hover:shadow-sm'
+                }`}
+              >
+                <div className="flex-1 flex flex-col gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <span className={`flex items-center justify-center w-5 h-5 rounded-lg font-extrabold text-[10px] ${
+                      isLoaded
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-blue-600/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400'
+                    }`}>
+                      #{idx + 1}
+                    </span>
+                    <h4 className="font-extrabold text-xs text-zinc-900 dark:text-white">
+                      {getMaterialLabel(result.params.struct)} ({Math.round(Number(result.params.sthick) * 100)}cm) + {getMaterialLabel(result.params.ins)} ({Math.round(Number(result.params.thick) * 100)}cm)
+                    </h4>
+                    {isLoaded && (
+                      <span className="text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-100/80 dark:bg-blue-900/60 px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <Check size={9} /> Active
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5 text-[9px] font-extrabold uppercase text-zinc-400">
+                    <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{formatDisplayNumber(result.params.orient)}° Azimuth</span>
+                    <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{(Number(result.params.win_f) * 100).toFixed(0)}% Glazing</span>
+                    <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{formatDisplayNumber(result.params.ach_val)} ACH</span>
+                  </div>
                 </div>
 
-                <div className="flex flex-wrap gap-1.5 text-[9px] font-extrabold uppercase text-zinc-400">
-                  <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{formatDisplayNumber(result.params.orient)}° Azimuth</span>
-                  <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{(result.params.win_f * 100).toFixed(0)}% Glazing</span>
-                  <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{formatDisplayNumber(result.params.ach_val)} ACH</span>
+                <div className="flex items-center sm:flex-col items-end gap-3 justify-between shrink-0">
+                  <div className="flex flex-col sm:items-end">
+                    <span className="text-[8px] font-bold text-zinc-400 uppercase tracking-wider">Score</span>
+                    <span className="text-lg font-extrabold text-blue-600 dark:text-blue-400 font-mono">{Number(result.score ?? 0).toFixed(1)}</span>
+                  </div>
+
+                  <button
+                    onClick={() => handleApplyPreset(result.params, result.id ?? idx, result.score)}
+                    className={`flex items-center gap-1.5 text-[10px] font-bold px-3.5 py-2 rounded-lg transition-all ${
+                      isLoaded
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm'
+                        : 'border border-blue-600 hover:bg-blue-600/5 dark:hover:bg-blue-500/10 text-blue-600 dark:text-blue-400'
+                    }`}
+                  >
+                    <Check size={12}/> {isLoaded ? 'Loaded' : 'Load Preset'}
+                  </button>
                 </div>
               </div>
+            );
+          })}
 
-              <div className="flex items-center sm:flex-col items-end gap-3 justify-between shrink-0">
-                <div className="flex flex-col sm:items-end">
-                  <span className="text-[8px] font-bold text-zinc-400 uppercase tracking-wider">Score</span>
-                  <span className="text-lg font-extrabold text-blue-600 dark:text-blue-400 font-mono">{result.score.toFixed(1)}</span>
-                </div>
-
-                <button onClick={() => handleApplyPreset(result.params)} className="flex items-center gap-1.5 border border-blue-600 hover:bg-blue-600/5 dark:hover:bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all">
-                  <Check size={10}/> Load Preset
-                </button>
-              </div>
-            </div>))}
-
-          {optResults.length === 0 && (<div className="flex flex-col items-center justify-center text-center text-zinc-400 py-16 gap-3">
+          {normalizedResults.length === 0 && (<div className="flex flex-col items-center justify-center text-center text-zinc-400 py-16 gap-3">
               <Sparkles size={40} className="text-zinc-200 dark:text-zinc-800"/>
               <p className="text-xs font-semibold">
                 Click "Run Seeded Search" on the left panel to execute random-search combined with local-refinement on the simulation engine.

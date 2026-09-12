@@ -265,6 +265,7 @@ def api_optimize(req: OptimizeRequest):
         
         serialized = []
         for r in top5:
+            params = r.get("params", {})
             serialized.append({
                 "name": r["design"],
                 "score": float(r["score"]),
@@ -273,7 +274,15 @@ def api_optimize(req: OptimizeRequest):
                 "comfort_h": float(r["comfortable_h"]),
                 "heating_energy": float(r["estimated_heating_kWh"]),
                 "conduction_loss": float(r["total_heat_loss_kWh"]),
-                "params": r["params"]
+                "params": {
+                    "struct": params.get("structure") or params.get("struct") or "stone_granite",
+                    "sthick": float(params.get("structure_thickness_m", params.get("sthick", 0.3))),
+                    "ins": params.get("insulation") or params.get("ins") or "xps_insulation",
+                    "thick": float(params.get("insulation_thickness_m", params.get("thick", 0.1))),
+                    "orient": float(params.get("orientation_deg", params.get("orient", 180.0))),
+                    "win_f": float(params.get("window_fraction", params.get("win_f", 0.15))),
+                    "ach_val": float(params.get("ach", params.get("ach_val", 0.5))),
+                }
             })
         return serialized
     except Exception as e:
@@ -316,6 +325,8 @@ def get_optimization_results():
 
 
 if HAS_REACT_BUILD:
+    app.mount("/assets", StaticFiles(directory=os.path.join(REACT_DIST, "assets")), name="react_assets")
+
     @app.get("/Icon.jpeg")
     def get_icon_jpeg():
         path = os.path.join(REACT_DIST, "Icon.jpeg")

@@ -39,11 +39,6 @@ export const Layout = () => {
                 title: "Design Compare",
                 subtitle: "Compare material assemblies under the active climate profile"
                 };
-            case '/optimization':
-                return {
-                    title: "Design Space Auto-Optimizer",
-                    subtitle: "Evaluate multi-parameter combinations to maximize passive performance"
-                };
             case '/validation':
                 return {
                     title: "ANSYS CHT Fluent Validation",
@@ -63,7 +58,6 @@ export const Layout = () => {
         { path: '/materials', label: 'Materials Catalog', icon: Database },
         { path: '/simulation', label: 'Simulation Setup', icon: Play },
         { path: '/comparison', label: 'Design Compare', icon: Columns },
-        { path: '/optimization', label: 'Auto-Optimizer', icon: Sparkles },
         { path: '/validation', label: 'ANSYS Validation', icon: ShieldCheck },
     ];
     const headerMeta = getPageHeader();

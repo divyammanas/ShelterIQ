@@ -404,13 +404,20 @@ export function classifyComfort(T, band) {
         return "marginal";
     return "uncomfortable";
 }
-export function designScore(res, comfort_band_hours_duration = 72.0) {
-    const comfort_score = Math.min(res.comfort_summary_hours.comfortable / comfort_band_hours_duration, 1.0);
-    const heating_score = 1.0 - Math.min(res.heating_energy_kWh / 150.0, 1.0);
-    const mean_T = res.T_air.reduce((a, b) => a + b, 0) / res.T_air.length;
-    const variance = res.T_air.reduce((a, b) => a + Math.pow(b - mean_T, 2), 0) / res.T_air.length;
+export function normalizeDesignScore(res, comfort_band_hours_duration = 72.0) {
+    const comfortHours = Number(res?.comfort_summary_hours?.comfortable ?? res?.comfortable_h ?? 0);
+    const heatingEnergyKWh = Number(res?.heating_energy_kWh ?? res?.estimated_heating_kWh ?? 0);
+    const tempSeries = Array.isArray(res?.T_air) ? res.T_air : [];
+    const mean_T = tempSeries.length > 0 ? tempSeries.reduce((a, b) => a + b, 0) / tempSeries.length : 0;
+    const variance = tempSeries.length > 0 ? tempSeries.reduce((a, b) => a + Math.pow(b - mean_T, 2), 0) / tempSeries.length : 0;
     const std = Math.sqrt(variance);
+    const comfort_score = Math.min(comfortHours / comfort_band_hours_duration, 1.0);
+    const heating_score = 1.0 - Math.min(heatingEnergyKWh / 150.0, 1.0);
     const stability_score = 1.0 - Math.min(std / 10.0, 1.0);
     const score = 100 * (0.4 * comfort_score + 0.35 * heating_score + 0.25 * stability_score);
     return Math.round(score * 10) / 10;
+}
+
+export function designScore(res, comfort_band_hours_duration = 72.0) {
+    return normalizeDesignScore(res, comfort_band_hours_duration);
 }
