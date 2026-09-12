@@ -69,7 +69,7 @@ export const AppProvider = ({ children }) => {
     const [simDuration, setSimDurationState] = useState(72);
     const [simTimestep, setSimTimestepState] = useState(0.5);
     const [internalGains, setInternalGains] = useState(100.0);
-    const [heatingEnabled, setHeatingEnabled] = useState(false);
+    const [heatingEnabled, setHeatingEnabled] = useState(true);
     const [heatingSetpoint, setHeatingSetpoint] = useState(16.0);
     const [T_air0, setT_air0] = useState(5.0);
     const [T_mass0, setT_mass0] = useState(5.0);
