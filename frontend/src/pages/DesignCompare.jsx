@@ -4,17 +4,17 @@ import { useApp } from '../context/AppContext';
 import { simulate, designScore, formatDisplayNumber } from '../services/physicsEngine';
 import { AutoOptimizer } from './AutoOptimizer';
 
-const getResults = (assembly, climate, simTimestep, optResults) => {
+const getResults = (assembly, climate, simTimestep, optResults, comfortBand, heatingEnabled, heatingSetpoint, T_air0, T_mass0, internalGains) => {
   const result = simulate(
     assembly.shelter,
     climate,
     simTimestep,
     assembly.addedMasses,
-    100,
-    { t_min: 16, t_max: 26, t_marginal_low: 8, t_marginal_high: 30 },
-    16.0,
-    -2,
-    -2
+    internalGains ?? 100,
+    comfortBand || { t_min: 16, t_max: 26, t_marginal_low: 8, t_marginal_high: 30 },
+    heatingEnabled ? heatingSetpoint : null,
+    T_air0 ?? -2,
+    T_mass0 ?? -2
   );
   let score = assembly.presetScore != null ? Number(assembly.presetScore) : null;
   if (score == null && optResults && optResults.length > 0) {
@@ -40,9 +40,12 @@ const getResults = (assembly, climate, simTimestep, optResults) => {
 };
 
 export const DesignCompare = () => {
-  const { savedAssemblies, removeAssembly, climate, climateParams, simTimestep, optResults } = useApp();
+  const { savedAssemblies, removeAssembly, climate, climateParams, simTimestep, optResults, comfortBand, heatingEnabled, heatingSetpoint, T_air0, T_mass0, internalGains } = useApp();
   const [expandedAssemblyId, setExpandedAssemblyId] = useState(null);
-  const comparisons = savedAssemblies.map((assembly) => ({ assembly, ...getResults(assembly, climate, simTimestep, optResults) }));
+  const comparisons = savedAssemblies.map((assembly) => ({
+    assembly,
+    ...getResults(assembly, climate, simTimestep, optResults, comfortBand, heatingEnabled, heatingSetpoint, T_air0, T_mass0, internalGains)
+  }));
 
   return (
     <div className="flex flex-col gap-6">
@@ -93,19 +96,19 @@ export const DesignCompare = () => {
               <div className="grid grid-cols-2 gap-3">
                 <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/60 p-3">
                   <span className="text-[10px] font-bold uppercase text-zinc-400">Score</span>
-                  <p className="text-xl font-extrabold font-mono mt-1 text-blue-600 dark:text-blue-400">{formatDisplayNumber(score)}</p>
+                  <p className="text-xl font-extrabold font-mono mt-1 text-blue-600 dark:text-blue-400">{score != null ? Number(score).toFixed(1) : '-'}</p>
                 </div>
                 <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/60 p-3">
                   <span className="text-[10px] font-bold uppercase text-zinc-400">Comfort</span>
-                  <p className="text-xl font-extrabold font-mono mt-1">{formatDisplayNumber(result.comfort_summary_hours.comfortable)} h</p>
+                  <p className="text-xl font-extrabold font-mono mt-1">{result?.comfort_summary_hours?.comfortable != null ? Number(result.comfort_summary_hours.comfortable).toFixed(1) : 0} h</p>
                 </div>
                 <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/60 p-3">
                   <span className="text-[10px] font-bold uppercase text-zinc-400">Heating</span>
-                  <p className="text-xl font-extrabold font-mono mt-1">{formatDisplayNumber(result.heating_energy_kWh)} kWh</p>
+                  <p className="text-xl font-extrabold font-mono mt-1">{result?.heating_energy_kWh != null ? Number(result.heating_energy_kWh).toFixed(1) : 0} kWh</p>
                 </div>
                 <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/60 p-3">
                   <span className="text-[10px] font-bold uppercase text-zinc-400">Indoor range</span>
-                  <p className="text-sm font-extrabold font-mono mt-2">{formatDisplayNumber(result.min_T_air)}° / {formatDisplayNumber(result.max_T_air)}°C</p>
+                  <p className="text-sm font-extrabold font-mono mt-2">{result?.min_T_air != null ? Number(result.min_T_air).toFixed(1) : '-'}° / {result?.max_T_air != null ? Number(result.max_T_air).toFixed(1) : '-'}°C</p>
                 </div>
               </div>
               <button

@@ -27,6 +27,7 @@ class ComfortBand:
 
 def comfort_hours(temps, dt_h: float, band: ComfortBand) -> dict:
     counts = {"comfortable": 0.0, "marginal": 0.0, "uncomfortable": 0.0}
-    for T in temps:
+    eval_temps = temps[1:] if len(temps) > 1 else temps
+    for T in eval_temps:
         counts[band.classify(T)] += dt_h
     return counts

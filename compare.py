@@ -26,7 +26,7 @@ class DesignCase:
 
 def run_comparison(cases: List[DesignCase], climate: ClimateSeries, dt_h: float = 0.5,
                     comfort_band: Optional[ComfortBand] = None,
-                    heating_setpoint_C: Optional[float] = 18.0) -> List[Dict]:
+                    heating_setpoint_C: Optional[float] = None) -> List[Dict]:
     rows = []
     for case in cases:
         result: SimulationResult = simulate(

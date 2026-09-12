@@ -377,8 +377,9 @@ export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], intern
         storage_rate[k] = (current_C_mass * (Tm_new - T_mass[k - 1]) + C_air * (Ta_new - T_air[k - 1])) / dt_sec;
     }
     const summary = { comfortable: 0.0, marginal: 0.0, uncomfortable: 0.0 };
-    for (const status of comfort_status) {
-        summary[status] = (summary[status] || 0) + dt_h;
+    for (let k = 1; k < n; k++) {
+        const dt_h_step = t_axis[k] - t_axis[k - 1];
+        summary[comfort_status[k]] = (summary[comfort_status[k]] || 0) + dt_h_step;
     }
     let heating_energy_kWh = 0;
     for (let k = 1; k < n; k++) {

@@ -282,7 +282,7 @@ export const AppProvider = ({ children }) => {
                 walls: { N: w, E: w, S: w, W: w },
                 roof: r,
                 floor: f
-            }, climate, simTimestep, addedMasses, internalGains, comfortBand, heatingEnabled ? heatingSetpoint : 16.0, T_air0, T_mass0);
+            }, climate, simTimestep, addedMasses, internalGains, comfortBand, heatingEnabled ? heatingSetpoint : null, T_air0, T_mass0);
             if (overrideScore != null) {
                 localResult.design_score = Number(overrideScore);
             }
@@ -409,7 +409,7 @@ export const AppProvider = ({ children }) => {
                     roof: roof_l,
                     floor: floor_l
                 };
-                const res = simulate(mockShelter, climate, simTimestep, addedMasses, internalGains, comfortBand, 16.0, T_air0, T_mass0);
+                const res = simulate(mockShelter, climate, simTimestep, addedMasses, internalGains, comfortBand, heatingEnabled ? heatingSetpoint : null, T_air0, T_mass0);
                 const score = designScore(res, simDuration);
                 candidates.push({
                     score,
