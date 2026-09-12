@@ -723,8 +723,8 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
                 const pitch = shelter.roof_pitch_deg * Math.PI / 180.0;
                 const slabW = (W / 2) / Math.cos(pitch) + 0.15;
                 const slabNGroup = new THREE.Group();
-                slabNGroup.position.set(0, H + (W / 4) * Math.sin(pitch), -W / 4);
-                slabNGroup.rotation.x = pitch;
+                slabNGroup.position.set(0, H + (W / 4) * Math.tan(pitch), -W / 4);
+                slabNGroup.rotation.x = -pitch;
                 let y_local = -t_roof / 2;
                 for (let i = roofLayers.length - 1; i >= 0; i--) {
                     const layer = roofLayers[i];
@@ -745,8 +745,8 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
                 }
                 shelterGroup.add(slabNGroup);
                 const slabSGroup = new THREE.Group();
-                slabSGroup.position.set(0, H + (W / 4) * Math.sin(pitch), W / 4);
-                slabSGroup.rotation.x = -pitch;
+                slabSGroup.position.set(0, H + (W / 4) * Math.tan(pitch), W / 4);
+                slabSGroup.rotation.x = pitch;
                 y_local = -t_roof / 2;
                 for (let i = roofLayers.length - 1; i >= 0; i--) {
                     const layer = roofLayers[i];
