@@ -871,7 +871,7 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
         if (isDaylight) {
             const t_noon = hod - 12;
             alt = 35 * Math.cos((t_noon / 4.5) * (Math.PI / 2));
-            az = 180 + t_noon * 20;
+            az = 180 - t_noon * 20;
         }
         else {
             alt = -40;
