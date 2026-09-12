@@ -103,9 +103,10 @@ export const Dashboard = () => {
     const getWallU = () => getUValue(shelter.walls.S || []).toFixed(2);
     const getRoofU = () => getUValue(shelter.roof || []).toFixed(2);
     const generateRecommendations = () => {
-        if (!simResult)
+        if (!simResult || !simResult.comfort_summary_hours)
             return [];
-        const comfort_pct = (simResult.comfort_summary_hours.comfortable / 72.0) * 100;
+        const totalDuration = (simResult?.t_hours?.length > 0) ? simResult.t_hours[simResult.t_hours.length - 1] : 72.0;
+        const comfort_pct = (simResult.comfort_summary_hours.comfortable / totalDuration) * 100;
         const std = Math.sqrt(simResult.T_air.reduce((a, b) => {
             const mean = simResult.T_air.reduce((s, x) => s + x, 0) / simResult.T_air.length;
             return a + Math.pow(b - mean, 2);
@@ -308,6 +309,7 @@ export const Dashboard = () => {
             ]
         };
     };
+    const totalDuration = (simResult?.t_hours?.length > 0) ? simResult.t_hours[simResult.t_hours.length - 1] : 72.0;
     const score = simResult ? Number(simResult.design_score.toFixed(1)) : 0;
     const comfortHours = simResult ? Number(simResult.comfort_summary_hours.comfortable.toFixed(1)) : 0;
     const heatingEnergy = simResult ? Number(simResult.heating_energy_kWh.toFixed(2)) : 0;
@@ -528,7 +530,7 @@ export const Dashboard = () => {
               <div className="flex justify-between items-center text-xs">
                 <span className="text-zinc-400 dark:text-zinc-500 font-medium">Comfort Target</span>
                 <span className="font-bold text-zinc-900 dark:text-white font-mono">
-                  {((comfortHours / 72) * 100).toFixed(0)}%
+                  {((comfortHours / totalDuration) * 100).toFixed(0)}%
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs">

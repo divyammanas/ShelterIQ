@@ -881,7 +881,8 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
                 shelterGroup.add(pcmW);
             }
         }
-        shelterGroup.rotation.y = -shelter.orientation_deg * Math.PI / 180.0;
+        // Keep window facing south direction (towards S compass marker along -Z)
+        shelterGroup.rotation.y = Math.PI;
         const hod = activeHour % 24;
         const isDaylight = hod >= 7.5 && hod <= 16.5;
         let alt = 0;

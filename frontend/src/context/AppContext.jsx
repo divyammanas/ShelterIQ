@@ -71,8 +71,8 @@ export const AppProvider = ({ children }) => {
     const [internalGains, setInternalGains] = useState(100.0);
     const [heatingEnabled, setHeatingEnabled] = useState(false);
     const [heatingSetpoint, setHeatingSetpoint] = useState(16.0);
-    const [T_air0, setT_air0] = useState(-2.0);
-    const [T_mass0, setT_mass0] = useState(-2.0);
+    const [T_air0, setT_air0] = useState(5.0);
+    const [T_mass0, setT_mass0] = useState(5.0);
     const [simResult, setSimResult] = useState(null);
     const [activeHour, setActiveHour] = useState(12);
     const [isSimulating, setIsSimulating] = useState(false);
@@ -195,8 +195,12 @@ export const AppProvider = ({ children }) => {
             floorLayers: JSON.parse(JSON.stringify(floorLayers)),
             addedMasses: JSON.parse(JSON.stringify(addedMasses)),
             climateParams: { ...climateParams },
-            presetScore: isFromPreset ? Number(loadedPreset.score) : (simResult?.design_score ? Number(simResult.design_score.toFixed(1)) : null),
-            presetId: isFromPreset ? loadedPreset.id : null,
+            presetScore: (loadedPreset && loadedPreset.score != null) ? Number(loadedPreset.score) : (simResult?.design_score ? Number(simResult.design_score.toFixed(1)) : null),
+            presetId: loadedPreset?.id != null ? loadedPreset.id : null,
+            heatingEnabled: Boolean(heatingEnabled),
+            heatingSetpoint: heatingSetpoint ?? 16.0,
+            T_air0: T_air0 ?? 5.0,
+            T_mass0: T_mass0 ?? 5.0,
         };
         setSavedAssemblies(prev => [...prev, assembly]);
     };
@@ -277,12 +281,13 @@ export const AppProvider = ({ children }) => {
         }
         catch (err) {
             console.warn("FastAPI backend simulate request failed, falling back to local JS solver:", err);
+            const effHeating = heatingEnabled ? (heatingSetpoint ?? 16.0) : null;
             const localResult = simulate({
                 ...s,
                 walls: { N: w, E: w, S: w, W: w },
                 roof: r,
                 floor: f
-            }, climate, simTimestep, addedMasses, internalGains, comfortBand, heatingEnabled ? heatingSetpoint : 16.0, T_air0, T_mass0);
+            }, climate, simTimestep, addedMasses, internalGains, comfortBand, effHeating, T_air0, T_mass0);
             if (overrideScore != null) {
                 localResult.design_score = Number(overrideScore);
             }
@@ -409,7 +414,8 @@ export const AppProvider = ({ children }) => {
                     roof: roof_l,
                     floor: floor_l
                 };
-                const res = simulate(mockShelter, climate, simTimestep, addedMasses, internalGains, comfortBand, 16.0, T_air0, T_mass0);
+                const effHeating = heatingEnabled !== false ? (heatingSetpoint ?? 16.0) : 16.0;
+                const res = simulate(mockShelter, climate, simTimestep, addedMasses, internalGains, comfortBand, effHeating, T_air0, T_mass0);
                 const score = designScore(res, simDuration);
                 candidates.push({
                     score,
@@ -574,6 +580,8 @@ export const AppProvider = ({ children }) => {
             setSimTimestep,
             internalGains,
             setInternalGains,
+            comfortBand,
+            setComfortBand,
             heatingEnabled,
             setHeatingEnabled,
             heatingSetpoint,

@@ -87,7 +87,7 @@ def simulate(shelter: Shelter, climate: ClimateSeries, dt_h: float = 0.5,
              added_masses: Optional[List[AddedMass]] = None,
              internal_gains_W: float = 100.0,
              comfort_band: Optional[ComfortBand] = None,
-             heating_setpoint_C: Optional[float] = 18.0,
+             heating_setpoint_C: Optional[float] = 16.0,
              T_air0: float = 5.0, T_mass0: float = 5.0) -> SimulationResult:
     """
     Run the transient simulation over the full duration of `climate`.
