@@ -251,9 +251,13 @@ export function surfaceIrradiance(ghi, hod, surface_orientation_deg, surface_til
     return Math.max(total * cloud_derate, 0.0);
 }
 export const DEFAULT_COMFORT_BAND = {
+    // Comfort band for Ladakh winter shelter with auxiliary heating.
+    // Passive shelter never exceeds ~5°C (outdoor -8°C mean), so heating
+    // is required to bring indoor temps into the comfort zone.
+    // 16°C = WHO minimum for sedentary occupants (heated space).
     t_min: 16.0,
     t_max: 26.0,
-    t_marginal_low: 8.0,
+    t_marginal_low: 8.0,   // below this: cold-stress risk even with some shelter
     t_marginal_high: 30.0
 };
 export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], internal_gains_W = 100.0, comfort_band = DEFAULT_COMFORT_BAND, heating_setpoint_C = null, T_air0 = 5.0, T_mass0 = 5.0) {

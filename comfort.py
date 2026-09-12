@@ -12,9 +12,12 @@ from dataclasses import dataclass
 
 @dataclass
 class ComfortBand:
-    t_min: float = 16.0
-    t_max: float = 26.0
-    t_marginal_low: float = 8.0   # below this: cold-stress risk
+    # 16°C = WHO minimum for sedentary occupants in a heated shelter.
+    # Heating is enabled by default in the simulation because passive Ladakh
+    # winter shelters (outdoor mean -8°C) never exceed ~5°C without heating.
+    t_min: float = 16.0          # lower comfortable bound (°C)
+    t_max: float = 26.0          # upper comfortable bound (°C)
+    t_marginal_low: float = 8.0  # below this: cold-stress risk
     t_marginal_high: float = 30.0
 
     def classify(self, T: float) -> str:

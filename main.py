@@ -207,6 +207,7 @@ def api_simulate(req: SimulateRequest):
             "net_heat_flow_W": result.net_heat_flow_W.tolist(),
             "storage_rate_W": result.storage_rate_W.tolist(),
             "heating_energy_kWh": float(result.heating_energy_kWh),
+            "heating_power_W": result.heating_power_W.tolist(),
             "comfort_summary_hours": result.comfort_summary_hours,
             "comfort_status": result.comfort_status,
             "min_T_air": float(result.min_T_air),
