@@ -750,10 +750,10 @@ class ShelterVisualizer {
     this.scene.add(compass);
     
     // Stick-line Compass labels (N, S, E, W)
-    this.createCompassLabel("N", 0, 0, -7.9, 0xef4444); // North is Red
-    this.createCompassLabel("S", 0, 0, 7.9, 0x475569);
-    this.createCompassLabel("E", 7.9, 0, 0, 0x475569);
-    this.createCompassLabel("W", -7.9, 0, 0, 0x475569);
+    this.createCompassLabel("N", 0, 0, 7.9, 0xef4444); // North is Red
+    this.createCompassLabel("S", 0, 0, -7.9, 0x475569);
+    this.createCompassLabel("E", -7.9, 0, 0, 0x475569);
+    this.createCompassLabel("W", 7.9, 0, 0, 0x475569);
   }
   
   createCompassLabel(char, x, y, z, colorVal) {
