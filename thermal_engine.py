@@ -142,30 +142,39 @@ def simulate(shelter: Shelter, climate: ClimateSeries, dt_h: float = 0.5,
 
         Hop_sum = 0.0
         Hop_Tsolair_sum = 0.0
+        Q_opaque_solar = 0.0
+        Hop_ground = 0.0
+        Hop_nonground = 0.0
         for el in elements:
             U, A = U_A[el.name]
             if el.is_ground_contact:
                 # ground-contact floor: couples to stable sub-surface soil
                 # temperature, not to swinging ambient air / solar
                 T_solair = GROUND_TEMP_C
+                Hop_ground += U * A
             else:
+                Hop_nonground += U * A
                 # pyrefly: ignore [bad-argument-type]
                 I_surf = surface_irradiance(cl["ghi"], hod, el.orientation_deg,
                                              # pyrefly: ignore [bad-argument-type]
                                              el.tilt_deg, cl["cloud"])
                 layer_alpha = el.layers[0].material.alpha if el.layers else 0.6
+                solar_dt = (layer_alpha * I_surf / h_out_dyn) if (cl["ghi"] > 0 and I_surf > 0) else 0.0
                 # pyrefly: ignore [bad-argument-type]
                 T_solair = sol_air_temperature(T_out_k, I_surf, layer_alpha, h_out=h_out_dyn,
                                                 is_horizontal=(el.tilt_deg < 10),
                                                 long_wave_correction=4.0 if I_surf == 0 else 0.0)
+                if solar_dt > 0:
+                    Q_opaque_solar += U * A * solar_dt
             Hop_sum += U * A
             Hop_Tsolair_sum += U * A * T_solair
 
         Q_win_solar = 0.0
-        for w in windows:
-            # pyrefly: ignore [bad-argument-type]
-            I_surf = surface_irradiance(cl["ghi"], hod, w.orientation_deg, 90.0, cl["cloud"])
-            Q_win_solar += I_surf * w.shgc * w.area
+        if cl["ghi"] > 0:
+            for w in windows:
+                # pyrefly: ignore [bad-argument-type]
+                I_surf = surface_irradiance(cl["ghi"], hod, w.orientation_deg, 90.0, cl["cloud"])
+                Q_win_solar += I_surf * w.shgc * w.area
         Q_solar_air = 0.7 * Q_win_solar + internal_gains_W
         Q_solar_mass = 0.3 * Q_win_solar
 
@@ -200,8 +209,8 @@ def simulate(shelter: Shelter, climate: ClimateSeries, dt_h: float = 0.5,
         T_air[k], T_mass[k] = Ta_new, Tm_new
         heating_power[k] = q_heat
 
-        solar_gain[k] = Q_win_solar + Hop_Tsolair_sum - Hop_sum * T_out_k  # solar contribution vs a no-sun baseline
-        cond_opaque_loss = Hop_sum * (Tm_new - T_out_k)
+        solar_gain[k] = max(0.0, Q_win_solar + Q_opaque_solar) if cl["ghi"] > 0 else 0.0
+        cond_opaque_loss = Hop_nonground * (Tm_new - T_out_k) + Hop_ground * (Tm_new - GROUND_TEMP_C)
         cond_window_loss = H_win_total * (Ta_new - T_out_k)
         cond_loss[k] = cond_opaque_loss + cond_window_loss
         vent_loss[k] = H_ve * (Ta_new - T_out_k)
