@@ -351,7 +351,9 @@ export const Dashboard = () => {
             <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex flex-col gap-1 shadow-sm">
               <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Comfort Hours</span>
               <span className="text-xl font-extrabold text-zinc-900 dark:text-white font-mono">{comfortHours} h</span>
-              <span className="text-[9px] text-zinc-400 dark:text-zinc-500">≥16°C · heated shelter</span>
+              <span className="text-[9px] text-zinc-400 dark:text-zinc-500">
+                {((comfortHours / totalDuration) * 100).toFixed(0)}% · ≥16°C · heated shelter
+              </span>
             </div>
             <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex flex-col gap-1 shadow-sm">
               <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Heating Demand</span>
@@ -375,12 +377,12 @@ export const Dashboard = () => {
                 </span>
               </div>
               <div className="flex flex-col gap-1 border-b border-zinc-100 dark:border-zinc-800 pb-3">
-                <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Ventilation</span>
+                <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Ventilation (ACH-based)</span>
                 <span className="text-sm font-bold text-orange-500 font-mono">{formatHeatLoss(current.ventilation_loss)} W</span>
               </div>
               <div className="flex flex-col gap-1 pb-3">
-                <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Infiltration</span>
-                <span className="text-sm font-bold text-purple-500 font-mono">{formatHeatLoss(current.ventilation_loss * 0.15)} W</span>
+                <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Heating Power</span>
+                <span className="text-sm font-bold text-rose-500 font-mono">{current.heating_power > 0 ? `+${current.heating_power.toFixed(0)} W` : '—'}</span>
               </div>
               <div className="flex flex-col gap-1 pb-3">
                 <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Thermal Mass</span>

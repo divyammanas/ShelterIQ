@@ -68,6 +68,7 @@ export const SimulationSetup = () => {
                 T_mass: simResult.T_mass[k],
                 solar: simResult.solar_gain_W[k],
                 conduction: simResult.conduction_loss_W[k],
+                heating_power: simResult.heating_power_W ? simResult.heating_power_W[k] : 0,
                 status: simResult.comfort_status[k]
             });
         }
@@ -176,6 +177,7 @@ export const SimulationSetup = () => {
                 <th className="px-6 py-3.5">Thermal Mass Temp (°C)</th>
                 <th className="px-6 py-3.5">Solar Gain (W)</th>
                 <th className="px-6 py-3.5">Conduction Loss (W)</th>
+                <th className="px-6 py-3.5">Heating Power (W)</th>
                 <th className="px-6 py-3.5">Comfort Status</th>
               </tr>
             </thead>
@@ -186,7 +188,8 @@ export const SimulationSetup = () => {
                   <td className="px-6 py-3.5 font-mono font-bold text-zinc-800 dark:text-zinc-100">{row.T_air.toFixed(1)}°C</td>
                   <td className="px-6 py-3.5 font-mono">{row.T_mass.toFixed(1)}°C</td>
                   <td className="px-6 py-3.5 font-mono text-yellow-600 dark:text-yellow-400">+{Math.round(row.solar)} W</td>
-                  <td className="px-6 py-3.5 font-mono text-blue-500">{Math.round(row.conduction)} W</td>
+                  <td className="px-6 py-3.5 font-mono text-blue-500">-{Math.round(Math.abs(row.conduction))} W</td>
+                  <td className="px-6 py-3.5 font-mono text-orange-500">{Math.round(row.heating_power) > 0 ? `+${Math.round(row.heating_power)} W` : '—'}</td>
                   <td className="px-6 py-3.5">
                     <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase ${getComfortBadge(row.status)}`}>
                       {row.status}
@@ -194,7 +197,7 @@ export const SimulationSetup = () => {
                   </td>
                 </tr>))}
               {sampledRows.length === 0 && (<tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-zinc-400 font-semibold">
+                  <td colSpan={8} className="px-6 py-12 text-center text-zinc-400 font-semibold">
                     No simulation logs compiled. Click run simulation or update parameters.
                   </td>
                 </tr>)}
