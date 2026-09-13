@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { NavLink, Link, Outlet, useLocation } from 'react-router-dom';
 import logoImg from '../assets/logo.jpg';
-import { LineChart, CloudSun, Home, Database, Play, Columns, Sparkles, ShieldCheck, Sun, Moon, Menu, X } from 'lucide-react';
+import { LineChart, CloudSun, Home, Database, Play, Columns, Sparkles, ShieldCheck, Sun, Moon, Menu, X, Compass } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { CinematicIntroModal } from './CinematicIntroModal';
+
+
 export const Layout = () => {
   const { isDarkMode, setIsDarkMode, isSimulating } = useApp();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [showIntro, setShowIntro] = useState(() => {
+      return sessionStorage.getItem('shelteriq_intro_seen') !== 'true';
+    });
     const location = useLocation();
+
+    const handleCloseIntro = () => {
+      sessionStorage.setItem('shelteriq_intro_seen', 'true');
+      setShowIntro(false);
+    };
     const getPageHeader = () => {
         switch (location.pathname) {
             case '/dashboard':
@@ -64,8 +75,8 @@ export const Layout = () => {
     return (<div className="min-h-screen flex flex-col md:flex-row bg-zinc-50 dark:bg-[#09090b] text-zinc-950 dark:text-zinc-50 transition-colors duration-200">
       
       <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-[#0c0c0f] border-r border-zinc-200 dark:border-zinc-800 shrink-0">
-        <div className="flex items-center gap-3 p-6 border-b border-zinc-200 dark:border-zinc-800">
-          <img src={logoImg} alt="ShelterIQ" className="w-10 h-10 rounded-xl object-cover shadow-md"/>
+        <div id="shelteriq-sidebar-logo" className="flex items-center gap-3 p-6 border-b border-zinc-200 dark:border-zinc-800">
+          <img id="shelteriq-sidebar-logo-img" src={logoImg} alt="ShelterIQ" className="w-10 h-10 rounded-xl object-cover shadow-md transition-transform duration-300"/>
           <div>
             <span className="font-extrabold text-lg tracking-tight">Shelter<span className="text-blue-500">IQ</span></span>
             <div className="text-[10px] text-zinc-400 font-medium leading-none">Passive Heat Lab</div>
@@ -87,10 +98,17 @@ export const Layout = () => {
       </aside>
 
       <div className="md:hidden flex items-center justify-between px-6 py-4 bg-white dark:bg-[#0c0c0f] border-b border-zinc-200 dark:border-zinc-800">
-        <div className="flex items-center gap-3">
-          <img src={logoImg} alt="ShelterIQ" className="w-8 h-8 rounded-lg object-cover"/>
-          <span className="font-extrabold text-md tracking-tight">Shelter<span className="text-blue-500">IQ</span></span>
-        </div>
+        <Link id="shelteriq-mobile-brand-logo" to="/dashboard" className="flex items-center gap-3 cursor-pointer">
+          <img
+            id="shelteriq-mobile-brand-logo-img"
+            src={logoImg}
+            alt="ShelterIQ"
+            className="w-8 h-8 rounded-lg object-cover transition-transform duration-300"
+          />
+          <span className="font-extrabold text-md tracking-tight">
+            Shelter<span className="text-blue-500">IQ</span>
+          </span>
+        </Link>
         <button onClick={() => setMobileMenuOpen(true)} className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900">
           <Menu size={20}/>
         </button>
@@ -141,7 +159,16 @@ export const Layout = () => {
               <span>{isSimulating ? 'Simulating...' : 'Passive Model Ready'}</span>
             </div>
 
-            <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#0c0c0f] text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors">
+            <button
+              onClick={() => setShowIntro(true)}
+              title="View Interactive Guide & Tour"
+              className="p-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#0c0c0f] text-zinc-500 hover:text-blue-600 dark:text-zinc-400 dark:hover:text-blue-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer"
+            >
+              <Compass size={16} className="text-blue-500" />
+              <span className="hidden xl:inline">App Guide</span>
+            </button>
+
+            <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#0c0c0f] text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors cursor-pointer">
               {isDarkMode ? <Sun size={16}/> : <Moon size={16}/>}
             </button>
           </div>
@@ -151,6 +178,12 @@ export const Layout = () => {
           <Outlet />
         </main>
       </div>
+
+      {/* Cinematic Intro Animation with Netflix-Dark Theme & Minimization into ShelterIQ Logo */}
+      <CinematicIntroModal
+        isOpen={showIntro}
+        onClose={handleCloseIntro}
+      />
 
     </div>);
 };
