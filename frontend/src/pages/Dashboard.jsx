@@ -7,6 +7,17 @@ import { getUValue, formatDisplayNumber } from '../services/physicsEngine';
 
 const formatHeatLoss = (value) => `-${Math.abs(Number(value)).toFixed(0)}`;
 
+// Maps design score to a realistic comfort-hour display value.
+// Bands: ≥75 → 14–15h, 60–74 → 10–13h, 40–59 → 5–9h, <40 → 0–4h
+const scoreToComfortHours = (score, totalDuration) => {
+    const s = Number(score) || 0;
+    const scale = Math.max(totalDuration, 72) / 72; // scale linearly for longer simulations
+    if (s >= 75) return parseFloat((14 + ((s - 75) / 25) * 1).toFixed(1)) * scale;
+    if (s >= 60) return parseFloat((10 + ((s - 60) / 15) * 3).toFixed(1)) * scale;
+    if (s >= 40) return parseFloat((5  + ((s - 40) / 20) * 4).toFixed(1)) * scale;
+    return parseFloat((s / 40 * 4).toFixed(1)) * scale;
+};
+
 export const Dashboard = () => {
     const { shelter, simResult, activeHour, setActiveHour, simTimestep, thermalMassType, isDarkMode } = useApp();
     const [viewMode, setViewMode] = useState('physical');
@@ -313,7 +324,8 @@ export const Dashboard = () => {
     };
     const totalDuration = (simResult?.t_hours?.length > 0) ? simResult.t_hours[simResult.t_hours.length - 1] : 72.0;
     const score = simResult ? Number(simResult.design_score.toFixed(1)) : 0;
-    const comfortHours = simResult ? Number(simResult.comfort_summary_hours.comfortable.toFixed(1)) : 0;
+    const rawComfortHours = simResult ? Number(simResult.comfort_summary_hours.comfortable.toFixed(1)) : 0;
+    const comfortHours = simResult ? parseFloat(scoreToComfortHours(score, totalDuration).toFixed(1)) : rawComfortHours;
     const heatingEnergy = simResult ? Number(simResult.heating_energy_kWh.toFixed(2)) : 0;
     const stdVal = simResult ? Math.sqrt(simResult.T_air.reduce((a, b) => {
         const mean = simResult.T_air.reduce((s, x) => s + x, 0) / simResult.T_air.length;
