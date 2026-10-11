@@ -92,24 +92,24 @@ export const ShelterDesign = () => {
     };
     return (<div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       {/* AutoOptimizer Presets quick loader */}
-      <div className="lg:col-span-12 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm flex flex-col gap-3">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 dark:border-zinc-800/80 pb-2">
+      <div className="lg:col-span-12 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.3)] flex flex-col gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border-subtle)] pb-2">
           <div className="flex items-center gap-2">
-            <Sparkles size={16} className="text-blue-500" />
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-800 dark:text-zinc-200">
-              Load AutoOptimizer Presets
+            <Sparkles size={16} style={{ color: 'var(--accent-primary)' }} />
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
+              LOAD AUTOOPTIMIZER PRESETS
             </h3>
             {loadedPreset && (
               <span className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
                 loadedPreset.isModified
                   ? 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800'
-                  : 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800'
+                  : 'text-[var(--comfort)] bg-[var(--comfort)]/10 border border-[var(--comfort)]/30'
               }`}>
                 <Check size={10} /> Preset #{Number(loadedPreset.id ?? 0) + 1} {loadedPreset.isModified ? '(Modified)' : 'Active'}
               </span>
             )}
           </div>
-          <span className="text-[11px] text-zinc-400">
+          <span className="text-[11px] text-[var(--text-muted)]">
             Click any top-scoring preset to load its envelope materials, orientation & ventilation directly into this design
           </span>
         </div>
@@ -122,26 +122,26 @@ export const ShelterDesign = () => {
                 key={pick.id ?? idx}
                 type="button"
                 onClick={() => loadDesignPreset(pick.params, { id: pick.id ?? idx, score: pick.score })}
-                className={`flex flex-col text-left p-2.5 rounded-xl border transition-all ${
+                className={`flex flex-col text-left p-2.5 rounded-[10px] border transition-colors ${
                   isSelected
-                    ? 'bg-blue-50/80 dark:bg-blue-950/50 border-blue-500 ring-2 ring-blue-500/30 shadow-xs'
-                    : 'bg-zinc-50/50 dark:bg-zinc-900/40 border-zinc-200 dark:border-zinc-800/80 hover:bg-zinc-100 dark:hover:bg-zinc-800/60'
+                    ? 'bg-[var(--accent-primary-soft)] border-[var(--accent-primary)] ring-1 ring-[var(--accent-primary)]/40'
+                    : 'bg-[var(--bg-surface-raised)] border-[var(--border-subtle)] hover:bg-[var(--bg-surface)]'
                 }`}
               >
                 <div className="flex items-center justify-between gap-1 mb-1">
-                  <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded ${
-                    isSelected ? 'bg-blue-600 text-white' : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300'
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                    isSelected ? 'bg-[var(--accent-primary)] text-[var(--bg-app)]' : 'bg-[var(--border-strong)]/30 text-[var(--text-secondary)]'
                   }`}>
                     #{idx + 1}
                   </span>
-                  <span className="font-mono text-[11px] font-extrabold text-blue-600 dark:text-blue-400">
+                  <span className="font-mono text-[11px] font-bold" style={{ color: 'var(--accent-primary)' }}>
                     {Number(pick.score ?? 0).toFixed(1)}
                   </span>
                 </div>
-                <p className="text-[11px] font-bold text-zinc-800 dark:text-zinc-200 truncate">
+                <p className="text-[11px] font-semibold text-[var(--text-primary)] truncate">
                   {getMaterialLabel(pick.params.struct)} + {getMaterialLabel(pick.params.ins)}
                 </p>
-                <div className="flex items-center justify-between text-[9px] text-zinc-400 mt-1">
+                <div className="flex items-center justify-between text-[9px] text-[var(--text-muted)] mt-1">
                   <span>{Math.round(Number(pick.params.orient))}° Azimuth</span>
                   <span>{Math.round(Number(pick.params.win_f) * 100)}% Win</span>
                 </div>
@@ -151,32 +151,32 @@ export const ShelterDesign = () => {
         </div>
       </div>
 
-      <div className="lg:col-span-12 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/50 dark:border-blue-900/30 rounded-xl p-3.5 sm:p-4">
+      <div className="lg:col-span-12 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[10px] p-3.5 sm:p-4">
         <div>
-          <h2 className="text-sm font-extrabold text-zinc-950 dark:text-white">Save this material assembly</h2>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Store the current design for comparison under active weather conditions.</p>
+          <h2 className="text-sm font-bold text-[var(--text-primary)]">Save this material assembly</h2>
+          <p className="text-xs text-[var(--text-secondary)] mt-0.5">Store the current design for comparison under active weather conditions.</p>
         </div>
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
-          <input value={assemblyName} onChange={(e) => setAssemblyName(e.target.value)} placeholder={`Assembly ${savedAssemblies.length + 1}`} className="w-full sm:w-44 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-blue-500/50" />
-          <button type="button" onClick={handleSaveAssembly} className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors cursor-pointer">
+          <input value={assemblyName} onChange={(e) => setAssemblyName(e.target.value)} placeholder={`Assembly ${savedAssemblies.length + 1}`} className="w-full sm:w-44 bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-[8px] px-3 py-2 text-xs outline-none text-[var(--text-primary)] placeholder-[var(--text-muted)]" />
+          <button type="button" onClick={handleSaveAssembly} className="flex items-center justify-center gap-2 bg-[var(--accent-primary)] text-[var(--bg-app)] hover:opacity-95 text-xs font-semibold px-3 py-2 rounded-[8px] transition-opacity cursor-pointer">
             <Save size={14} /> Save Assembly
           </button>
-          {saveMessage && <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 self-center">{saveMessage}</span>}
+          {saveMessage && <span className="text-[10px] font-semibold text-[var(--comfort)] self-center">{saveMessage}</span>}
         </div>
       </div>
       
       <div className="lg:col-span-6 flex flex-col gap-4 sm:gap-6">
         
-        <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm flex flex-col gap-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
-            <LayoutGrid size={16} className="text-blue-500"/> Envelope Dimensions
+        <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-3.5 sm:p-5 shadow-[0_1px_2px_rgba(0,0,0,0.3)] flex flex-col gap-4">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2 border-b border-[var(--border-subtle)] pb-3 shrink-0">
+            <LayoutGrid size={16} style={{ color: 'var(--accent-primary)' }} /> ENVELOPE DIMENSIONS
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 flex justify-between">
+              <label className="text-xs font-medium text-[var(--text-secondary)] flex justify-between">
                 <span>Length (Front Wall)</span>
-                <span className="font-bold text-zinc-800 dark:text-zinc-200 font-mono">{shelter.length.toFixed(1)} m</span>
+                <span className="font-bold text-[var(--text-primary)] font-mono">{shelter.length.toFixed(1)} m</span>
               </label>
               <input type="range" min="2.0" max="12.0" step="0.1" value={shelter.length} onChange={(e) => handleSliderChange('length', parseFloat(e.target.value))}/>
             </div>
@@ -198,10 +198,10 @@ export const ShelterDesign = () => {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Roof Configuration</label>
-              <select value={shelter.shape} onChange={(e) => handleSliderChange('shape', e.target.value)} className="w-full bg-zinc-50 dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-zinc-100">
-                <option value="flat_roof_box">Flat Roof</option>
-                <option value="pitched_roof_box">Pitched Roof</option>
+              <label className="text-xs font-semibold text-[var(--text-secondary)]">Roof Configuration</label>
+              <select value={shelter.shape} onChange={(e) => handleSliderChange('shape', e.target.value)} className="w-full bg-[var(--bg-surface-raised)] border border-[var(--border-strong)] rounded-xl px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-[var(--accent-primary)] focus:border-[var(--accent-primary)] text-[var(--text-primary)]">
+                <option value="flat_roof_box" className="bg-[var(--bg-surface)] text-[var(--text-primary)]">Flat Roof</option>
+                <option value="pitched_roof_box" className="bg-[var(--bg-surface)] text-[var(--text-primary)]">Pitched Roof</option>
               </select>
             </div>
 
@@ -231,39 +231,39 @@ export const ShelterDesign = () => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
-            <AppWindow size={16} className="text-blue-500"/> South Window Openings
+        <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-5 shadow-[0_1px_2px_rgba(0,0,0,0.3)] flex flex-col gap-4">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2 border-b border-[var(--border-subtle)] pb-3 shrink-0">
+            <AppWindow size={16} style={{ color: 'var(--accent-primary)' }} /> SOUTH WINDOW OPENINGS
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 flex justify-between">
+              <label className="text-xs font-medium text-[var(--text-secondary)] flex justify-between">
                 <span>Window Width</span>
-                <span className="font-bold text-zinc-800 dark:text-zinc-200 font-mono">{activeWindow.width.toFixed(1)} m</span>
+                <span className="font-bold text-[var(--text-primary)] font-mono">{activeWindow.width.toFixed(1)} m</span>
               </label>
               <input type="range" min="0.5" max="4.0" step="0.1" value={activeWindow.width} onChange={(e) => handleWindowChange({ width: parseFloat(e.target.value) })}/>
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 flex justify-between">
+              <label className="text-xs font-medium text-[var(--text-secondary)] flex justify-between">
                 <span>Window Height</span>
-                <span className="font-bold text-zinc-800 dark:text-zinc-200 font-mono">{activeWindow.height.toFixed(1)} m</span>
+                <span className="font-bold text-[var(--text-primary)] font-mono">{activeWindow.height.toFixed(1)} m</span>
               </label>
               <input type="range" min="0.5" max="2.0" step="0.1" value={activeWindow.height} onChange={(e) => handleWindowChange({ height: parseFloat(e.target.value) })}/>
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 flex justify-between">
+              <label className="text-xs font-medium text-[var(--text-secondary)] flex justify-between">
                 <span>Solar Heat Coefficient (SHGC)</span>
-                <span className="font-bold text-zinc-800 dark:text-zinc-200 font-mono">{activeWindow.shgc.toFixed(2)}</span>
+                <span className="font-bold text-[var(--text-primary)] font-mono">{activeWindow.shgc.toFixed(2)}</span>
               </label>
               <input type="range" min="0.2" max="0.9" step="0.05" value={activeWindow.shgc} onChange={(e) => handleWindowChange({ shgc: parseFloat(e.target.value) })}/>
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Glazing Type</label>
-              <select value={activeWindow.glazing ? Object.keys(DEFAULT_MATERIALS).find(k => DEFAULT_MATERIALS[k].name === activeWindow.glazing?.name) || 'glass_double_lowE' : 'glass_double_lowE'} onChange={(e) => handleWindowChange({ glazing: e.target.value })} className="w-full bg-zinc-50 dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-zinc-100">
+              <label className="text-xs font-medium text-[var(--text-secondary)]">Glazing Type</label>
+              <select value={activeWindow.glazing ? Object.keys(DEFAULT_MATERIALS).find(k => DEFAULT_MATERIALS[k].name === activeWindow.glazing?.name) || 'glass_double_lowE' : 'glass_double_lowE'} onChange={(e) => handleWindowChange({ glazing: e.target.value })} className="w-full bg-[var(--bg-surface-raised)] border border-[var(--border-strong)] rounded-[8px] px-3 py-2 text-xs outline-none text-[var(--text-primary)]">
                 <option value="glass_double_lowE">Double Glazing Low-E (Argon)</option>
                 <option value="glass_double_air">Double Glazing (Air)</option>
                 <option value="glass_single">Single Glazing (standard)</option>
@@ -272,18 +272,18 @@ export const ShelterDesign = () => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
-            <Cpu size={16} className="text-blue-500"/> Interior Thermal Mass
+        <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-5 shadow-[0_1px_2px_rgba(0,0,0,0.3)] flex flex-col gap-4">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2 border-b border-[var(--border-subtle)] pb-3 shrink-0">
+            <Cpu size={16} style={{ color: 'var(--accent-primary)' }} /> INTERIOR THERMAL MASS
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Thermal Mass Type</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">Thermal Mass Type</label>
               <select value={thermalMassType} onChange={(e) => {
             updateThermalMass(e.target.value, e.target.value === 'water_drums' ? 2 : e.target.value === 'concrete_wall' ? 3.0 : e.target.value === 'pcm_panels' ? 20 : 1);
             setTimeout(() => runActiveSimulation(), 100);
-        }} className="w-full bg-zinc-50 dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-zinc-100">
+        }} className="w-full bg-[var(--bg-surface-raised)] border border-[var(--border-strong)] rounded-[8px] px-3 py-2 text-xs outline-none text-[var(--text-primary)]">
                 <option value="water_drums">Water Drums (300L Cylinders)</option>
                 <option value="concrete_wall">Concrete Partition Wall</option>
                 <option value="pcm_panels">PCM RT21 Panels</option>
@@ -292,9 +292,9 @@ export const ShelterDesign = () => {
             </div>
 
             {thermalMassType !== 'none' && (<div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 flex justify-between">
+                <label className="text-xs font-medium text-[var(--text-secondary)] flex justify-between">
                   <span>{getMassLabel()}</span>
-                  <span className="font-bold text-zinc-800 dark:text-zinc-200 font-mono">
+                  <span className="font-bold text-[var(--text-primary)] font-mono">
                     {thermalMassType === 'concrete_wall' ? thermalMassQty.toFixed(1) : thermalMassQty.toFixed(0)} {getMassUnit()}
                   </span>
                 </label>
@@ -308,9 +308,9 @@ export const ShelterDesign = () => {
 
       </div>
 
-      <div className="lg:col-span-6 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-4">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
-          <Layers size={16} className="text-blue-500"/> Envelope Layers Assembly
+      <div className="lg:col-span-6 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-5 shadow-[0_1px_2px_rgba(0,0,0,0.3)] flex flex-col gap-4">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2 border-b border-[var(--border-subtle)] pb-3 shrink-0">
+          <Layers size={16} style={{ color: 'var(--accent-primary)' }} /> ENVELOPE LAYERS ASSEMBLY
         </h3>
         
         <LayerEditor />

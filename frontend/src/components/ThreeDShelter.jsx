@@ -20,14 +20,14 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
     const particlesRef = useRef([]);
     useEffect(() => {
         if (sceneRef.current) {
-            sceneRef.current.background = new THREE.Color(isDarkMode ? 0x0f172a : 0xf8fafc);
+            sceneRef.current.background = new THREE.Color(isDarkMode ? 0x0B0C0E : 0xF4F1EA);
         }
     }, [isDarkMode]);
     useEffect(() => {
         if (!canvasRef.current || !containerRef.current)
             return;
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(isDarkMode ? 0x0f172a : 0xf8fafc);
+        scene.background = new THREE.Color(isDarkMode ? 0x0B0C0E : 0xF4F1EA);
         sceneRef.current = scene;
         const camera = new THREE.PerspectiveCamera(45, containerRef.current.clientWidth / containerRef.current.clientHeight, 0.1, 100);
         camera.position.set(9, 7, 10);
@@ -52,28 +52,28 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
         scene.add(dirLight);
         dirLightRef.current = dirLight;
         const sunGeom = new THREE.SphereGeometry(0.4, 16, 16);
-        const sunMat = new THREE.MeshBasicMaterial({ color: 0xfacc15 });
+        const sunMat = new THREE.MeshBasicMaterial({ color: 0xE8C26A });
         const sunMesh = new THREE.Mesh(sunGeom, sunMat);
         scene.add(sunMesh);
         sunMeshRef.current = sunMesh;
         const beamGeom = new THREE.CylinderGeometry(0.015, 0.015, 1, 8);
-        const beamMat = new THREE.MeshBasicMaterial({ color: 0xfacc15, transparent: true, opacity: 0.25 });
+        const beamMat = new THREE.MeshBasicMaterial({ color: 0xE8C26A, transparent: true, opacity: 0.2 });
         const sunBeam = new THREE.Mesh(beamGeom, beamMat);
         scene.add(sunBeam);
         sunBeamRef.current = sunBeam;
-        const gridHelper = new THREE.GridHelper(20, 20, 0x334155, 0x1e293b);
+        const gridHelper = new THREE.GridHelper(20, 20, isDarkMode ? 0x343A42 : 0xCBD5E1, isDarkMode ? 0x23272D : 0xE2E8F0);
         gridHelper.position.y = 0.001;
         scene.add(gridHelper);
         const compassGeom = new THREE.RingGeometry(7.5, 7.6, 64);
-        const compassMat = new THREE.MeshBasicMaterial({ color: 0x475569, side: THREE.DoubleSide });
+        const compassMat = new THREE.MeshBasicMaterial({ color: 0xF0EDE6, transparent: true, opacity: 0.18, side: THREE.DoubleSide });
         const compass = new THREE.Mesh(compassGeom, compassMat);
         compass.rotation.x = Math.PI / 2;
         compass.position.y = 0.02;
         scene.add(compass);
-        createCompassLabel(scene, "N", 0, 0, 8.0, 0xef4444, true);
-        createCompassLabel(scene, "S", 0, 0, -8.0, 0x64748b, false);
-        createCompassLabel(scene, "E", -8.0, 0, 0, 0x64748b, false);
-        createCompassLabel(scene, "W", 8.0, 0, 0, 0x64748b, false);
+        createCompassLabel(scene, "N", 0, 0, 8.0, 0xD9694A, true);
+        createCompassLabel(scene, "S", 0, 0, -8.0, 0x727883, false);
+        createCompassLabel(scene, "E", -8.0, 0, 0, 0x727883, false);
+        createCompassLabel(scene, "W", 8.0, 0, 0, 0x727883, false);
         const shelterGroup = new THREE.Group();
         scene.add(shelterGroup);
         shelterGroupRef.current = shelterGroup;
@@ -137,13 +137,13 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
                         let heatFlowHtml = "";
                         if (u.heatFlow !== undefined) {
                             const flowVal = parseFloat(u.heatFlow);
-                            const color = flowVal > 0 ? "#f87171" : flowVal < 0 ? "#60a5fa" : "#34d399";
+                            const color = flowVal > 0 ? "#D9694A" : flowVal < 0 ? "#E8C26A" : "#6FB3A0";
                             const label = flowVal > 0 ? "Heat Loss" : flowVal < 0 ? "Heat Gain" : "Balanced";
                             heatFlowHtml = `<div class="mb-1"><strong>Heat Flow:</strong> <span style="color:${color};font-weight:bold;">${Math.abs(flowVal).toFixed(0)} W (${label})</span></div>`;
                         }
-                        const textClass = isDarkMode ? "text-zinc-300" : "text-zinc-600";
+                        const textClass = isDarkMode ? "text-[var(--text-secondary)]" : "text-[var(--text-secondary)]";
                         tooltipRef.current.innerHTML = `
-              <div class="font-bold border-b border-dashed border-blue-500 pb-1 mb-1.5 text-blue-600 dark:text-blue-400 uppercase text-[10px] tracking-wider">${u.name}</div>
+              <div class="font-bold border-b border-dashed border-[var(--border-strong)] pb-1 mb-1.5 text-[var(--accent-primary)] uppercase text-[10px] tracking-wider">${u.name}</div>
               <div class="mb-1 ${textClass}"><strong>Material:</strong> ${u.materialName}</div>
               ${u.thickness ? `<div class="mb-1 ${textClass}"><strong>Thickness:</strong> ${u.thickness}</div>` : ""}
               <div class="mb-1 ${textClass}"><strong>U-value:</strong> ${u.uValue} W/m²K</div>
@@ -277,25 +277,27 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
     };
     const getMaterialColor = (material) => {
         if (material.is_pcm)
-            return 0xa855f7;
+            return 0x8FBF9F;
         if (material.k < 0.05) {
             if (material.name.includes("XPS"))
-                return 0x0ea5e9;
+                return 0x7A827E;
             if (material.name.includes("Mineral"))
-                return 0xeab308;
-            return 0xe0f2fe;
+                return 0x8C8474;
+            return 0x6F7873;
         }
+        if (material.name.includes("Roof"))
+            return 0x4A4438;
         if (material.name.includes("Stone") || material.name.includes("Granite"))
-            return 0x475569;
+            return 0x3B3A36;
         if (material.name.includes("Rammed") || material.name.includes("Adobe") || material.name.includes("Brick"))
-            return 0xb45309;
+            return 0x6E5843;
         if (material.name.includes("Timber") || material.name.includes("Wood"))
-            return 0x7c2d12;
+            return 0x4A4438;
         if (material.name.includes("Straw"))
-            return 0xfef08a;
+            return 0x8C8474;
         if (material.name.includes("Water"))
-            return 0x06b6d4;
-        return 0x64748b;
+            return 0x8FBF9F;
+        return 0x3B3A36;
     };
     const getMaterialRoughness = (material) => {
         if (material.k < 0.05)
@@ -323,10 +325,10 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
         const ctx = canvas.getContext('2d');
         if (!ctx)
             return;
-        ctx.fillStyle = isDarkMode ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.95)';
-        ctx.strokeStyle = '#3b82f6';
-        ctx.lineWidth = 2;
-        const x = 4, y = 4, w = 248, h = 56, r = 12;
+        ctx.fillStyle = isDarkMode ? 'rgba(18, 20, 23, 0.92)' : 'rgba(251, 249, 244, 0.95)';
+        ctx.strokeStyle = isDarkMode ? '#23272D' : '#DCD6C8';
+        ctx.lineWidth = 1;
+        const x = 4, y = 4, w = 248, h = 56, r = 10;
         ctx.beginPath();
         ctx.moveTo(x + r, y);
         ctx.lineTo(x + w - r, y);
@@ -340,7 +342,7 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
-        ctx.fillStyle = !isDarkMode && color === "#ffffff" ? "#0f172a" : color;
+        ctx.fillStyle = !isDarkMode && color === "#ECE8DF" ? "#1E2624" : color;
         ctx.font = 'bold 20px Inter, Arial, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -359,10 +361,10 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
         particlesRef.current = [];
         const sphereGeom = new THREE.SphereGeometry(0.06, 8, 8);
         if (solar_gain > 50) {
-            const yellowMat = new THREE.MeshBasicMaterial({ color: 0xfacc15 });
+            const solarMat = new THREE.MeshBasicMaterial({ color: 0xE8C26A });
             const num = Math.min(Math.ceil(solar_gain / 250), 5);
             for (let i = 0; i < num; i++) {
-                const mesh = new THREE.Mesh(sphereGeom, yellowMat);
+                const mesh = new THREE.Mesh(sphereGeom, solarMat);
                 arrowGroupRef.current.add(mesh);
                 const start = new THREE.Vector3(0, H / 2, W / 2).applyMatrix4(shelterGroupRef.current.matrixWorld);
                 const end = new THREE.Vector3((i - (num - 1) / 2) * 0.5, 0.1, -W / 5).applyMatrix4(shelterGroupRef.current.matrixWorld);
@@ -372,14 +374,14 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
                 });
                 if (i === 0 || i === num - 1) {
                     const dir = new THREE.Vector3().subVectors(end, start).normalize();
-                    const arr = new THREE.ArrowHelper(dir, start, 1.2, 0xfacc15, 0.3, 0.15);
+                    const arr = new THREE.ArrowHelper(dir, start, 1.2, 0xE8C26A, 0.3, 0.15);
                     arrowGroupRef.current.add(arr);
                 }
             }
         }
         if (Math.abs(cond_loss) > 50) {
             const isLoss = cond_loss > 0;
-            const condMat = new THREE.MeshBasicMaterial({ color: isLoss ? 0x3b82f6 : 0xef4444 });
+            const condMat = new THREE.MeshBasicMaterial({ color: isLoss ? 0x5B8DB8 : 0xD9694A });
             const paths = [
                 { s: new THREE.Vector3(0, H / 2, -W / 4), e: new THREE.Vector3(0, H / 2, -W / 2 - 0.4) },
                 { s: new THREE.Vector3(0, H / 2, W / 4), e: new THREE.Vector3(0, H / 2, W / 2 + 0.4) },
@@ -401,13 +403,13 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
                     t: Math.random(), speed: 0.012
                 });
                 const dir = new THREE.Vector3().subVectors(end, start).normalize();
-                const arr = new THREE.ArrowHelper(dir, start, 0.6, isLoss ? 0x3b82f6 : 0xef4444, 0.2, 0.1);
+                const arr = new THREE.ArrowHelper(dir, start, 0.6, isLoss ? 0x5B8DB8 : 0xD9694A, 0.2, 0.1);
                 arrowGroupRef.current.add(arr);
             });
         }
         if (Math.abs(vent_loss) > 20) {
             const isLoss = vent_loss > 0;
-            const ventMat = new THREE.MeshBasicMaterial({ color: 0xf97316 });
+            const ventMat = new THREE.MeshBasicMaterial({ color: 0xD9694A });
             let start = new THREE.Vector3(0, H / 2, 0).applyMatrix4(shelterGroupRef.current.matrixWorld);
             let end = new THREE.Vector3(0, H + 0.4, 0).applyMatrix4(shelterGroupRef.current.matrixWorld);
             if (!isLoss) {
@@ -424,12 +426,12 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
                 });
             }
             const dir = new THREE.Vector3().subVectors(end, start).normalize();
-            const arr = new THREE.ArrowHelper(dir, start, 0.8, 0xf97316, 0.25, 0.15);
+            const arr = new THREE.ArrowHelper(dir, start, 0.8, 0xD9694A, 0.25, 0.15);
             arrowGroupRef.current.add(arr);
         }
         if (Math.abs(storage_rate) > 20) {
             const isCharging = storage_rate > 0;
-            const storageMat = new THREE.MeshBasicMaterial({ color: isCharging ? 0xec4899 : 0x06b6d4 });
+            const storageMat = new THREE.MeshBasicMaterial({ color: isCharging ? 0x8FBF9F : 0x5B8DB8 });
             const massTargets = [];
             const t_wall = (shelter.walls.S || []).reduce((sum, l) => sum + l.thickness, 0.15);
             if (thermalMassType === "water_drums") {
@@ -473,7 +475,7 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
                     });
                 }
                 const dir = new THREE.Vector3().subVectors(end, start).normalize();
-                const arr = new THREE.ArrowHelper(dir, start, 0.5, isCharging ? 0xec4899 : 0x06b6d4, 0.2, 0.1);
+                const arr = new THREE.ArrowHelper(dir, start, 0.5, isCharging ? 0x8FBF9F : 0x5B8DB8, 0.2, 0.1);
                 arrowGroupRef.current.add(arr);
             });
         }
@@ -811,7 +813,7 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
                     let drumMat;
                     if (viewMode === "physical") {
                         drumMat = new THREE.MeshStandardMaterial({
-                            color: 0x06b6d4,
+                            color: 0x8FBF9F,
                             roughness: 0.3,
                             transparent: true,
                             opacity: 0.8
@@ -832,7 +834,7 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
                 const partGeom = new THREE.BoxGeometry(0.15, 1.8, wallLength);
                 let partMat;
                 if (viewMode === "physical") {
-                    partMat = new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.8 });
+                    partMat = new THREE.MeshStandardMaterial({ color: 0x6E5843, roughness: 0.8 });
                 }
                 else {
                     partMat = new THREE.MeshStandardMaterial({ color: getTemperatureColor(T_mass_val), roughness: 0.7 });
@@ -856,7 +858,7 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
                 let pcmMat;
                 if (viewMode === "physical") {
                     pcmMat = new THREE.MeshStandardMaterial({
-                        color: 0x8b5cf6,
+                        color: 0x8FBF9F,
                         roughness: 0.4,
                         transparent: true,
                         opacity: 0.8
@@ -939,11 +941,11 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
                     const points = [sunMeshRef.current.position.clone(), targetGlobal];
                     const rayGeom = new THREE.BufferGeometry().setFromPoints(points);
                     const rayMat = new THREE.LineDashedMaterial({
-                        color: 0xfacc15,
+                        color: 0xE8C26A,
                         dashSize: 0.3,
                         gapSize: 0.15,
                         transparent: true,
-                        opacity: 0.4
+                        opacity: 0.35
                     });
                     const ray = new THREE.Line(rayGeom, rayMat);
                     ray.computeLineDistances();
@@ -957,7 +959,7 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
                 dirLightRef.current.intensity = 0.05;
             }
             if (sunMeshRef.current) {
-                sunMeshRef.current.material.color.setHex(0x1e293b);
+                sunMeshRef.current.material.color.setHex(0x121417);
             }
             if (sunBeamRef.current) {
                 sunBeamRef.current.visible = false;
@@ -968,21 +970,21 @@ export const ThreeDShelter = ({ viewMode, envelopeOpacity, visibilityStates, isR
         }
         if (viewMode === "thermal") {
             const sunDir = sunMeshRef.current ? sunMeshRef.current.position.clone().normalize() : new THREE.Vector3(1, 1, 1);
-            createTempLabel(`T_out: ${T_out_val.toFixed(1)}°C`, new THREE.Vector3(sunDir.x * 4.5, H + 1.2, sunDir.z * 4.5), "#60a5fa");
-            createTempLabel(`T_air: ${T_air_val.toFixed(1)}°C`, new THREE.Vector3(0, H / 2 + 0.3, 0), "#f87171");
+            createTempLabel(`T_out: ${T_out_val.toFixed(1)}°C`, new THREE.Vector3(sunDir.x * 4.5, H + 1.2, sunDir.z * 4.5), "#5B8DB8");
+            createTempLabel(`T_air: ${T_air_val.toFixed(1)}°C`, new THREE.Vector3(0, H / 2 + 0.3, 0), "#D9694A");
             if (thermalMassType !== "none") {
-                createTempLabel(`T_mass: ${T_mass_val.toFixed(1)}°C`, new THREE.Vector3(-L / 4, 1.1, -W / 4), "#34d399");
+                createTempLabel(`T_mass: ${T_mass_val.toFixed(1)}°C`, new THREE.Vector3(-L / 4, 1.1, -W / 4), "#8FBF9F");
             }
             if (visibilityStates.walls) {
-                createTempLabel(`Roof: ${roofTemp.toFixed(1)}°C`, new THREE.Vector3(0, H + 0.6, 0), "#fbbf24");
-                createTempLabel(`Floor: ${(T_mass_val - 2.0).toFixed(1)}°C`, new THREE.Vector3(0, -0.2, 0), "#94a3b8");
-                createTempLabel(`Wall S: ${t_S.toFixed(1)}°C`, new THREE.Vector3(0, H / 2, W / 2 + 0.3).applyMatrix4(shelterGroup.matrixWorld), "#ffffff");
-                createTempLabel(`Wall N: ${t_N.toFixed(1)}°C`, new THREE.Vector3(0, H / 2, -W / 2 - 0.3).applyMatrix4(shelterGroup.matrixWorld), "#ffffff");
+                createTempLabel(`Roof: ${roofTemp.toFixed(1)}°C`, new THREE.Vector3(0, H + 0.6, 0), "#E8C26A");
+                createTempLabel(`Floor: ${(T_mass_val - 2.0).toFixed(1)}°C`, new THREE.Vector3(0, -0.2, 0), "#A0A5AE");
+                createTempLabel(`Wall S: ${t_S.toFixed(1)}°C`, new THREE.Vector3(0, H / 2, W / 2 + 0.3).applyMatrix4(shelterGroup.matrixWorld), "#F0EDE6");
+                createTempLabel(`Wall N: ${t_N.toFixed(1)}°C`, new THREE.Vector3(0, H / 2, -W / 2 - 0.3).applyMatrix4(shelterGroup.matrixWorld), "#F0EDE6");
             }
         }
     };
-    return (<div ref={containerRef} className="w-full h-full relative overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
+    return (<div ref={containerRef} className="w-full h-full relative overflow-hidden rounded-[10px] border border-[var(--border-subtle)] bg-[#0B0C0E]">
       <canvas ref={canvasRef} className="w-full h-full block"/>
-      <div ref={tooltipRef} style={{ display: 'none' }} className="absolute bg-zinc-950/95 border border-blue-500 p-3 rounded-xl text-[11px] leading-relaxed z-30 pointer-events-none w-[220px] shadow-xl text-white"/>
+      <div ref={tooltipRef} style={{ display: 'none' }} className="absolute bg-[#121417]/95 border border-[var(--border-strong)] p-3 rounded-[10px] text-[11px] leading-relaxed z-30 pointer-events-none w-[220px] shadow-[0_1px_2px_rgba(0,0,0,0.3)] text-[var(--text-primary)]"/>
     </div>);
 };

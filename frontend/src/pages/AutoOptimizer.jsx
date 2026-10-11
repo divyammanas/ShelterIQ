@@ -98,77 +98,77 @@ export const AutoOptimizer = () => {
 
     return (<div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       
-      <div className="lg:col-span-5 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm flex flex-col gap-4 sm:gap-6">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
-          <ListCollapse size={16} className="text-blue-500"/> Search Combinatorics
+      <div className="lg:col-span-5 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-3.5 sm:p-5 shadow-sm flex flex-col gap-4 sm:gap-6">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2 border-b border-[var(--border-subtle)] pb-3 shrink-0">
+          <ListCollapse size={16} className="text-[var(--accent-primary)]"/> Search Combinatorics
         </h3>
 
-        <div className="space-y-3 sm:space-y-4 text-xs font-medium text-zinc-600 dark:text-zinc-400">
-          <div className="flex flex-col gap-1 border-b border-zinc-50 dark:border-zinc-900 pb-2">
-            <strong className="text-zinc-800 dark:text-zinc-200">Insulation Core:</strong>
+        <div className="space-y-3 sm:space-y-4 text-xs font-medium text-[var(--text-secondary)]">
+          <div className="flex flex-col gap-1 border-b border-[var(--border-subtle)] pb-2">
+            <strong className="text-[var(--text-primary)]">Insulation Core:</strong>
             <p>EPS, XPS, Mineral Wool (5cm to 15cm thicknesses)</p>
           </div>
-          <div className="flex flex-col gap-1 border-b border-zinc-50 dark:border-zinc-900 pb-2">
-            <strong className="text-zinc-800 dark:text-zinc-200">Structural Core:</strong>
+          <div className="flex flex-col gap-1 border-b border-[var(--border-subtle)] pb-2">
+            <strong className="text-[var(--text-primary)]">Structural Core:</strong>
             <p>Granite Stone, Rammed Earth, Lightweight Concrete (20cm to 30cm)</p>
           </div>
-          <div className="flex flex-col gap-1 border-b border-zinc-50 dark:border-zinc-900 pb-2">
-            <strong className="text-zinc-800 dark:text-zinc-200">Azimuth Bearing:</strong>
+          <div className="flex flex-col gap-1 border-b border-[var(--border-subtle)] pb-2">
+            <strong className="text-[var(--text-primary)]">Azimuth Bearing:</strong>
             <p>160° to 200° (South-facing window optimization)</p>
           </div>
-          <div className="flex flex-col gap-1 border-b border-zinc-50 dark:border-zinc-900 pb-2">
-            <strong className="text-zinc-800 dark:text-zinc-200">Window Fraction:</strong>
+          <div className="flex flex-col gap-1 border-b border-[var(--border-subtle)] pb-2">
+            <strong className="text-[var(--text-primary)]">Window Fraction:</strong>
             <p>10%, 15%, 20% south-facing envelope glazing area</p>
           </div>
           <div className="flex flex-col gap-1 pb-2">
-            <strong className="text-zinc-800 dark:text-zinc-200">Ventilation Rate:</strong>
+            <strong className="text-[var(--text-primary)]">Ventilation Rate:</strong>
             <p>0.3 to 0.7 ACH (Tight envelope sealing profiles)</p>
           </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
-          <button onClick={runOptimizationMC} disabled={isOptimizing} className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-500/50 text-white text-xs font-semibold px-4 py-2.5 sm:py-3 rounded-xl transition-all shadow-xs cursor-pointer">
+          <button onClick={runOptimizationMC} disabled={isOptimizing} className="flex-1 flex items-center justify-center gap-2 bg-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 text-[var(--bg-app)] text-xs font-semibold px-4 py-2.5 sm:py-3 rounded-xl transition-all shadow-xs cursor-pointer">
             {isOptimizing ? <Loader2 size={14} className="animate-spin"/> : <Play size={14}/>}
             <span>{isOptimizing ? 'Optimizing...' : 'Run Seeded Search'}</span>
           </button>
           
-          <button onClick={() => fileInputRef.current?.click()} className="flex items-center justify-center gap-2 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-xs font-semibold px-4 py-2.5 sm:py-3 rounded-xl transition-all cursor-pointer">
-            <Import size={14} className="text-blue-500"/>
+          <button onClick={() => fileInputRef.current?.click()} className="flex items-center justify-center gap-2 border border-[var(--border-strong)] bg-transparent hover:bg-[var(--bg-surface-raised)] text-[var(--text-primary)] text-xs font-semibold px-4 py-2.5 sm:py-3 rounded-xl transition-all cursor-pointer">
+            <Import size={14} className="text-[var(--accent-primary)]"/>
             <span>Load CSV</span>
           </button>
           <input type="file" ref={fileInputRef} onChange={handleImportCSV} accept=".csv" className="hidden"/>
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Optimizer Progress Logs</label>
-          <pre ref={logRef} className="w-full h-[150px] sm:h-[180px] bg-zinc-950 dark:bg-black rounded-xl p-3 sm:p-4 text-[10px] text-zinc-300 font-mono overflow-y-auto leading-relaxed border border-zinc-800 select-all scrollbar-none whitespace-pre-wrap">
+          <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Optimizer Progress Logs</label>
+          <pre ref={logRef} className="w-full h-[150px] sm:h-[180px] bg-[var(--bg-app)] rounded-xl p-3 sm:p-4 text-[10px] text-[var(--text-secondary)] font-mono overflow-y-auto leading-relaxed border border-[var(--border-subtle)] select-all scrollbar-none whitespace-pre-wrap">
             {optLogs}
           </pre>
         </div>
 
       </div>
 
-      <div className="lg:col-span-7 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm flex flex-col gap-4 sm:gap-5">
-        <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-3">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2">
-            <Award size={16} className="text-blue-500"/> Top 5 Optimized Picks
+      <div className="lg:col-span-7 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-3.5 sm:p-5 shadow-sm flex flex-col gap-4 sm:gap-5">
+        <div className="flex items-center justify-between border-b border-[var(--border-subtle)] pb-3">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2">
+            <Award size={16} className="text-[var(--accent-primary)]"/> Top 5 Optimized Picks
           </h3>
           {loadedPreset && (
-            <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-full flex items-center gap-1">
+            <span className="text-[10px] font-bold text-[var(--comfort)] bg-[var(--comfort)]/10 border border-[var(--comfort)]/30 px-2 py-0.5 rounded-full flex items-center gap-1">
               <Check size={10} /> Preset #{Number(loadedPreset.id ?? 0) + 1}
             </span>
           )}
         </div>
 
         {loadedPreset && (
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-900/60 rounded-xl px-3 py-2 text-xs text-blue-900 dark:text-blue-200">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-[var(--accent-primary-soft)] border border-[var(--accent-primary)]/40 rounded-xl px-3 py-2 text-xs text-[var(--text-primary)]">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+              <span className="w-2 h-2 rounded-full bg-[var(--comfort)] animate-pulse shrink-0" />
               <span>
                 <strong>Preset #{Number(loadedPreset.id ?? 0) + 1}</strong> is active in your shelter design.
               </span>
             </div>
-            <a href="#/design" className="font-extrabold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 text-[11px] shrink-0">
+            <a href="#/design" className="font-extrabold text-[var(--accent-primary)] hover:underline flex items-center gap-1 text-[11px] shrink-0">
               View in Design →
             </a>
           </div>
@@ -182,48 +182,48 @@ export const AutoOptimizer = () => {
                 key={result.id ?? idx}
                 className={`p-3.5 sm:p-4 rounded-xl sm:rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 transition-all ${
                   isLoaded
-                    ? 'bg-blue-50/60 dark:bg-blue-950/30 border-2 border-blue-500 shadow-md ring-2 ring-blue-500/20'
-                    : 'bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 hover:shadow-xs'
+                    ? 'bg-[var(--accent-primary-soft)] border border-[var(--accent-primary)] shadow-md'
+                    : 'bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] hover:shadow-xs'
                 }`}
               >
                 <div className="flex-1 flex flex-col gap-2 sm:gap-3">
                   <div className="flex items-center gap-2">
                     <span className={`flex items-center justify-center w-5 h-5 rounded-lg font-extrabold text-[10px] shrink-0 ${
                       isLoaded
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-blue-600/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400'
+                        ? 'bg-[var(--accent-primary)] text-[var(--bg-app)]'
+                        : 'bg-[var(--accent-primary-soft)] text-[var(--accent-primary)]'
                     }`}>
                       #{idx + 1}
                     </span>
-                    <h4 className="font-extrabold text-xs text-zinc-900 dark:text-white leading-tight">
+                    <h4 className="font-extrabold text-xs text-[var(--text-primary)] leading-tight">
                       {getMaterialLabel(result.params.struct)} ({Math.round(Number(result.params.sthick) * 100)}cm) + {getMaterialLabel(result.params.ins)} ({Math.round(Number(result.params.thick) * 100)}cm)
                     </h4>
                     {isLoaded && (
-                      <span className="text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-100/80 dark:bg-blue-900/60 px-1.5 py-0.5 rounded-full flex items-center gap-1 shrink-0 ml-auto sm:ml-0">
+                      <span className="text-[9px] font-bold text-[var(--comfort)] bg-[var(--comfort)]/10 px-1.5 py-0.5 rounded-full flex items-center gap-1 shrink-0 ml-auto sm:ml-0">
                         <Check size={9} /> Active
                       </span>
                     )}
                   </div>
 
-                  <div className="flex flex-wrap gap-1.5 text-[9px] font-extrabold uppercase text-zinc-400">
-                    <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{formatDisplayNumber(result.params.orient)}° Azimuth</span>
-                    <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{(Number(result.params.win_f) * 100).toFixed(0)}% Glazing</span>
-                    <span className="bg-zinc-200/50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/20">{formatDisplayNumber(result.params.ach_val)} ACH</span>
+                  <div className="flex flex-wrap gap-1.5 text-[9px] font-extrabold uppercase text-[var(--text-muted)]">
+                    <span className="bg-[var(--bg-surface)] px-2 py-0.5 rounded border border-[var(--border-subtle)]">{formatDisplayNumber(result.params.orient)}° Azimuth</span>
+                    <span className="bg-[var(--bg-surface)] px-2 py-0.5 rounded border border-[var(--border-subtle)]">{(Number(result.params.win_f) * 100).toFixed(0)}% Glazing</span>
+                    <span className="bg-[var(--bg-surface)] px-2 py-0.5 rounded border border-[var(--border-subtle)]">{formatDisplayNumber(result.params.ach_val)} ACH</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-end sm:flex-col sm:items-end gap-2.5 sm:gap-3 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-200/50 dark:border-zinc-800/50 shrink-0">
+                <div className="flex items-center justify-between sm:justify-end sm:flex-col sm:items-end gap-2.5 sm:gap-3 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-[var(--border-subtle)] shrink-0">
                   <div className="flex sm:flex-col sm:items-end items-center gap-1.5 sm:gap-0">
-                    <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">Score</span>
-                    <span className="text-base sm:text-lg font-extrabold text-blue-600 dark:text-blue-400 font-mono">{Number(result.score ?? 0).toFixed(1)}</span>
+                    <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Score</span>
+                    <span className="text-base sm:text-lg font-extrabold text-[var(--accent-primary)] font-mono">{Number(result.score ?? 0).toFixed(1)}</span>
                   </div>
 
                   <button
                     onClick={() => handleApplyPreset(result.params, result.id ?? idx, result.score)}
                     className={`flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg transition-all cursor-pointer ${
                       isLoaded
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-xs'
-                        : 'border border-blue-600 hover:bg-blue-600/5 dark:hover:bg-blue-500/10 text-blue-600 dark:text-blue-400'
+                        ? 'bg-[var(--accent-primary)] text-[var(--bg-app)] shadow-xs'
+                        : 'border border-[var(--border-strong)] bg-transparent hover:bg-[var(--bg-surface-raised)] text-[var(--text-primary)]'
                     }`}
                   >
                     <Check size={12}/> {isLoaded ? 'Loaded' : 'Load Preset'}
@@ -233,8 +233,8 @@ export const AutoOptimizer = () => {
             );
           })}
 
-          {normalizedResults.length === 0 && (<div className="flex flex-col items-center justify-center text-center text-zinc-400 py-16 gap-3">
-              <Sparkles size={40} className="text-zinc-200 dark:text-zinc-800"/>
+          {normalizedResults.length === 0 && (<div className="flex flex-col items-center justify-center text-center text-[var(--text-muted)] py-16 gap-3">
+              <Sparkles size={40} className="text-[var(--border-strong)]"/>
               <p className="text-xs font-semibold">
                 Click "Run Seeded Search" on the left panel to execute random-search combined with local-refinement on the simulation engine.
               </p>

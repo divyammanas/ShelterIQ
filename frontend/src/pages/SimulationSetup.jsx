@@ -49,11 +49,11 @@ export const SimulationSetup = () => {
     const getComfortBadge = (status) => {
         switch (status) {
             case 'comfortable':
-                return 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30';
+                return 'bg-[var(--comfort)]/15 text-[var(--comfort)] border border-[var(--comfort)]/30';
             case 'marginal':
-                return 'bg-amber-50 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-900/30';
+                return 'bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30';
             default:
-                return 'bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-900/30';
+                return 'bg-[var(--heat-loss)]/15 text-[var(--heat-loss)] border border-[var(--heat-loss)]/30';
         }
     };
     const getSampledRows = () => {
@@ -78,78 +78,78 @@ export const SimulationSetup = () => {
     return (<div className="flex flex-col gap-6">
       
       {/* Settings Grid */}
-      <div className="bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl p-3.5 sm:p-5 shadow-xs flex flex-col gap-4">
-        <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2 border-b border-slate-200 dark:border-[#1e2638] pb-3 shrink-0">
-          <Sliders size={15} className="text-blue-500" /> Solver Parameters
+      <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-3.5 sm:p-5 shadow-xs flex flex-col gap-4">
+        <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2 border-b border-[var(--border-subtle)] pb-3 shrink-0">
+          <Sliders size={15} className="text-[var(--accent-primary)]" /> Solver Parameters
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Simulation Duration</label>
-            <select value={simDuration} onChange={(e) => handleSelectChange(setSimDuration, parseInt(e.target.value))} className="w-full bg-zinc-50 dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-zinc-100 font-medium">
-              <option value="24">24 Hours (1 Day)</option>
-              <option value="48">48 Hours (2 Days)</option>
-              <option value="72">72 Hours (3 Days)</option>
-              <option value="168">168 Hours (7 Days)</option>
+            <label className="text-xs font-semibold text-[var(--text-secondary)]">Simulation Duration</label>
+            <select value={simDuration} onChange={(e) => handleSelectChange(setSimDuration, parseInt(e.target.value))} className="w-full bg-[var(--bg-surface-raised)] border border-[var(--border-strong)] rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-1 focus:ring-[var(--accent-primary)] text-[var(--text-primary)] font-medium">
+              <option value="24" className="bg-[var(--bg-surface)] text-[var(--text-primary)]">24 Hours (1 Day)</option>
+              <option value="48" className="bg-[var(--bg-surface)] text-[var(--text-primary)]">48 Hours (2 Days)</option>
+              <option value="72" className="bg-[var(--bg-surface)] text-[var(--text-primary)]">72 Hours (3 Days)</option>
+              <option value="168" className="bg-[var(--bg-surface)] text-[var(--text-primary)]">168 Hours (7 Days)</option>
               {simDuration !== 24 && simDuration !== 48 && simDuration !== 72 && simDuration !== 168 && (
-                <option value={simDuration}>{simDuration} Hours (Dataset Range)</option>
+                <option value={simDuration} className="bg-[var(--bg-surface)] text-[var(--text-primary)]">{simDuration} Hours (Dataset Range)</option>
               )}
             </select>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Simulation Timestep (dt)</label>
-            <select value={simTimestep} onChange={(e) => handleSelectChange(setSimTimestep, parseFloat(e.target.value))} className="w-full bg-zinc-50 dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-zinc-100 font-medium">
-              <option value={0.1}>0.1 Hour (6 Mins)</option>
-              <option value={0.5}>0.5 Hour (30 Mins)</option>
-              <option value={1}>1.0 Hour (60 Mins)</option>
+            <label className="text-xs font-semibold text-[var(--text-secondary)]">Simulation Timestep (dt)</label>
+            <select value={simTimestep} onChange={(e) => handleSelectChange(setSimTimestep, parseFloat(e.target.value))} className="w-full bg-[var(--bg-surface-raised)] border border-[var(--border-strong)] rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-1 focus:ring-[var(--accent-primary)] text-[var(--text-primary)] font-medium">
+              <option value={0.1} className="bg-[var(--bg-surface)] text-[var(--text-primary)]">0.1 Hour (6 Mins)</option>
+              <option value={0.5} className="bg-[var(--bg-surface)] text-[var(--text-primary)]">0.5 Hour (30 Mins)</option>
+              <option value={1} className="bg-[var(--bg-surface)] text-[var(--text-primary)]">1.0 Hour (60 Mins)</option>
             </select>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 flex justify-between">
+            <label className="text-xs font-semibold text-[var(--text-secondary)] flex justify-between">
               <span>Internal Heat Gains</span>
-              <span className="font-bold text-zinc-800 dark:text-zinc-200 font-mono">{internalGains} W</span>
+              <span className="font-bold text-[var(--text-primary)] font-mono">{internalGains} W</span>
             </label>
             <input type="range" min="0" max="800" step="10" value={internalGains} onChange={(e) => handleSliderChange(setInternalGains, parseInt(e.target.value))}/>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 flex justify-between">
+            <label className="text-xs font-semibold text-[var(--text-secondary)] flex justify-between">
                 <span>Initial Indoor Air Temp (T_air0)</span>
-              <span className="font-bold text-zinc-800 dark:text-zinc-200 font-mono">{T_air0.toFixed(1)}°C</span>
+              <span className="font-bold text-[var(--text-primary)] font-mono">{T_air0.toFixed(1)}°C</span>
             </label>
             <input type="range" min="-15" max="15" step="0.5" value={T_air0} onChange={(e) => handleSliderChange(setT_air0, parseFloat(e.target.value))}/>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 flex justify-between">
+            <label className="text-xs font-semibold text-[var(--text-secondary)] flex justify-between">
                 <span>Initial Thermal Mass Temp (T_mass0)</span>
-              <span className="font-bold text-zinc-800 dark:text-zinc-200 font-mono">{T_mass0.toFixed(1)}°C</span>
+              <span className="font-bold text-[var(--text-primary)] font-mono">{T_mass0.toFixed(1)}°C</span>
             </label>
             <input type="range" min="-15" max="15" step="0.5" value={T_mass0} onChange={(e) => handleSliderChange(setT_mass0, parseFloat(e.target.value))}/>
           </div>
         </div>
 
-        <div className="border-t border-zinc-200 dark:border-zinc-800/80 pt-4 mt-2">
-          <div className="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl">
+        <div className="border-t border-[var(--border-subtle)] pt-4 mt-2">
+          <div className="flex items-center justify-between p-3 bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-xl">
             <div className="flex items-start gap-2.5">
-              <Flame size={16} className="text-orange-500 shrink-0 mt-0.5"/>
+              <Flame size={16} className="text-[var(--heat-loss)] shrink-0 mt-0.5"/>
               <div>
-                <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Auxiliary Heating Setpoint</span>
-                <p className="text-[10px] text-zinc-400 leading-normal">Clamps indoor temperature and computes supplemental heating demand (kWh)</p>
+                <span className="text-xs font-bold text-[var(--text-primary)]">Auxiliary Heating Setpoint</span>
+                <p className="text-[10px] text-[var(--text-muted)] leading-normal">Clamps indoor temperature and computes supplemental heating demand (kWh)</p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer select-none">
               <input type="checkbox" checked={heatingEnabled} onChange={(e) => handleToggleChange(e.target.checked)} className="sr-only peer"/>
-              <div className="w-9 h-5 bg-zinc-200 dark:bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+              <div className="w-9 h-5 bg-[var(--border-strong)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-[var(--bg-app)] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[var(--text-primary)] after:border-[var(--border-subtle)] after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[var(--accent-primary)]"></div>
             </label>
           </div>
 
           {heatingEnabled && (<div className="flex flex-col gap-1.5 mt-4 max-w-sm animate-fade-in">
-              <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 flex justify-between">
+              <label className="text-xs font-semibold text-[var(--text-secondary)] flex justify-between">
                 <span>Heating Target Setpoint</span>
-                <span className="font-bold text-zinc-800 dark:text-zinc-200 font-mono">{heatingSetpoint.toFixed(1)}°C</span>
+                <span className="font-bold text-[var(--text-primary)] font-mono">{heatingSetpoint.toFixed(1)}°C</span>
               </label>
               <input type="range" min="10" max="22" step="0.5" value={heatingSetpoint} onChange={(e) => handleSliderChange(setHeatingSetpoint, parseFloat(e.target.value))}/>
             </div>)}
@@ -157,19 +157,19 @@ export const SimulationSetup = () => {
       </div>
 
       {/* Log Preview Table */}
-      <div className="bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl shadow-xs overflow-hidden flex flex-col">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-5 border-b border-slate-200 dark:border-[#1e2638]">
-          <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
-            <Table size={15} className="text-blue-500" /> Transient Solution Matrix Preview
+      <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] shadow-xs overflow-hidden flex flex-col">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-5 border-b border-[var(--border-subtle)]">
+          <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2">
+            <Table size={15} className="text-[var(--accent-primary)]" /> Transient Solution Matrix Preview
           </h3>
-          <button onClick={exportTimeseriesCSV} disabled={!simResult} className="w-full sm:w-auto justify-center flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900 disabled:opacity-50 text-zinc-700 dark:text-zinc-300 text-xs font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 shadow-sm">
-            <FileSpreadsheet size={14} className="text-emerald-500"/> Export Full CSV
+          <button onClick={exportTimeseriesCSV} disabled={!simResult} className="w-full sm:w-auto justify-center flex items-center gap-2 border border-[var(--border-strong)] bg-transparent hover:bg-[var(--bg-surface-raised)] disabled:opacity-50 text-[var(--text-primary)] text-xs font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 shadow-sm">
+            <FileSpreadsheet size={14} className="text-[var(--comfort)]"/> Export Full CSV
           </button>
         </div>
 
         <div className="overflow-x-auto max-h-[360px] overflow-y-auto">
-          <table className="w-full border-collapse text-left text-xs text-zinc-600 dark:text-zinc-300">
-            <thead className="sticky top-0 bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 z-10 font-bold uppercase text-[9px] text-zinc-400 tracking-wider">
+          <table className="w-full border-collapse text-left text-xs text-[var(--text-secondary)]">
+            <thead className="sticky top-0 bg-[var(--bg-surface-raised)] border-b border-[var(--border-subtle)] z-10 font-bold uppercase text-[9px] text-[var(--text-muted)] tracking-wider">
               <tr>
                 <th className="px-3 sm:px-6 py-2.5 sm:py-3.5">Time</th>
                 <th className="px-3 sm:px-6 py-2.5 sm:py-3.5">Outdoor Temp</th>
@@ -181,15 +181,15 @@ export const SimulationSetup = () => {
                 <th className="px-3 sm:px-6 py-2.5 sm:py-3.5">Comfort Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200/50 dark:divide-zinc-800/40">
-              {sampledRows.map((row, idx) => (<tr key={idx} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30 transition-colors">
-                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-bold font-mono whitespace-nowrap">Hour {row.time.toFixed(1)}</td>
-                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono whitespace-nowrap">{row.T_out.toFixed(1)}°C</td>
-                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono font-bold text-zinc-800 dark:text-zinc-100 whitespace-nowrap">{row.T_air.toFixed(1)}°C</td>
-                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono whitespace-nowrap">{row.T_mass.toFixed(1)}°C</td>
-                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono text-yellow-600 dark:text-yellow-400 whitespace-nowrap">+{Math.round(row.solar)} W</td>
-                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono text-blue-500 whitespace-nowrap">-{Math.round(Math.abs(row.conduction))} W</td>
-                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono text-orange-500 whitespace-nowrap">{Math.round(row.heating_power) > 0 ? `+${Math.round(row.heating_power)} W` : '—'}</td>
+            <tbody className="divide-y divide-[var(--border-subtle)]">
+              {sampledRows.map((row, idx) => (<tr key={idx} className="hover:bg-[var(--bg-surface-raised)] transition-colors">
+                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-bold font-mono whitespace-nowrap text-[var(--text-primary)]">Hour {row.time.toFixed(1)}</td>
+                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono whitespace-nowrap text-[var(--cold)]">{row.T_out.toFixed(1)}°C</td>
+                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono font-bold text-[var(--indoor-air)] whitespace-nowrap">{row.T_air.toFixed(1)}°C</td>
+                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono whitespace-nowrap text-[var(--thermal-mass)]">{row.T_mass.toFixed(1)}°C</td>
+                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono text-[var(--solar)] whitespace-nowrap">+{Math.round(row.solar)} W</td>
+                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono text-[var(--cold)] whitespace-nowrap">-{Math.round(Math.abs(row.conduction))} W</td>
+                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono text-[var(--heat-loss)] whitespace-nowrap">{Math.round(row.heating_power) > 0 ? `+${Math.round(row.heating_power)} W` : '—'}</td>
                   <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 whitespace-nowrap">
                     <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase ${getComfortBadge(row.status)}`}>
                       {row.status}
@@ -197,7 +197,7 @@ export const SimulationSetup = () => {
                   </td>
                 </tr>))}
               {sampledRows.length === 0 && (<tr>
-                  <td colSpan={8} className="px-6 py-12 text-center text-zinc-400 font-semibold">
+                  <td colSpan={8} className="px-6 py-12 text-center text-[var(--text-muted)] font-semibold">
                     No simulation logs compiled. Click run simulation or update parameters.
                   </td>
                 </tr>)}

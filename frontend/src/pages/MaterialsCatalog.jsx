@@ -70,94 +70,94 @@ export const MaterialsCatalog = () => {
             case 'structural':
             case 'masonry':
             case 'stone':
-                return 'bg-zinc-50 dark:bg-zinc-800/80 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800/50';
+                return 'bg-[var(--bg-surface-raised)] text-[var(--text-secondary)] border-[var(--border-subtle)]';
             case 'glazing':
             case 'air cavity':
-                return 'bg-cyan-50 dark:bg-cyan-950/20 text-cyan-600 dark:text-cyan-400 border-cyan-100 dark:border-cyan-900/30';
+                return 'bg-[var(--cold)]/10 text-[var(--cold)] border-[var(--cold)]/30';
             case 'thermal storage':
             case 'water':
-                return 'bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-900/30';
+                return 'bg-[var(--thermal-mass)]/15 text-[var(--thermal-mass)] border-[var(--thermal-mass)]/30';
             case 'metal':
-                return 'bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800/50';
+                return 'bg-[var(--border-strong)]/20 text-[var(--text-secondary)] border-[var(--border-subtle)]';
             case 'finish':
-                return 'bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 border-rose-100 dark:border-rose-900/30';
+                return 'bg-[var(--heat-loss)]/15 text-[var(--heat-loss)] border-[var(--heat-loss)]/30';
             case 'wood':
             case 'polymer':
             case 'timber':
             default:
-                return 'bg-amber-50 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400 border-amber-100 dark:border-amber-900/30';
+                return 'bg-[var(--accent-primary-soft)] text-[var(--accent-primary)] border-[var(--accent-primary)]/30';
         }
     };
     return (<div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
       
-      <form onSubmit={handleAddMaterial} className="lg:col-span-4 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm flex flex-col gap-3.5 sm:gap-4">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
-          <Plus size={16} className="text-blue-500"/> Register Custom Material
+      <form onSubmit={handleAddMaterial} className="lg:col-span-4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-3.5 sm:p-5 shadow-[0_1px_2px_rgba(0,0,0,0.3)] flex flex-col gap-3.5 sm:gap-4">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2 border-b border-[var(--border-subtle)] pb-3 shrink-0">
+          <Plus size={16} style={{ color: 'var(--accent-primary)' }} /> REGISTER CUSTOM MATERIAL
         </h3>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Material Name</label>
-          <input type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Hempcrete / Straw Clay" className="w-full bg-zinc-50 dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3.5 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-white"/>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">Material Name</label>
+          <input type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Hempcrete / Straw Clay" className="w-full bg-[var(--bg-surface-raised)] border border-[var(--border-strong)] rounded-[8px] px-3.5 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm outline-none text-[var(--text-primary)] placeholder-[var(--text-muted)]"/>
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Conductivity (k) [W/mK]</label>
-          <input type="number" step="0.001" required value={k} onChange={(e) => setK(e.target.value)} className="w-full bg-zinc-50 dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3.5 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-white font-mono"/>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">Conductivity (k) [W/mK]</label>
+          <input type="number" step="0.001" required value={k} onChange={(e) => setK(e.target.value)} className="w-full bg-[var(--bg-surface-raised)] border border-[var(--border-strong)] rounded-[8px] px-3.5 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm outline-none text-[var(--text-primary)] font-mono"/>
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Density (ρ) [kg/m³]</label>
-          <input type="number" required value={rho} onChange={(e) => setRho(e.target.value)} className="w-full bg-zinc-50 dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3.5 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-white font-mono"/>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">Density (ρ) [kg/m³]</label>
+          <input type="number" required value={rho} onChange={(e) => setRho(e.target.value)} className="w-full bg-[var(--bg-surface-raised)] border border-[var(--border-strong)] rounded-[8px] px-3.5 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm outline-none text-[var(--text-primary)] font-mono"/>
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Specific Heat Capacity (Cp) [J/kgK]</label>
-          <input type="number" required value={cp} onChange={(e) => setCp(e.target.value)} className="w-full bg-zinc-50 dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3.5 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-white font-mono"/>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">Specific Heat Capacity (Cp) [J/kgK]</label>
+          <input type="number" required value={cp} onChange={(e) => setCp(e.target.value)} className="w-full bg-[var(--bg-surface-raised)] border border-[var(--border-strong)] rounded-[8px] px-3.5 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm outline-none text-[var(--text-primary)] font-mono"/>
         </div>
 
-        <div className="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl mt-1">
+        <div className="flex items-center justify-between p-3 bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[8px] mt-1">
           <div>
-            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Phase Change Material (PCM)</span>
-            <p className="text-[10px] text-zinc-400 leading-normal">Enables temperature-dependent latent heat calculations</p>
+            <span className="text-xs font-semibold text-[var(--text-primary)]">Phase Change Material (PCM)</span>
+            <p className="text-[10px] text-[var(--text-muted)] leading-normal">Enables temperature-dependent latent heat calculations</p>
           </div>
           <label className="relative inline-flex items-center cursor-pointer select-none">
             <input type="checkbox" checked={isPcm} onChange={(e) => setIsPcm(e.target.checked)} className="sr-only peer"/>
-            <div className="w-9 h-5 bg-zinc-200 dark:bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+            <div className="w-9 h-5 bg-[var(--border-strong)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[var(--accent-primary)]"></div>
           </label>
         </div>
 
-        {isPcm && (<div className="flex flex-col gap-3.5 p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl animate-fade-in">
+        {isPcm && (<div className="flex flex-col gap-3.5 p-3.5 bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[8px]">
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Melting Temp (T_melt) [°C]</label>
-              <input type="number" step="0.5" value={tMelt} onChange={(e) => setTMelt(e.target.value)} className="w-full bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3.5 py-2 text-xs sm:text-sm outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-white font-mono"/>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">Melting Temp (T_melt) [°C]</label>
+              <input type="number" step="0.5" value={tMelt} onChange={(e) => setTMelt(e.target.value)} className="w-full bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-[8px] px-3.5 py-2 text-xs sm:text-sm outline-none text-[var(--text-primary)] font-mono"/>
             </div>
             
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Latent Heat (L) [J/kg]</label>
-              <input type="number" value={latent} onChange={(e) => setLatent(e.target.value)} className="w-full bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3.5 py-2 text-xs sm:text-sm outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-white font-mono"/>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">Latent Heat (L) [J/kg]</label>
+              <input type="number" value={latent} onChange={(e) => setLatent(e.target.value)} className="w-full bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-[8px] px-3.5 py-2 text-xs sm:text-sm outline-none text-[var(--text-primary)] font-mono"/>
             </div>
             
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Mushy Zone Band (+/- °C)</label>
-              <input type="number" step="0.5" value={mushBand} onChange={(e) => setMushBand(e.target.value)} className="w-full bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3.5 py-2 text-xs sm:text-sm outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-white font-mono"/>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">Mushy Zone Band (+/- °C)</label>
+              <input type="number" step="0.5" value={mushBand} onChange={(e) => setMushBand(e.target.value)} className="w-full bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-[8px] px-3.5 py-2 text-xs sm:text-sm outline-none text-[var(--text-primary)] font-mono"/>
             </div>
           </div>)}
 
-        <button type="submit" className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2.5 sm:py-3 rounded-xl transition-all shadow-sm mt-1 cursor-pointer">
+        <button type="submit" className="flex items-center justify-center gap-2 bg-[var(--accent-primary)] text-[var(--bg-app)] hover:opacity-95 text-xs font-semibold px-4 py-2.5 sm:py-3 rounded-[8px] transition-opacity shadow-sm mt-1 cursor-pointer">
           <Plus size={14}/> Register Material
         </button>
       </form>
 
-      <div className="lg:col-span-8 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm flex flex-col gap-4">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
-          <Database size={16} className="text-blue-500"/> Standard Materials Library
+      <div className="lg:col-span-8 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-3.5 sm:p-5 shadow-[0_1px_2px_rgba(0,0,0,0.3)] flex flex-col gap-4">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2 border-b border-[var(--border-subtle)] pb-3 shrink-0">
+          <Database size={16} style={{ color: 'var(--accent-primary)' }} /> STANDARD MATERIALS LIBRARY
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 max-h-[520px] overflow-y-auto pr-1">
           {mdb.list().map((key) => {
             const m = mdb.get(key);
             const type = getMaterialType(m);
-            return (<div key={`${key}-${refreshKey}`} className="p-3.5 sm:p-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl flex flex-col gap-3 hover:shadow-xs transition-all">
+            return (<div key={`${key}-${refreshKey}`} className="p-3.5 sm:p-4 bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[10px] flex flex-col gap-3 transition-colors">
                 <div className="flex items-start justify-between gap-2">
                   <span className="font-extrabold text-xs text-zinc-900 dark:text-white truncate">{m.name}</span>
                   <span className={`text-[8px] font-extrabold uppercase px-2 py-0.5 rounded-full border shrink-0 ${getBadgeStyle(type)}`}>

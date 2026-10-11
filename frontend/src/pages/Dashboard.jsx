@@ -18,6 +18,34 @@ const scoreToComfortHours = (score, totalDuration) => {
     return parseFloat((s / 40 * 4).toFixed(1)) * scale;
 };
 
+class ThreeDErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+    }
+    static getDerivedStateFromError() {
+        return { hasError: true };
+    }
+    componentDidCatch(error, info) {
+        console.error("ThreeDShelter Error:", error, info);
+    }
+    render() {
+        if (this.state.hasError) {
+            return (
+                <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center rounded-[10px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-secondary)]">
+                    <p className="text-xs font-semibold mb-2 text-[var(--text-primary)]">3D Viewport temporarily unavailable</p>
+                    <button 
+                        onClick={() => this.setState({ hasError: false })} 
+                        className="text-xs px-2.5 py-1 rounded-[6px] bg-[var(--accent-primary)] text-[var(--bg-app)] font-medium hover:opacity-90 transition-opacity">
+                        Retry 3D View
+                    </button>
+                </div>
+            );
+        }
+        return this.props.children;
+    }
+}
+
 export const Dashboard = () => {
     const { shelter, simResult, activeHour, setActiveHour, simTimestep, thermalMassType, isDarkMode } = useApp();
     const [viewMode, setViewMode] = useState('physical');
@@ -181,26 +209,35 @@ export const Dashboard = () => {
     const getTempChartOption = () => {
         if (!simResult)
             return {};
-        const textStyle = { color: isDarkMode ? '#a1a1aa' : '#52525b', fontFamily: 'Inter, sans-serif' };
-        const gridBorderColor = isDarkMode ? '#27272a' : '#e4e4e7';
+        const textStyle = { color: isDarkMode ? '#727883' : '#6B716D', fontFamily: 'DM Sans, sans-serif', fontSize: 10 };
+        const nameTextStyle = { color: isDarkMode ? '#A0A5AE' : '#57615C', fontFamily: 'DM Sans, sans-serif', fontSize: 10 };
+        const gridBorderColor = isDarkMode ? '#23272D' : '#DCD6C8';
         return {
             backgroundColor: 'transparent',
-            color: ['#f87171', '#34d399', '#60a5fa'],
+            color: ['#D9694A', '#8FBF9F', '#5B8DB8'],
             tooltip: {
                 trigger: 'axis',
-                backgroundColor: isDarkMode ? '#18181b' : '#ffffff',
+                confine: true,
+                backgroundColor: isDarkMode ? '#121417' : '#FBF9F4',
                 borderColor: gridBorderColor,
-              textStyle: { color: isDarkMode ? '#ffffff' : '#09090b' },
-              valueFormatter: (value) => formatDisplayNumber(value)
+                textStyle: { color: isDarkMode ? '#F0EDE6' : '#1E2624', fontSize: 12 },
+                valueFormatter: (value) => formatDisplayNumber(value)
             },
             legend: {
                 data: ['Indoor Air', 'Thermal Mass', 'Outdoor Ambient'],
-                textStyle
+                top: 4,
+                left: 'center',
+                icon: 'circle',
+                itemWidth: 8,
+                itemHeight: 8,
+                itemGap: 14,
+                textStyle: { color: isDarkMode ? '#A0A5AE' : '#57615C', fontSize: 11, fontFamily: 'DM Sans, sans-serif' }
             },
             grid: {
                 left: '3%',
                 right: '4%',
-                bottom: '3%',
+                top: 36,
+                bottom: 20,
                 containLabel: true,
                 borderColor: gridBorderColor
             },
@@ -213,10 +250,10 @@ export const Dashboard = () => {
             yAxis: {
                 type: 'value',
                 name: 'Temp (°C)',
-                nameTextStyle: { ...textStyle },
+                nameTextStyle,
                 axisLabel: { ...textStyle },
                 axisLine: { lineStyle: { color: gridBorderColor } },
-                splitLine: { lineStyle: { color: gridBorderColor } }
+                splitLine: { lineStyle: { color: gridBorderColor, type: 'dashed' } }
             },
             series: [
                 {
@@ -225,7 +262,8 @@ export const Dashboard = () => {
                     data: simResult.T_air,
                     smooth: true,
                     showSymbol: false,
-                    lineStyle: { width: 3 }
+                    lineStyle: { width: 2.5, color: '#D9694A' },
+                    itemStyle: { color: '#D9694A' }
                 },
                 {
                     name: 'Thermal Mass',
@@ -233,7 +271,8 @@ export const Dashboard = () => {
                     data: simResult.T_mass,
                     smooth: true,
                     showSymbol: false,
-                    lineStyle: { width: 2, type: 'dashed' }
+                    lineStyle: { width: 2, type: 'dashed', color: '#8FBF9F' },
+                    itemStyle: { color: '#8FBF9F' }
                 },
                 {
                     name: 'Outdoor Ambient',
@@ -241,7 +280,8 @@ export const Dashboard = () => {
                     data: simResult.T_out,
                     smooth: true,
                     showSymbol: false,
-                    lineStyle: { width: 1.5 }
+                    lineStyle: { width: 1.5, color: '#5B8DB8' },
+                    itemStyle: { color: '#5B8DB8' }
                 }
             ]
         };
@@ -249,26 +289,35 @@ export const Dashboard = () => {
     const getFlowChartOption = () => {
         if (!simResult)
             return {};
-        const textStyle = { color: isDarkMode ? '#a1a1aa' : '#52525b', fontFamily: 'Inter, sans-serif' };
-        const gridBorderColor = isDarkMode ? '#27272a' : '#e4e4e7';
+        const textStyle = { color: isDarkMode ? '#727883' : '#6B716D', fontFamily: 'DM Sans, sans-serif', fontSize: 10 };
+        const nameTextStyle = { color: isDarkMode ? '#A0A5AE' : '#57615C', fontFamily: 'DM Sans, sans-serif', fontSize: 10 };
+        const gridBorderColor = isDarkMode ? '#23272D' : '#DCD6C8';
         return {
             backgroundColor: 'transparent',
-            color: ['#facc15', '#3b82f6', '#f97316', '#14b8a6'],
+            color: ['#E8C26A', '#5B8DB8', '#D9694A', '#8FBF9F'],
             tooltip: {
                 trigger: 'axis',
-                backgroundColor: isDarkMode ? '#18181b' : '#ffffff',
+                confine: true,
+                backgroundColor: isDarkMode ? '#121417' : '#FBF9F4',
                 borderColor: gridBorderColor,
-              textStyle: { color: isDarkMode ? '#ffffff' : '#09090b' },
-              valueFormatter: (value) => formatDisplayNumber(value)
+                textStyle: { color: isDarkMode ? '#F0EDE6' : '#1E2624', fontSize: 12 },
+                valueFormatter: (value) => formatDisplayNumber(value)
             },
             legend: {
                 data: ['Solar Gain', 'Conduction', 'Ventilation', 'Mass Storage'],
-                textStyle
+                top: 4,
+                left: 'center',
+                icon: 'circle',
+                itemWidth: 8,
+                itemHeight: 8,
+                itemGap: 12,
+                textStyle: { color: isDarkMode ? '#A0A5AE' : '#57615C', fontSize: 11, fontFamily: 'DM Sans, sans-serif' }
             },
             grid: {
                 left: '3%',
                 right: '4%',
-                bottom: '3%',
+                top: 36,
+                bottom: 20,
                 containLabel: true,
                 borderColor: gridBorderColor
             },
@@ -281,10 +330,10 @@ export const Dashboard = () => {
             yAxis: {
                 type: 'value',
                 name: 'Heat Flow (W)',
-                nameTextStyle: { ...textStyle },
+                nameTextStyle,
                 axisLabel: { ...textStyle },
                 axisLine: { lineStyle: { color: gridBorderColor } },
-                splitLine: { lineStyle: { color: gridBorderColor } }
+                splitLine: { lineStyle: { color: gridBorderColor, type: 'dashed' } }
             },
             series: [
                 {
@@ -293,7 +342,8 @@ export const Dashboard = () => {
                     data: simResult.solar_gain_W,
                     smooth: true,
                     showSymbol: false,
-                    lineStyle: { width: 2 }
+                    lineStyle: { width: 2, color: '#E8C26A' },
+                    itemStyle: { color: '#E8C26A' }
                 },
                 {
                     name: 'Conduction',
@@ -301,7 +351,8 @@ export const Dashboard = () => {
                     data: simResult.conduction_loss_W.map(v => -v),
                     smooth: true,
                     showSymbol: false,
-                    lineStyle: { width: 2 }
+                    lineStyle: { width: 2, color: '#5B8DB8' },
+                    itemStyle: { color: '#5B8DB8' }
                 },
                 {
                     name: 'Ventilation',
@@ -309,7 +360,8 @@ export const Dashboard = () => {
                     data: simResult.ventilation_loss_W.map(v => -v),
                     smooth: true,
                     showSymbol: false,
-                    lineStyle: { width: 2 }
+                    lineStyle: { width: 2, color: '#D9694A' },
+                    itemStyle: { color: '#D9694A' }
                 },
                 {
                     name: 'Mass Storage',
@@ -317,7 +369,8 @@ export const Dashboard = () => {
                     data: simResult.storage_rate_W || new Array(simResult.t_hours.length).fill(0),
                     smooth: true,
                     showSymbol: false,
-                    lineStyle: { width: 2 }
+                    lineStyle: { width: 2, color: '#8FBF9F' },
+                    itemStyle: { color: '#8FBF9F' }
                 }
             ]
         };
@@ -342,246 +395,247 @@ export const Dashboard = () => {
         
         <div className="xl:col-span-7 flex flex-col gap-4 sm:gap-6">
           
-          <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3 sm:mb-4 flex items-center gap-2">
-              <Thermometer size={16} className="text-red-500"/> Temperature Profile
+          <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-3.5 sm:p-5 shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] mb-3 sm:mb-4 flex items-center gap-2">
+              <Thermometer size={16} style={{ color: 'var(--accent-primary)' }} /> TEMPERATURE PROFILE
             </h3>
             <div className="h-[220px] sm:h-[250px] w-full">
-              {simResult ? (<ReactECharts option={getTempChartOption()} style={{ height: '100%', width: '100%' }} theme={isDarkMode ? 'dark' : 'light'}/>) : (<div className="h-full flex items-center justify-center text-zinc-400">Loading thermal models...</div>)}
+              {simResult ? (<ReactECharts option={getTempChartOption()} style={{ height: '100%', width: '100%' }} theme={isDarkMode ? 'dark' : 'light'}/>) : (<div className="h-full flex items-center justify-center text-[var(--text-muted)]">Loading thermal models...</div>)}
             </div>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
-            <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 p-3 sm:p-4 rounded-xl flex flex-col gap-1 shadow-sm">
-              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Indoor Min</span>
-              <span className="text-lg sm:text-xl font-extrabold text-zinc-900 dark:text-white font-mono">{minTemp} °C</span>
+            <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-3 sm:p-4 rounded-[10px] flex flex-col gap-1 shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
+              <span className="text-[10px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Indoor Min</span>
+              <span className="text-lg sm:text-xl font-bold text-[var(--text-primary)] font-mono">{minTemp} °C</span>
             </div>
-            <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 p-3 sm:p-4 rounded-xl flex flex-col gap-1 shadow-sm">
-              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Indoor Max</span>
-              <span className="text-lg sm:text-xl font-extrabold text-zinc-900 dark:text-white font-mono">{maxTemp} °C</span>
+            <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-3 sm:p-4 rounded-[10px] flex flex-col gap-1 shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
+              <span className="text-[10px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Indoor Max</span>
+              <span className="text-lg sm:text-xl font-bold text-[var(--text-primary)] font-mono">{maxTemp} °C</span>
             </div>
-            <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 p-3 sm:p-4 rounded-xl flex flex-col gap-1 shadow-sm">
-              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Comfort Hours</span>
-              <span className="text-lg sm:text-xl font-extrabold text-zinc-900 dark:text-white font-mono">{comfortHours} h</span>
-              <span className="text-[9px] text-zinc-400 dark:text-zinc-500 leading-tight">
+            <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-3 sm:p-4 rounded-[10px] flex flex-col gap-1 shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
+              <span className="text-[10px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Comfort Hours</span>
+              <span className="text-lg sm:text-xl font-bold font-mono" style={{ color: 'var(--comfort)' }}>{comfortHours} h</span>
+              <span className="text-[9px] text-[var(--text-muted)] leading-tight">
                 {((comfortHours / totalDuration) * 100).toFixed(0)}% · ≥16°C
               </span>
             </div>
-            <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 p-3 sm:p-4 rounded-xl flex flex-col gap-1 shadow-sm">
-              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Heating Demand</span>
-              <span className="text-lg sm:text-xl font-extrabold text-zinc-900 dark:text-white font-mono">{heatingEnergy.toFixed(1)} kWh</span>
+            <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-3 sm:p-4 rounded-[10px] flex flex-col gap-1 shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
+              <span className="text-[10px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Heating Demand</span>
+              <span className="text-lg sm:text-xl font-bold font-mono" style={{ color: 'var(--heat-loss)' }}>{heatingEnergy.toFixed(1)} kWh</span>
+              <span className="text-[9px] text-[var(--text-muted)] leading-tight">
+                17% · ≥16°C · heated shelter
+              </span>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3 sm:mb-4 flex items-center gap-2">
-              <Zap size={16} className="text-blue-500"/> Instantaneous Heat Balance (Hour {activeHour.toFixed(1)}h)
+          <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-3.5 sm:p-5 shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] mb-3 sm:mb-4 flex items-center gap-2">
+              <Zap size={16} style={{ color: 'var(--accent-primary)' }} /> INSTANTANEOUS HEAT BALANCE (HOUR {activeHour.toFixed(1)}H)
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-              <div className="flex flex-col gap-1 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
-                <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Solar Gain</span>
-                <span className="text-sm font-bold text-yellow-500 font-mono">{current.solar_gain > 0 ? `+${current.solar_gain.toFixed(0)}` : '0'} W</span>
+              <div className="flex flex-col gap-1 border-b border-[var(--border-subtle)] pb-2.5">
+                <span className="text-[10px] text-[var(--text-secondary)] font-semibold uppercase tracking-wider">Solar Gain</span>
+                <span className="text-sm font-bold font-mono" style={{ color: 'var(--solar)' }}>{current.solar_gain > 0 ? `+${current.solar_gain.toFixed(0)}` : '0'} W</span>
               </div>
-              <div className="flex flex-col gap-1 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
-                <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Conduction</span>
-                <span className={`text-sm font-bold font-mono ${current.conduction_loss > 0 ? 'text-blue-500' : 'text-red-500'}`}>
+              <div className="flex flex-col gap-1 border-b border-[var(--border-subtle)] pb-2.5">
+                <span className="text-[10px] text-[var(--text-secondary)] font-semibold uppercase tracking-wider">Conduction</span>
+                <span className="text-sm font-bold font-mono" style={{ color: current.conduction_loss > 0 ? 'var(--cold)' : 'var(--heat-loss)' }}>
                   {current.conduction_loss > 0 ? `-${current.conduction_loss.toFixed(0)}` : `+${Math.abs(current.conduction_loss).toFixed(0)}`} W
                 </span>
               </div>
-              <div className="flex flex-col gap-1 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
-                <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Ventilation (ACH)</span>
-                <span className="text-sm font-bold text-orange-500 font-mono">{formatHeatLoss(current.ventilation_loss)} W</span>
+              <div className="flex flex-col gap-1 border-b border-[var(--border-subtle)] pb-2.5">
+                <span className="text-[10px] text-[var(--text-secondary)] font-semibold uppercase tracking-wider">Ventilation (ACH)</span>
+                <span className="text-sm font-bold font-mono" style={{ color: 'var(--heat-loss)' }}>{formatHeatLoss(current.ventilation_loss)} W</span>
               </div>
               <div className="flex flex-col gap-1 pb-2.5">
-                <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Heating Power</span>
-                <span className="text-sm font-bold text-rose-500 font-mono">{current.heating_power > 0 ? `+${current.heating_power.toFixed(0)} W` : '—'}</span>
+                <span className="text-[10px] text-[var(--text-secondary)] font-semibold uppercase tracking-wider">Heating Power</span>
+                <span className="text-sm font-bold font-mono" style={{ color: 'var(--heat-loss)' }}>{current.heating_power > 0 ? `+${current.heating_power.toFixed(0)} W` : '—'}</span>
               </div>
               <div className="flex flex-col gap-1 pb-2.5">
-                <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Thermal Mass</span>
-                <span className={`text-sm font-bold font-mono ${current.storage_rate > 0 ? 'text-pink-500' : 'text-teal-500'}`}>
+                <span className="text-[10px] text-[var(--text-secondary)] font-semibold uppercase tracking-wider">Thermal Mass</span>
+                <span className="text-sm font-bold font-mono" style={{ color: current.storage_rate > 0 ? 'var(--accent-primary)' : 'var(--thermal-mass)' }}>
                   {current.storage_rate > 0 ? `+${current.storage_rate.toFixed(0)}` : `-${Math.abs(current.storage_rate).toFixed(0)}`} W
                 </span>
               </div>
-              <div className="col-span-2 sm:col-span-1 flex flex-col gap-1 bg-blue-50/60 dark:bg-blue-950/30 px-3 py-2 rounded-lg border-l-4 border-blue-500 justify-center">
-                <span className="text-[10px] text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">Net Heat Flow</span>
-                <span className="text-sm font-extrabold text-blue-600 dark:text-blue-400 font-mono">{current.net_heat_flow.toFixed(0)} W</span>
+              <div className="col-span-2 sm:col-span-1 flex flex-col gap-1 bg-[var(--bg-surface-raised)] px-3 py-2 rounded-[8px] border-l-4 justify-center" style={{ borderLeftColor: 'var(--accent-primary)' }}>
+                <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: 'var(--accent-primary)' }}>Net Heat Flow</span>
+                <span className="text-sm font-bold font-mono" style={{ color: 'var(--accent-primary)' }}>{current.net_heat_flow.toFixed(0)} W</span>
               </div>
             </div>
           </div>
 
         </div>
 
-        <div ref={viewerPanelRef} className={`xl:col-span-5 flex flex-col gap-3.5 sm:gap-4 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm self-stretch ${isViewerFullscreen ? 'w-screen h-screen overflow-y-auto rounded-none border-0' : ''}`}>
-          <div className="flex flex-wrap items-center justify-between gap-2.5 border-b border-zinc-200 dark:border-zinc-800 pb-3 sm:pb-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2">
-              <Box size={16} className="text-blue-500"/> Interactive 3D Model
+        <div ref={viewerPanelRef} className={`xl:col-span-5 flex flex-col gap-3.5 sm:gap-4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-3.5 sm:p-5 shadow-[0_1px_2px_rgba(0,0,0,0.3)] self-stretch ${isViewerFullscreen ? 'w-screen h-screen overflow-y-auto rounded-none border-0' : ''}`}>
+          <div className="flex flex-wrap items-center justify-between gap-2.5 border-b border-[var(--border-subtle)] pb-3 sm:pb-4">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2">
+              <Box size={16} style={{ color: 'var(--accent-primary)' }} /> INTERACTIVE 3D MODEL
             </h3>
             
             <div className="flex items-center gap-1.5 sm:gap-2">
-              <button onClick={() => setViewMode('physical')} className={`px-2.5 sm:px-3 py-1 text-[10px] font-bold rounded-lg transition-colors ${viewMode === 'physical'
-            ? 'bg-blue-600 text-white'
-            : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-200'}`}>
+              <button onClick={() => setViewMode('physical')} className={`px-2.5 sm:px-3 py-1 text-[10px] font-semibold rounded-[8px] transition-colors ${viewMode === 'physical'
+            ? 'bg-[var(--accent-primary)] text-[var(--bg-app)]'
+            : 'bg-[var(--bg-surface-raised)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}>
                 Physical
               </button>
-              <button onClick={() => setViewMode('thermal')} className={`px-2.5 sm:px-3 py-1 text-[10px] font-bold rounded-lg transition-colors ${viewMode === 'thermal'
-            ? 'bg-blue-600 text-white'
-            : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-200'}`}>
+              <button onClick={() => setViewMode('thermal')} className={`px-2.5 sm:px-3 py-1 text-[10px] font-semibold rounded-[8px] transition-colors ${viewMode === 'thermal'
+            ? 'bg-[var(--accent-primary)] text-[var(--bg-app)]'
+            : 'bg-[var(--bg-surface-raised)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}>
                 Thermal
               </button>
-              <span className="text-[11px] font-mono font-bold bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-2 py-0.5 rounded-lg">
+              <span className="text-[11px] font-mono font-bold bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] text-[var(--text-primary)] px-2 py-0.5 rounded-[8px]">
                 {activeHour.toFixed(1)}h
               </span>
-              <button type="button" onClick={toggleViewerFullscreen} title={isViewerFullscreen ? 'Exit fullscreen' : 'View 3D model fullscreen'} aria-label={isViewerFullscreen ? 'Exit fullscreen' : 'View 3D model fullscreen'} className="p-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-50 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors">
+              <button type="button" onClick={toggleViewerFullscreen} title={isViewerFullscreen ? 'Exit fullscreen' : 'View 3D model fullscreen'} aria-label={isViewerFullscreen ? 'Exit fullscreen' : 'View 3D model fullscreen'} className="p-1.5 rounded-[8px] border border-[var(--border-strong)] bg-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-raised)] transition-colors">
                 {isViewerFullscreen ? <Minimize2 size={14}/> : <Maximize2 size={14}/>}
               </button>
             </div>
           </div>
 
           <div className={`${isViewerFullscreen ? 'flex-1 min-h-[420px]' : 'h-[250px] sm:h-[320px]'} w-full relative touch-manipulation`}>
-            <ThreeDShelter viewMode={viewMode} envelopeOpacity={envelopeOpacity} visibilityStates={visibilityStates} isRotating={isRotating}/>
+            <ThreeDErrorBoundary>
+              <ThreeDShelter viewMode={viewMode} envelopeOpacity={envelopeOpacity} visibilityStates={visibilityStates} isRotating={isRotating}/>
+            </ThreeDErrorBoundary>
           </div>
 
-          <div className="flex flex-col gap-2.5 sm:gap-3 p-2.5 sm:p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl">
+          <div className="flex flex-col gap-2.5 sm:gap-3 p-2.5 sm:p-3 bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[10px]">
             <div className="flex flex-wrap gap-2 sm:gap-3 items-center justify-between">
               
               <div className="flex gap-2">
-                <button onClick={() => setIsPlaying(!isPlaying)} className="flex items-center gap-1.5 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900 text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg transition-colors">
+                <button onClick={() => setIsPlaying(!isPlaying)} className="flex items-center gap-1.5 bg-[var(--accent-primary)] text-[var(--bg-app)] hover:opacity-95 text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded-[8px] transition-opacity">
                   {isPlaying ? <Pause size={12}/> : <Play size={12}/>}
                   <span>{isPlaying ? 'Pause' : 'Play'}</span>
                 </button>
-                <button onClick={() => setIsRotating(!isRotating)} className={`flex items-center gap-1.5 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg transition-all duration-150 ${isRotating
-            ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-900/30'
-            : 'bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900'}`}>
+                <button onClick={() => setIsRotating(!isRotating)} className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded-[8px] transition-colors ${isRotating
+            ? 'bg-[var(--accent-primary)] text-[var(--bg-app)]'
+            : 'bg-transparent border border-[var(--border-strong)] text-[var(--text-primary)] hover:bg-[var(--bg-surface)]'}`}>
                   <RotateCw size={12}/>
                   <span>Rotate</span>
                 </button>
               </div>
               
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Opacity:</span>
-                <input type="range" min="0.1" max="1.0" step="0.05" value={envelopeOpacity} onChange={(e) => setEnvelopeOpacity(parseFloat(e.target.value))} className="w-16 h-1 bg-zinc-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-blue-500"/>
+                <span className="text-[10px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Opacity:</span>
+                <input type="range" min="0.1" max="1.0" step="0.05" value={envelopeOpacity} onChange={(e) => setEnvelopeOpacity(parseFloat(e.target.value))} className="w-16 h-1 rounded-[8px] appearance-none cursor-pointer"/>
               </div>
             </div>
 
-            <div className="grid grid-cols-3 sm:flex sm:flex-wrap gap-1.5 border-t border-zinc-200 dark:border-zinc-800 pt-2.5">
-              {['roof', 'walls', 'floor', 'openings', 'mass', 'arrows'].map((key) => (<button key={key} onClick={() => toggleVisibility(key)} className={`px-2 py-1 text-[9px] font-bold uppercase rounded-lg border text-center transition-all ${visibilityStates[key]
-                ? 'bg-blue-500 hover:bg-blue-600 border-blue-500 text-white'
-                : 'bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-400 dark:text-zinc-500 hover:bg-zinc-50 dark:hover:bg-zinc-900'}`}>
+            <div className="grid grid-cols-3 sm:flex sm:flex-wrap gap-1.5 border-t border-[var(--border-subtle)] pt-2.5">
+              {['roof', 'walls', 'floor', 'openings', 'mass', 'arrows'].map((key) => (<button key={key} onClick={() => toggleVisibility(key)} className={`px-2 py-1 text-[9px] font-bold uppercase rounded-[8px] border text-center transition-colors ${visibilityStates[key]
+                ? 'bg-[var(--accent-primary)] border-[var(--accent-primary)] text-[var(--bg-app)]'
+                : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-raised)]'}`}>
                   {key}
                 </button>))}
             </div>
           </div>
 
           <div className="flex items-center gap-3 mt-1">
-            <span className="text-xs font-bold text-zinc-400 dark:text-zinc-500 shrink-0">Hour:</span>
+            <span className="text-xs font-semibold text-[var(--text-secondary)] shrink-0">Hour:</span>
             <input type="range" min="0" max={simResult ? simResult.t_hours[simResult.t_hours.length - 1] : 72} step={simTimestep} value={activeHour} onChange={(e) => setActiveHour(parseFloat(e.target.value))} className="flex-1"/>
           </div>
         </div>
 
       </div>
 
-      <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3 sm:mb-4 flex items-center gap-2">
-          <Lightbulb size={16} className="text-amber-500"/> Current Design Specifications Summary
+      <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-3.5 sm:p-5 shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] mb-3 sm:mb-4 flex items-center gap-2">
+          <Lightbulb size={16} style={{ color: 'var(--accent-primary)' }} /> CURRENT DESIGN SPECIFICATIONS SUMMARY
         </h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4">
-          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
-            <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Orientation</span>
-            <span className="text-xs sm:text-sm font-extrabold text-zinc-900 dark:text-white font-mono">{shelter.orientation_deg}° Azimuth</span>
+          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-[10px] bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)]">
+            <span className="text-[9px] font-semibold text-[var(--text-muted)] uppercase tracking-wider">Orientation</span>
+            <span className="text-xs sm:text-sm font-bold text-[var(--text-primary)] font-mono">{shelter.orientation_deg}° Azimuth</span>
           </div>
-          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
-            <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Wall U-Value</span>
-            <span className="text-xs sm:text-sm font-extrabold text-zinc-900 dark:text-white font-mono">{getWallU()} W/m²K</span>
+          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-[10px] bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)]">
+            <span className="text-[9px] font-semibold text-[var(--text-muted)] uppercase tracking-wider">Wall U-Value</span>
+            <span className="text-xs sm:text-sm font-bold text-[var(--text-primary)] font-mono">{getWallU()} W/m²K</span>
           </div>
-          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
-            <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Roof U-Value</span>
-            <span className="text-xs sm:text-sm font-extrabold text-zinc-900 dark:text-white font-mono">{getRoofU()} W/m²K</span>
+          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-[10px] bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)]">
+            <span className="text-[9px] font-semibold text-[var(--text-muted)] uppercase tracking-wider">Roof U-Value</span>
+            <span className="text-xs sm:text-sm font-bold text-[var(--text-primary)] font-mono">{getRoofU()} W/m²K</span>
           </div>
-          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
-            <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Ventilation (ACH)</span>
-            <span className="text-xs sm:text-sm font-extrabold text-zinc-900 dark:text-white font-mono">{shelter.ach} ACH</span>
+          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-[10px] bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)]">
+            <span className="text-[9px] font-semibold text-[var(--text-muted)] uppercase tracking-wider">Ventilation (ACH)</span>
+            <span className="text-xs sm:text-sm font-bold text-[var(--text-primary)] font-mono">{shelter.ach} ACH</span>
           </div>
-          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
-            <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Thermal Mass</span>
-            <span className="text-xs sm:text-sm font-extrabold text-zinc-900 dark:text-white capitalize truncate">
+          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-[10px] bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)]">
+            <span className="text-[9px] font-semibold text-[var(--text-muted)] uppercase tracking-wider">Thermal Mass</span>
+            <span className="text-xs sm:text-sm font-bold text-[var(--text-primary)] font-mono capitalize truncate">
               {thermalMassType === 'none' ? 'None' : thermalMassType.replace('_', ' ')}
             </span>
           </div>
-          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
-            <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Climate Location</span>
-            <span className="text-xs sm:text-sm font-extrabold text-zinc-900 dark:text-white">Ladakh Winter</span>
+          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-[10px] bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)]">
+            <span className="text-[9px] font-semibold text-[var(--text-muted)] uppercase tracking-wider">Climate Location</span>
+            <span className="text-xs sm:text-sm font-bold text-[var(--text-primary)] font-mono">Ladakh Winter</span>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-6 items-start">
         
-        <div className="xl:col-span-7 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3 sm:mb-4 flex items-center gap-2">
-            <Timer size={16} className="text-blue-500"/> Energy Flow Breakdown
+        <div className="xl:col-span-7 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-3.5 sm:p-5 shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] mb-3 sm:mb-4 flex items-center gap-2">
+            <Timer size={16} style={{ color: 'var(--accent-primary)' }} /> ENERGY FLOW BREAKDOWN
           </h3>
           <div className="h-[220px] sm:h-[250px] w-full">
-            {simResult ? (<ReactECharts option={getFlowChartOption()} style={{ height: '100%', width: '100%' }} theme={isDarkMode ? 'dark' : 'light'}/>) : (<div className="h-full flex items-center justify-center text-zinc-400">Loading flow metrics...</div>)}
+            {simResult ? (<ReactECharts option={getFlowChartOption()} style={{ height: '100%', width: '100%' }} theme={isDarkMode ? 'dark' : 'light'}/>) : (<div className="h-full flex items-center justify-center text-[var(--text-muted)]">Loading flow metrics...</div>)}
           </div>
         </div>
 
         <div className="xl:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 self-stretch">
           
-          <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 sm:p-5 shadow-sm flex flex-col items-center justify-center relative">
-            <div className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 self-start mb-2 flex items-center gap-1.5">
-              <ShieldCheck size={14} className="text-blue-500"/> Design Score
+          <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-4 sm:p-5 shadow-[0_1px_2px_rgba(0,0,0,0.3)] flex flex-col items-center justify-center relative">
+            <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] self-start mb-2 flex items-center gap-1.5">
+              <ShieldCheck size={14} style={{ color: 'var(--accent-primary)' }} /> DESIGN SCORE
             </div>
             
             <div className="relative w-28 h-28 my-2 flex items-center justify-center">
               <svg className="w-full h-full transform -rotate-90">
-                <circle cx="56" cy="56" r={radius} className="fill-none stroke-zinc-100 dark:stroke-zinc-800/80 stroke-[10]"/>
-                <circle cx="56" cy="56" r={radius} strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} className="fill-none stroke-blue-500 stroke-[10] stroke-linecap-round transition-all duration-300"/>
+                <circle cx="56" cy="56" r={radius} className="fill-none stroke-[var(--border-subtle)] stroke-[10]"/>
+                <circle cx="56" cy="56" r={radius} strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} className="fill-none stroke-[var(--accent-primary)] stroke-[10] stroke-linecap-round transition-all duration-300"/>
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span className="text-2xl font-extrabold text-zinc-900 dark:text-white font-mono">{score}</span>
-                <span className="text-[9px] uppercase font-bold text-zinc-400 dark:text-zinc-500 leading-none mt-1">Points</span>
+                <span className="text-2xl font-bold text-[var(--text-primary)] font-mono">{score}</span>
+                <span className="text-[9px] uppercase font-semibold text-[var(--text-muted)] leading-none mt-1">Points</span>
               </div>
             </div>
 
-            <div className="w-full space-y-1.5 mt-4 border-t border-zinc-100 dark:border-zinc-800/60 pt-3">
+            <div className="w-full space-y-1.5 mt-4 border-t border-[var(--border-subtle)] pt-3">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-zinc-400 dark:text-zinc-500 font-medium">Comfort Target</span>
-                <span className="font-bold text-zinc-900 dark:text-white font-mono">
+                <span className="text-[var(--text-secondary)] font-medium">Comfort Target</span>
+                <span className="font-bold text-[var(--text-primary)] font-mono">
                   {((comfortHours / totalDuration) * 100).toFixed(0)}%
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-zinc-400 dark:text-zinc-500 font-medium">Auxiliary Heating</span>
-                <span className="font-bold text-zinc-900 dark:text-white font-mono">
+                <span className="text-[var(--text-secondary)] font-medium">Auxiliary Heating</span>
+                <span className="font-bold text-[var(--text-primary)] font-mono">
                   {heatingEnergy.toFixed(1)} kWh
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-zinc-400 dark:text-zinc-500 font-medium">Stability Index</span>
-                <span className="font-bold text-zinc-900 dark:text-white font-mono">
+                <span className="text-[var(--text-secondary)] font-medium">Stability Index</span>
+                <span className="font-bold text-[var(--text-primary)] font-mono">
                   ±{stdVal.toFixed(1)}°C
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 sm:p-5 shadow-sm flex flex-col self-stretch">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3 flex items-center gap-1.5 shrink-0">
-              <Lightbulb size={14} className="text-amber-500"/> Advisor Recommendations
+          <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-4 sm:p-5 shadow-[0_1px_2px_rgba(0,0,0,0.3)] flex flex-col self-stretch">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] mb-3 flex items-center gap-1.5 shrink-0">
+              <Lightbulb size={14} style={{ color: 'var(--accent-primary)' }} /> ADVISOR RECOMMENDATIONS
             </h3>
             
             <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 max-h-[220px]">
-              {recommendations.map((rec, i) => (<div key={i} className={`p-2.5 sm:p-3 rounded-xl border flex items-start gap-2.5 ${rec.type === 'danger'
-                ? 'bg-red-50/50 dark:bg-red-950/10 border-red-100 dark:border-red-950/20 text-red-800 dark:text-red-300'
-                : rec.type === 'warning'
-                    ? 'bg-amber-50/50 dark:bg-amber-950/10 border-amber-100 dark:border-amber-950/20 text-amber-800 dark:text-amber-300'
-                    : 'bg-emerald-50/50 dark:bg-emerald-950/10 border-emerald-100 dark:border-emerald-950/20 text-emerald-800 dark:text-emerald-300'}`}>
+              {recommendations.map((rec, i) => (<div key={i} className="p-2.5 sm:p-3 rounded-[8px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] flex items-start gap-2.5">
                   <div className="shrink-0 mt-0.5">
-                    {rec.type === 'danger' ? (<AlertTriangle size={14} className="text-red-500"/>) : rec.type === 'warning' ? (<AlertTriangle size={14} className="text-amber-500"/>) : (<ShieldCheck size={14} className="text-emerald-500"/>)}
+                    {rec.type === 'danger' ? (<AlertTriangle size={14} style={{ color: 'var(--heat-loss)' }} />) : rec.type === 'warning' ? (<AlertTriangle size={14} style={{ color: 'var(--accent-primary)' }} />) : (<ShieldCheck size={14} style={{ color: 'var(--comfort)' }} />)}
                   </div>
                   <div className="text-[11px] leading-relaxed">
-                    <div className="font-extrabold mb-0.5">{rec.title}</div>
-                    <div>{rec.desc}</div>
+                    <div className="font-bold mb-0.5 text-[var(--text-primary)]">{rec.title}</div>
+                    <div className="text-[var(--text-secondary)]">{rec.desc}</div>
                   </div>
                 </div>))}
             </div>

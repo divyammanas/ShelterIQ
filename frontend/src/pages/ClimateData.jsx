@@ -153,9 +153,9 @@ export const ClimateData = () => {
 
   // ECharts configuration options for Climate Profiles (strictly adheres to modern ECharts 5/6 API)
   const getChartOptions = () => {
-    const labelColor = isDarkMode ? '#a1a1aa' : '#52525b';
-    const gridBorderColor = isDarkMode ? '#27272a' : '#e4e4e7';
-    const legendTextStyle = { color: labelColor, fontFamily: 'Inter, sans-serif' };
+    const labelColor = isDarkMode ? '#727883' : '#6B716D';
+    const gridBorderColor = isDarkMode ? '#23272D' : '#DCD6C8';
+    const legendTextStyle = { color: isDarkMode ? '#A0A5AE' : '#57615C', fontFamily: 'Inter, sans-serif' };
 
     if (activeChartTab === 'temp_solar') {
       return {
@@ -163,9 +163,10 @@ export const ClimateData = () => {
         animationDuration: 300,
         tooltip: {
           trigger: 'axis',
-          backgroundColor: isDarkMode ? '#18181b' : '#ffffff',
+          confine: true,
+          backgroundColor: isDarkMode ? '#121417' : '#FBF9F4',
           borderColor: gridBorderColor,
-          textStyle: { color: isDarkMode ? '#ffffff' : '#09090b', fontSize: 12 },
+          textStyle: { color: isDarkMode ? '#F0EDE6' : '#1E2624', fontSize: 12 },
           formatter: (params) => {
             if (!params || !params.length) return '';
             let html = `<div class="font-bold text-xs mb-1">${params[0].axisValue}</div>`;
@@ -182,13 +183,14 @@ export const ClimateData = () => {
         },
         legend: {
           data: ['Ambient Temperature (T_out)', 'Solar Radiation (GHI)'],
+          icon: 'circle',
           textStyle: legendTextStyle,
-          top: 0
+          top: 4
         },
         grid: {
           left: '3%',
           right: '3%',
-          bottom: '5%',
+          bottom: 20,
           top: 36,
           containLabel: true,
           borderColor: gridBorderColor
@@ -228,12 +230,12 @@ export const ClimateData = () => {
             data: chartData.temps,
             smooth: true,
             showSymbol: false,
-            lineStyle: { width: 2.5, color: '#38bdf8' },
-            itemStyle: { color: '#38bdf8' },
+            lineStyle: { width: 2.5, color: '#5B8DB8' },
+            itemStyle: { color: '#5B8DB8' },
             markLine: {
               silent: true,
               data: [
-                { yAxis: 0, lineStyle: { color: isDarkMode ? '#64748b' : '#94a3b8', type: 'dashed', width: 1 }, label: { formatter: '0°C Freeze', position: 'end', fontSize: 10, color: labelColor } }
+                { yAxis: 0, lineStyle: { color: isDarkMode ? '#343A42' : '#C4BCAB', type: 'dashed', width: 1 }, label: { formatter: '0°C Freeze', position: 'end', fontSize: 10, color: labelColor } }
               ]
             }
           },
@@ -244,8 +246,8 @@ export const ClimateData = () => {
             data: chartData.ghis,
             smooth: true,
             showSymbol: false,
-            lineStyle: { width: 2, color: '#f59e0b' },
-            itemStyle: { color: '#f59e0b' },
+            lineStyle: { width: 2, color: '#E8C26A' },
+            itemStyle: { color: '#E8C26A' },
             areaStyle: {
               color: {
                 type: 'linear',
@@ -254,8 +256,8 @@ export const ClimateData = () => {
                 x2: 0,
                 y2: 1,
                 colorStops: [
-                  { offset: 0, color: 'rgba(245, 158, 11, 0.35)' },
-                  { offset: 1, color: 'rgba(245, 158, 11, 0.01)' }
+                  { offset: 0, color: 'rgba(232, 194, 106, 0.35)' },
+                  { offset: 1, color: 'rgba(232, 194, 106, 0.01)' }
                 ]
               }
             }
@@ -268,19 +270,21 @@ export const ClimateData = () => {
         animationDuration: 300,
         tooltip: {
           trigger: 'axis',
-          backgroundColor: isDarkMode ? '#18181b' : '#ffffff',
+          confine: true,
+          backgroundColor: isDarkMode ? '#121417' : '#FBF9F4',
           borderColor: gridBorderColor,
-          textStyle: { color: isDarkMode ? '#ffffff' : '#09090b', fontSize: 12 }
+          textStyle: { color: isDarkMode ? '#F0EDE6' : '#1E2624', fontSize: 12 }
         },
         legend: {
           data: ['Wind Velocity (m/s)', 'Relative Humidity (%)'],
+          icon: 'circle',
           textStyle: legendTextStyle,
-          top: 0
+          top: 4
         },
         grid: {
           left: '3%',
           right: '3%',
-          bottom: '5%',
+          bottom: 20,
           top: 36,
           containLabel: true,
           borderColor: gridBorderColor
@@ -322,8 +326,8 @@ export const ClimateData = () => {
             data: chartData.winds,
             smooth: true,
             showSymbol: false,
-            lineStyle: { width: 2, color: '#06b6d4' },
-            itemStyle: { color: '#06b6d4' }
+            lineStyle: { width: 2, color: '#6FB3A0' },
+            itemStyle: { color: '#6FB3A0' }
           },
           {
             name: 'Relative Humidity (%)',
@@ -332,8 +336,8 @@ export const ClimateData = () => {
             data: chartData.rhs,
             smooth: true,
             showSymbol: false,
-            lineStyle: { width: 2, color: '#6366f1' },
-            itemStyle: { color: '#6366f1' },
+            lineStyle: { width: 2, color: '#5B8DB8' },
+            itemStyle: { color: '#5B8DB8' },
             areaStyle: {
               color: {
                 type: 'linear',
@@ -342,8 +346,8 @@ export const ClimateData = () => {
                 x2: 0,
                 y2: 1,
                 colorStops: [
-                  { offset: 0, color: 'rgba(99, 102, 241, 0.25)' },
-                  { offset: 1, color: 'rgba(99, 102, 241, 0.01)' }
+                  { offset: 0, color: 'rgba(91, 141, 184, 0.25)' },
+                  { offset: 1, color: 'rgba(91, 141, 184, 0.01)' }
                 ]
               }
             }
@@ -357,27 +361,27 @@ export const ClimateData = () => {
     <div className="flex flex-col gap-6">
       
       {/* Top Main Climate Configuration Panel */}
-      <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 sm:p-6 shadow-sm flex flex-col gap-6">
+      <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-5 sm:p-6 shadow-sm flex flex-col gap-6">
         
         {/* Header & Source Toggle */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-4">
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2">
-              <Sun size={16} className="text-yellow-500" /> Site Climate Properties & Weather Data
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2">
+              <Sun size={16} className="text-[var(--solar)]" /> Site Climate Properties & Weather Data
             </h3>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+            <p className="text-xs text-[var(--text-muted)] mt-1">
               Configure real historical Leh weather records (2021–2025) or synthetic diurnal micro-climate to drive passive thermal simulations.
             </p>
           </div>
 
-          <div className="w-full sm:w-auto grid grid-cols-2 sm:flex items-center bg-zinc-100 dark:bg-zinc-900 p-1 rounded-xl border border-zinc-200 dark:border-zinc-800">
+          <div className="w-full sm:w-auto grid grid-cols-2 sm:flex items-center bg-[var(--bg-surface-raised)] p-1 rounded-xl border border-[var(--border-subtle)]">
             <button
               type="button"
               onClick={() => handleModeSwitch('real')}
               className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
                 climateSource === 'real'
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
+                  ? 'bg-[var(--accent-primary)] text-[var(--bg-app)] shadow-xs'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               <Database size={14} />
@@ -388,8 +392,8 @@ export const ClimateData = () => {
               onClick={() => handleModeSwitch('synthetic')}
               className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
                 climateSource === 'synthetic'
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
+                  ? 'bg-[var(--accent-primary)] text-[var(--bg-app)] shadow-xs'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               <Sparkles size={14} />
@@ -403,18 +407,18 @@ export const ClimateData = () => {
           <div className="flex flex-col gap-6">
             
             {/* Scenario Selection Box */}
-            <div className="bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/60 dark:border-blue-900/30 rounded-xl p-3.5 sm:p-5 flex flex-col gap-4">
+            <div className="bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[10px] p-3.5 sm:p-5 flex flex-col gap-4">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
                 <div className="flex flex-col gap-1">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--accent-primary)] flex items-center gap-1.5">
                     <Calendar size={14} /> Active Climate Scenario
                   </span>
-                  <p className="text-xs text-zinc-700 dark:text-zinc-300 font-medium">
+                  <p className="text-xs text-[var(--text-primary)] font-medium">
                     {activeScenarioMeta ? activeScenarioMeta.description : "Historical hourly records from Leh weather station (34.15° N, 3500m ASL)."}
                   </p>
                   {activeScenarioMeta && (
-                    <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 mt-0.5">
-                      Period: <strong className="text-zinc-700 dark:text-zinc-200">{activeScenarioMeta.start}</strong> → <strong className="text-zinc-700 dark:text-zinc-200">{activeScenarioMeta.end}</strong> ({activeScenarioMeta.duration_h}h)
+                    <span className="text-[11px] font-mono text-[var(--text-muted)] mt-0.5">
+                      Period: <strong className="text-[var(--text-primary)]">{activeScenarioMeta.start}</strong> → <strong className="text-[var(--text-primary)]">{activeScenarioMeta.end}</strong> ({activeScenarioMeta.duration_h}h)
                     </span>
                   )}
                 </div>
@@ -423,10 +427,10 @@ export const ClimateData = () => {
                   <select
                     value={selectedScenario}
                     onChange={(e) => handleScenarioChange(e.target.value)}
-                    className="w-full md:w-auto bg-white dark:bg-[#121622] border border-blue-200 dark:border-blue-900/60 text-zinc-900 dark:text-zinc-100 text-xs font-bold rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-blue-500/50 cursor-pointer shadow-xs min-w-0 md:min-w-[220px]"
+                    className="w-full md:w-auto bg-[var(--bg-surface)] border border-[var(--border-strong)] text-[var(--text-primary)] text-xs font-bold rounded-xl px-3.5 py-2.5 outline-none focus:ring-1 focus:ring-[var(--accent-primary)] focus:border-[var(--accent-primary)] cursor-pointer shadow-xs min-w-0 md:min-w-[220px]"
                   >
                     {safeScenarios.map((scen) => (
-                      <option key={scen.id} value={scen.id}>
+                      <option key={scen.id} value={scen.id} className="bg-[var(--bg-surface)] text-[var(--text-primary)]">
                         {scen.name}
                       </option>
                     ))}
@@ -435,8 +439,8 @@ export const ClimateData = () => {
               </div>
 
               {/* Quick Scenario Preset Chips */}
-              <div className="flex flex-wrap gap-2 pt-2 border-t border-blue-100/50 dark:border-blue-900/20">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 self-center mr-1">Quick Picks:</span>
+              <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--border-subtle)]">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] self-center mr-1">Quick Picks:</span>
                 {QUICK_SCENARIOS.map((chip) => (
                   <button
                     key={chip.id}
@@ -444,8 +448,8 @@ export const ClimateData = () => {
                     onClick={() => handleScenarioChange(chip.id)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${
                       selectedScenario === chip.id
-                        ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                        : 'bg-white/80 dark:bg-zinc-900/60 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800 hover:border-blue-400 dark:hover:border-blue-600'
+                        ? 'bg-[var(--accent-primary)] text-[var(--bg-app)] border-[var(--accent-primary)] shadow-xs'
+                        : 'bg-[var(--bg-surface)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:border-[var(--accent-primary)]'
                     }`}
                   >
                     <span className="font-semibold">{chip.label}</span>
@@ -458,64 +462,64 @@ export const ClimateData = () => {
             {/* Active Scenario Current Driver Metrics */}
             {scenarioStats && (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                <div className="bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-xl p-3 flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1">
-                    <Thermometer size={12} className="text-red-500" /> Mean Temp
+                <div className="bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[10px] p-3 flex flex-col justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-1">
+                    <Thermometer size={12} className="text-[var(--indoor-air)]" /> Mean Temp
                   </span>
-                  <p className="text-lg font-extrabold font-mono text-zinc-800 dark:text-zinc-100 mt-1">
+                  <p className="text-lg font-extrabold font-mono text-[var(--text-primary)] mt-1">
                     {scenarioStats.meanTemp}°C
                   </p>
-                  <span className="text-[10px] text-zinc-400 font-mono">Period Average</span>
+                  <span className="text-[10px] text-[var(--text-muted)] font-mono">Period Average</span>
                 </div>
 
-                <div className="bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-xl p-3 flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1">
-                    <ArrowDownRight size={12} className="text-blue-500" /> Temp Low
+                <div className="bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[10px] p-3 flex flex-col justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-1">
+                    <ArrowDownRight size={12} className="text-[var(--cold)]" /> Temp Low
                   </span>
-                  <p className="text-lg font-extrabold font-mono text-blue-600 dark:text-blue-400 mt-1">
+                  <p className="text-lg font-extrabold font-mono text-[var(--cold)] mt-1">
                     {scenarioStats.minTemp}°C
                   </p>
-                  <span className="text-[10px] text-zinc-400 font-mono">Coldest Hour</span>
+                  <span className="text-[10px] text-[var(--text-muted)] font-mono">Coldest Hour</span>
                 </div>
 
-                <div className="bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-xl p-3 flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1">
-                    <Sun size={12} className="text-amber-500" /> Peak Solar GHI
+                <div className="bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[10px] p-3 flex flex-col justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-1">
+                    <Sun size={12} className="text-[var(--solar)]" /> Peak Solar GHI
                   </span>
-                  <p className="text-lg font-extrabold font-mono text-amber-500 mt-1">
-                    {scenarioStats.peakGhi} <span className="text-xs font-normal text-zinc-400">W/m²</span>
+                  <p className="text-lg font-extrabold font-mono text-[var(--solar)] mt-1">
+                    {scenarioStats.peakGhi} <span className="text-xs font-normal text-[var(--text-muted)]">W/m²</span>
                   </p>
-                  <span className="text-[10px] text-zinc-400 font-mono">Clear-sky Peak</span>
+                  <span className="text-[10px] text-[var(--text-muted)] font-mono">Clear-sky Peak</span>
                 </div>
 
-                <div className="bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-xl p-3 flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1">
-                    <Flame size={12} className="text-orange-500" /> Cumulative Solar
+                <div className="bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[10px] p-3 flex flex-col justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-1">
+                    <Flame size={12} className="text-[var(--accent-primary)]" /> Cumulative Solar
                   </span>
-                  <p className="text-lg font-extrabold font-mono text-orange-600 dark:text-orange-400 mt-1">
-                    {scenarioStats.totalSolarKWh} <span className="text-xs font-normal text-zinc-400">kWh/m²</span>
+                  <p className="text-lg font-extrabold font-mono text-[var(--accent-primary)] mt-1">
+                    {scenarioStats.totalSolarKWh} <span className="text-xs font-normal text-[var(--text-muted)]">kWh/m²</span>
                   </p>
-                  <span className="text-[10px] text-zinc-400 font-mono">Total Insolation</span>
+                  <span className="text-[10px] text-[var(--text-muted)] font-mono">Total Insolation</span>
                 </div>
 
-                <div className="bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-xl p-3 flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1">
-                    <Wind size={12} className="text-cyan-500" /> Peak Wind
+                <div className="bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[10px] p-3 flex flex-col justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-1">
+                    <Wind size={12} className="text-[var(--comfort)]" /> Peak Wind
                   </span>
-                  <p className="text-lg font-extrabold font-mono text-cyan-600 dark:text-cyan-400 mt-1">
-                    {scenarioStats.maxWind} <span className="text-xs font-normal text-zinc-400">m/s</span>
+                  <p className="text-lg font-extrabold font-mono text-[var(--comfort)] mt-1">
+                    {scenarioStats.maxWind} <span className="text-xs font-normal text-[var(--text-muted)]">m/s</span>
                   </p>
-                  <span className="text-[10px] text-zinc-400 font-mono">Max Gust Velocity</span>
+                  <span className="text-[10px] text-[var(--text-muted)] font-mono">Max Gust Velocity</span>
                 </div>
 
-                <div className="bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-xl p-3 flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1">
-                    <Clock size={12} className="text-indigo-500" /> Duration
+                <div className="bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[10px] p-3 flex flex-col justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-1">
+                    <Clock size={12} className="text-[var(--text-secondary)]" /> Duration
                   </span>
-                  <p className="text-lg font-extrabold font-mono text-zinc-800 dark:text-zinc-100 mt-1">
-                    {scenarioStats.totalHours} <span className="text-xs font-normal text-zinc-400">hours</span>
+                  <p className="text-lg font-extrabold font-mono text-[var(--text-primary)] mt-1">
+                    {scenarioStats.totalHours} <span className="text-xs font-normal text-[var(--text-muted)]">hours</span>
                   </p>
-                  <span className="text-[10px] text-zinc-400 font-mono">Sim Timesteps</span>
+                  <span className="text-[10px] text-[var(--text-muted)] font-mono">Sim Timesteps</span>
                 </div>
               </div>
             )}
@@ -524,83 +528,83 @@ export const ClimateData = () => {
             {safeSummary && (
               <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
-                    <CheckCircle2 size={13} className="text-emerald-500" /> 5-Year Leh Station Verified Baseline ({safeSummary.total_records.toLocaleString()} Records)
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-1.5">
+                    <CheckCircle2 size={13} className="text-[var(--comfort)]" /> 5-Year Leh Station Verified Baseline ({safeSummary.total_records.toLocaleString()} Records)
                   </span>
-                  <span className="text-[11px] font-mono text-blue-600 dark:text-blue-400">
+                  <span className="text-[11px] font-mono text-[var(--text-muted)]">
                     {safeSummary.location}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {/* Temp Card */}
-                  <div className="bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 flex flex-col gap-2">
-                    <div className="flex items-center justify-between text-zinc-500 text-xs">
-                      <span className="font-semibold flex items-center gap-1.5"><Thermometer size={14} className="text-red-500" /> Temperature</span>
-                      <span className="font-mono text-[11px]">{safeSummary.temperature.mean}°C mean</span>
+                  <div className="bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[10px] p-4 flex flex-col gap-2">
+                    <div className="flex items-center justify-between text-[var(--text-secondary)] text-xs">
+                      <span className="font-semibold flex items-center gap-1.5"><Thermometer size={14} className="text-[var(--indoor-air)]" /> Temperature</span>
+                      <span className="font-mono text-[11px] text-[var(--text-muted)]">{safeSummary.temperature.mean}°C mean</span>
                     </div>
                     <div className="flex items-baseline justify-between mt-1">
                       <div>
-                        <span className="text-[10px] uppercase text-zinc-400">Record Low</span>
-                        <p className="text-lg font-extrabold font-mono text-blue-600 dark:text-blue-400">{safeSummary.temperature.min}°C</p>
+                        <span className="text-[10px] uppercase text-[var(--text-muted)]">Record Low</span>
+                        <p className="text-lg font-extrabold font-mono text-[var(--cold)]">{safeSummary.temperature.min}°C</p>
                       </div>
                       <div className="text-right">
-                        <span className="text-[10px] uppercase text-zinc-400">Summer High</span>
-                        <p className="text-lg font-extrabold font-mono text-amber-600 dark:text-amber-400">{safeSummary.temperature.max}°C</p>
+                        <span className="text-[10px] uppercase text-[var(--text-muted)]">Summer High</span>
+                        <p className="text-lg font-extrabold font-mono text-[var(--solar)]">{safeSummary.temperature.max}°C</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Solar Card */}
-                  <div className="bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 flex flex-col gap-2">
-                    <div className="flex items-center justify-between text-zinc-500 text-xs">
-                      <span className="font-semibold flex items-center gap-1.5"><Sun size={14} className="text-amber-500" /> Solar Radiation (GHI)</span>
-                      <span className="font-mono text-[11px]">{safeSummary.ghi.mean} W/m² mean</span>
+                  <div className="bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[10px] p-4 flex flex-col gap-2">
+                    <div className="flex items-center justify-between text-[var(--text-secondary)] text-xs">
+                      <span className="font-semibold flex items-center gap-1.5"><Sun size={14} className="text-[var(--solar)]" /> Solar Radiation (GHI)</span>
+                      <span className="font-mono text-[11px] text-[var(--text-muted)]">{safeSummary.ghi.mean} W/m² mean</span>
                     </div>
                     <div className="flex items-baseline justify-between mt-1">
                       <div>
-                        <span className="text-[10px] uppercase text-zinc-400">Peak GHI</span>
-                        <p className="text-lg font-extrabold font-mono text-amber-500">{safeSummary.ghi.max} W/m²</p>
+                        <span className="text-[10px] uppercase text-[var(--text-muted)]">Peak GHI</span>
+                        <p className="text-lg font-extrabold font-mono text-[var(--solar)]">{safeSummary.ghi.max} W/m²</p>
                       </div>
                       <div className="text-right">
-                        <span className="text-[10px] uppercase text-zinc-400">Night Low</span>
-                        <p className="text-lg font-extrabold font-mono text-zinc-400">0 W/m²</p>
+                        <span className="text-[10px] uppercase text-[var(--text-muted)]">Night Low</span>
+                        <p className="text-lg font-extrabold font-mono text-[var(--text-muted)]">0 W/m²</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Wind Card */}
-                  <div className="bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 flex flex-col gap-2">
-                    <div className="flex items-center justify-between text-zinc-500 text-xs">
-                      <span className="font-semibold flex items-center gap-1.5"><Wind size={14} className="text-cyan-500" /> Wind Velocity</span>
-                      <span className="font-mono text-[11px]">{safeSummary.wind.mean} m/s mean</span>
+                  <div className="bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[10px] p-4 flex flex-col gap-2">
+                    <div className="flex items-center justify-between text-[var(--text-secondary)] text-xs">
+                      <span className="font-semibold flex items-center gap-1.5"><Wind size={14} className="text-[var(--comfort)]" /> Wind Velocity</span>
+                      <span className="font-mono text-[11px] text-[var(--text-muted)]">{safeSummary.wind.mean} m/s mean</span>
                     </div>
                     <div className="flex items-baseline justify-between mt-1">
                       <div>
-                        <span className="text-[10px] uppercase text-zinc-400">Peak Gust</span>
-                        <p className="text-lg font-extrabold font-mono text-cyan-600 dark:text-cyan-400">{safeSummary.wind.max} m/s</p>
+                        <span className="text-[10px] uppercase text-[var(--text-muted)]">Peak Gust</span>
+                        <p className="text-lg font-extrabold font-mono text-[var(--comfort)]">{safeSummary.wind.max} m/s</p>
                       </div>
                       <div className="text-right">
-                        <span className="text-[10px] uppercase text-zinc-400">Calm Low</span>
-                        <p className="text-lg font-extrabold font-mono text-zinc-400">{safeSummary.wind.min} m/s</p>
+                        <span className="text-[10px] uppercase text-[var(--text-muted)]">Calm Low</span>
+                        <p className="text-lg font-extrabold font-mono text-[var(--text-muted)]">{safeSummary.wind.min} m/s</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Humidity Card */}
-                  <div className="bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 flex flex-col gap-2">
-                    <div className="flex items-center justify-between text-zinc-500 text-xs">
-                      <span className="font-semibold flex items-center gap-1.5"><Droplets size={14} className="text-blue-500" /> Relative Humidity</span>
-                      <span className="font-mono text-[11px]">{safeSummary.humidity.mean}% mean</span>
+                  <div className="bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[10px] p-4 flex flex-col gap-2">
+                    <div className="flex items-center justify-between text-[var(--text-secondary)] text-xs">
+                      <span className="font-semibold flex items-center gap-1.5"><Droplets size={14} className="text-[var(--cold)]" /> Relative Humidity</span>
+                      <span className="font-mono text-[11px] text-[var(--text-muted)]">{safeSummary.humidity.mean}% mean</span>
                     </div>
                     <div className="flex items-baseline justify-between mt-1">
                       <div>
-                        <span className="text-[10px] uppercase text-zinc-400">Dry Min</span>
-                        <p className="text-lg font-extrabold font-mono text-indigo-500">{safeSummary.humidity.min}%</p>
+                        <span className="text-[10px] uppercase text-[var(--text-muted)]">Dry Min</span>
+                        <p className="text-lg font-extrabold font-mono text-[var(--accent-primary)]">{safeSummary.humidity.min}%</p>
                       </div>
                       <div className="text-right">
-                        <span className="text-[10px] uppercase text-zinc-400">Wet Max</span>
-                        <p className="text-lg font-extrabold font-mono text-zinc-400">{safeSummary.humidity.max}%</p>
+                        <span className="text-[10px] uppercase text-[var(--text-muted)]">Wet Max</span>
+                        <p className="text-lg font-extrabold font-mono text-[var(--text-muted)]">{safeSummary.humidity.max}%</p>
                       </div>
                     </div>
                   </div>
@@ -664,10 +668,10 @@ export const ClimateData = () => {
         )}
 
         {/* Informational Callout */}
-        <div className="p-4 bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/50 dark:border-blue-900/30 rounded-xl text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed flex gap-3">
-          <Info size={18} className="text-blue-500 shrink-0 mt-0.5"/>
+        <div className="p-4 bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-[10px] text-xs text-[var(--text-secondary)] leading-relaxed flex gap-3">
+          <Info size={18} className="text-[var(--accent-primary)] shrink-0 mt-0.5"/>
           <div>
-            <strong className="text-zinc-950 dark:text-white font-bold">High-Altitude Cold Desert Physics & Solar Radiation:</strong>
+            <strong className="text-[var(--text-primary)] font-bold">High-Altitude Cold Desert Physics & Solar Radiation:</strong>
             <p className="mt-1">
               At 3,500m elevation, Leh experiences atmospheric pressure ~66 kPa and optical air mass with minimal vapor attenuation. This generates intense clear-sky GHI peaks (frequently surpassing 1,000 W/m²) alongside sub-zero winter temperatures reaching down to -39°C. The active weather scenario feeds directly into the building thermal model, conduction calculations, sol-air surface temperature transformations, and design optimizations.
             </p>
@@ -676,27 +680,27 @@ export const ClimateData = () => {
       </div>
 
       {/* Interactive Climate Profile Timeseries Visualization */}
-      <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 sm:p-6 shadow-sm flex flex-col gap-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-200 dark:border-zinc-800 pb-4">
+      <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-5 sm:p-6 shadow-sm flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border-subtle)] pb-4">
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2">
-              <Activity size={15} className="text-blue-500" /> Dynamic Climate Timeseries Curves
+            <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2">
+              <Activity size={15} className="text-[var(--accent-primary)]" /> Dynamic Climate Timeseries Curves
             </h4>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+            <p className="text-xs text-[var(--text-muted)] mt-1">
               Hourly ambient meteorological boundary conditions driving RC network conduction and solar-air sol-thermal gains.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
             {/* Metric Mode Switcher */}
-            <div className="flex items-center bg-zinc-100 dark:bg-zinc-900 p-1 rounded-xl border border-zinc-200 dark:border-zinc-800">
+            <div className="flex items-center bg-[var(--bg-surface-raised)] p-1 rounded-xl border border-[var(--border-subtle)]">
               <button
                 type="button"
                 onClick={() => setActiveChartTab('temp_solar')}
                 className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   activeChartTab === 'temp_solar'
-                    ? 'bg-white dark:bg-zinc-800 text-blue-600 dark:text-blue-400 shadow-xs'
-                    : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+                    ? 'bg-[var(--accent-primary)] text-[var(--bg-app)] shadow-xs'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 Temp & Solar
@@ -706,8 +710,8 @@ export const ClimateData = () => {
                 onClick={() => setActiveChartTab('wind_humidity')}
                 className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   activeChartTab === 'wind_humidity'
-                    ? 'bg-white dark:bg-zinc-800 text-cyan-600 dark:text-cyan-400 shadow-xs'
-                    : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+                    ? 'bg-[var(--accent-primary)] text-[var(--bg-app)] shadow-xs'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 Wind & RH
@@ -719,7 +723,7 @@ export const ClimateData = () => {
               type="button"
               onClick={exportWeatherCSV}
               title="Download scenario hourly weather CSV"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-xs font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[var(--border-strong)] bg-transparent text-xs font-medium text-[var(--text-primary)] hover:bg-[var(--bg-surface-raised)] transition-colors"
             >
               <Download size={13} />
               <span>CSV</span>
@@ -736,7 +740,7 @@ export const ClimateData = () => {
               theme={isDarkMode ? 'dark' : 'light'}
             />
           ) : (
-            <div className="h-full flex items-center justify-center text-xs text-zinc-400">
+            <div className="h-full flex items-center justify-center text-xs text-[var(--text-muted)]">
               Loading weather timeseries data...
             </div>
           )}
@@ -744,11 +748,11 @@ export const ClimateData = () => {
       </div>
 
       {/* Hourly Data Sample Inspector (Collapsible Table) */}
-      <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-4">
+      <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-5 shadow-sm flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Table size={15} className="text-zinc-400" />
-            <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            <Table size={15} className="text-[var(--text-secondary)]" />
+            <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)]">
               Hourly Record Sample Table ({climate?.t_hours?.length || 0} Hours Available)
             </h4>
           </div>
@@ -756,16 +760,16 @@ export const ClimateData = () => {
           <button
             type="button"
             onClick={() => setShowTablePreview(!showTablePreview)}
-            className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+            className="text-xs font-semibold text-[var(--accent-primary)] hover:underline"
           >
             {showTablePreview ? "Collapse Table" : "Inspect Sampled Records"}
           </button>
         </div>
 
         {showTablePreview && (
-          <div className="overflow-x-auto border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <table className="w-full text-left text-xs text-zinc-700 dark:text-zinc-300">
-              <thead className="bg-zinc-50 dark:bg-zinc-900/80 border-b border-zinc-200 dark:border-zinc-800 text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-400">
+          <div className="overflow-x-auto border border-[var(--border-subtle)] rounded-xl">
+            <table className="w-full text-left text-xs text-[var(--text-secondary)]">
+              <thead className="bg-[var(--bg-surface-raised)] border-b border-[var(--border-subtle)] text-[10px] uppercase font-bold text-[var(--text-muted)]">
                 <tr>
                   <th className="py-2.5 px-4">Hour Index</th>
                   <th className="py-2.5 px-4">Ambient Temp (T_out)</th>
@@ -775,7 +779,7 @@ export const ClimateData = () => {
                   <th className="py-2.5 px-4">Cloud Cover</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 font-mono text-[11px]">
+              <tbody className="divide-y divide-[var(--border-subtle)] font-mono text-[11px]">
                 {climate.t_hours.slice(0, 36).filter((_, i) => i % 2 === 0).map((h, idx) => {
                   const actualIdx = climate.t_hours.indexOf(h);
                   const temp = climate.T_out[actualIdx];
@@ -785,21 +789,21 @@ export const ClimateData = () => {
                   const cloud = climate.cloud?.[actualIdx] ?? 0;
 
                   return (
-                    <tr key={idx} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/40 transition-colors">
-                      <td className="py-2 px-4 font-bold text-zinc-900 dark:text-zinc-100">H+{h.toFixed(0)}</td>
-                      <td className={`py-2 px-4 font-bold ${temp < 0 ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-900 dark:text-zinc-100'}`}>
+                    <tr key={idx} className="hover:bg-[var(--bg-surface-raised)] transition-colors">
+                      <td className="py-2 px-4 font-bold text-[var(--text-primary)]">H+{h.toFixed(0)}</td>
+                      <td className={`py-2 px-4 font-bold ${temp < 0 ? 'text-[var(--cold)]' : 'text-[var(--text-primary)]'}`}>
                         {temp.toFixed(2)}°C
                       </td>
-                      <td className={`py-2 px-4 ${ghi > 0 ? 'text-amber-600 dark:text-amber-400 font-bold' : 'text-zinc-400'}`}>
+                      <td className={`py-2 px-4 ${ghi > 0 ? 'text-[var(--solar)] font-bold' : 'text-[var(--text-muted)]'}`}>
                         {ghi.toFixed(1)} W/m²
                       </td>
-                      <td className="py-2 px-4 text-cyan-600 dark:text-cyan-400">
+                      <td className="py-2 px-4 text-[var(--comfort)]">
                         {wind.toFixed(2)} m/s
                       </td>
-                      <td className="py-2 px-4 text-zinc-500 dark:text-zinc-400">
+                      <td className="py-2 px-4 text-[var(--text-secondary)]">
                         {rh.toFixed(1)}%
                       </td>
-                      <td className="py-2 px-4 text-zinc-400">
+                      <td className="py-2 px-4 text-[var(--text-muted)]">
                         {cloud.toFixed(0)}%
                       </td>
                     </tr>

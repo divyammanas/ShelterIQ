@@ -197,7 +197,7 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
       time += 0.012;
       ctx.clearRect(0, 0, width, height);
 
-      // Deep dark navy vignette matching ShelterIQ dark theme
+      // Deep warm charcoal vignette matching ShelterIQ dark theme
       const bgGrad = ctx.createRadialGradient(
         width / 2,
         height / 2,
@@ -206,9 +206,9 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
         height / 2,
         Math.max(width, height) * 0.85
       );
-      bgGrad.addColorStop(0, '#0c101d');
-      bgGrad.addColorStop(0.55, '#070a12');
-      bgGrad.addColorStop(1, '#030407');
+      bgGrad.addColorStop(0, '#121417');
+      bgGrad.addColorStop(0.55, '#0B0C0E');
+      bgGrad.addColorStop(1, '#050607');
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, width, height);
 
@@ -217,7 +217,7 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
       ctx.translate(width / 2, height / 2);
       ctx.rotate(time * 0.04);
       const ringRadius = Math.min(width, height) * 0.32;
-      ctx.strokeStyle = 'rgba(59, 130, 246, 0.08)';
+      ctx.strokeStyle = 'rgba(236, 232, 223, 0.08)';
       ctx.lineWidth = 1;
       ctx.setLineDash([3, 10]);
       ctx.beginPath();
@@ -265,7 +265,7 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
               ctx.beginPath();
               ctx.moveTo(p.x, p.y);
               ctx.lineTo(mouseRef.current.x, mouseRef.current.y);
-              ctx.strokeStyle = `rgba(59, 130, 246, ${mForce * 0.35})`;
+              ctx.strokeStyle = `rgba(224, 163, 91, ${mForce * 0.35})`;
               ctx.lineWidth = 0.7;
               ctx.stroke();
             }
@@ -286,8 +286,8 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
             ctx.strokeStyle = p.isHighlight || p2.isHighlight
-              ? `rgba(96, 165, 250, ${alpha * 1.4})`
-              : `rgba(71, 85, 105, ${alpha * 0.8})`;
+              ? `rgba(224, 163, 91, ${alpha * 1.4})`
+              : `rgba(111, 120, 115, ${alpha * 0.8})`;
             ctx.lineWidth = 0.6;
             ctx.stroke();
           }
@@ -300,11 +300,11 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         if (p.isHighlight) {
-          ctx.fillStyle = `rgba(147, 197, 253, ${currentAlpha})`;
-          ctx.shadowColor = 'rgba(59, 130, 246, 0.7)';
+          ctx.fillStyle = `rgba(224, 163, 91, ${currentAlpha})`;
+          ctx.shadowColor = 'rgba(224, 163, 91, 0.7)';
           ctx.shadowBlur = 6;
         } else {
-          ctx.fillStyle = `rgba(148, 163, 184, ${currentAlpha})`;
+          ctx.fillStyle = `rgba(169, 177, 172, ${currentAlpha})`;
           ctx.shadowBlur = 0;
         }
         ctx.fill();
@@ -414,37 +414,37 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
       <div
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
-        className="relative z-10 w-full max-w-2xl mx-3 sm:mx-4 bg-[#0c1017]/95 dark:bg-[#0c1017]/95 backdrop-blur-2xl border border-zinc-800 rounded-2xl shadow-[0_0_80px_rgba(0,0,0,0.85)] p-4 sm:p-6 sm:p-7 text-zinc-100 flex flex-col will-change-transform max-h-[92vh] overflow-y-auto"
+        className="relative z-10 w-full max-w-2xl mx-3 sm:mx-4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.5)] p-4 sm:p-6 sm:p-7 text-[var(--text-primary)] flex flex-col will-change-transform max-h-[92vh] overflow-y-auto"
         style={minimizingStyle}
       >
         {/* Subtle accent highlight line */}
-        <div className="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
+        <div className="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-primary)]/40 to-transparent" />
 
         {/* Top Header & Auto-Play Status */}
-        <div className="flex items-center justify-between pb-3.5 border-b border-zinc-800/80 text-xs">
+        <div className="flex items-center justify-between pb-3.5 border-b border-[var(--border-subtle)] text-xs">
           <div className="flex items-center gap-2">
-            <Compass size={15} className="text-blue-400" />
-            <span className="font-bold tracking-tight text-white">
-              Shelter<span className="text-blue-500">IQ</span>
+            <Compass size={15} className="text-[var(--accent-primary)]" />
+            <span className="font-bold tracking-tight text-[var(--text-primary)] font-serif">
+              Shelter<span className="text-[var(--accent-primary)]">IQ</span>
             </span>
-            <span className="text-zinc-500 font-mono text-[11px] hidden sm:inline">// Interactive Feature Tour</span>
+            <span className="text-[var(--text-muted)] font-mono text-[11px] hidden sm:inline">// Interactive Feature Tour</span>
           </div>
 
-          <div className="flex items-center gap-2 font-mono text-[11px] text-zinc-400">
-            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-zinc-900 border border-zinc-800">
+          <div className="flex items-center gap-2 font-mono text-[11px] text-[var(--text-secondary)]">
+            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)]">
               {isPaused ? (
                 <>
-                  <Pause size={10} className="text-amber-400" />
-                  <span className="text-amber-400">Paused</span>
+                  <Pause size={10} className="text-[var(--accent-primary)]" />
+                  <span className="text-[var(--accent-primary)]">Paused</span>
                 </>
               ) : (
                 <>
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping" />
-                  <span className="text-blue-400">Tour</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)] animate-ping" />
+                  <span className="text-[var(--accent-primary)]">Tour</span>
                 </>
               )}
             </span>
-            <span className="text-zinc-500">
+            <span className="text-[var(--text-muted)]">
               {activeStep + 1}/{TOUR_STEPS.length}
             </span>
           </div>
@@ -459,15 +459,13 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
               <button
                 key={step.id}
                 onClick={() => setActiveStep(idx)}
-                className="group relative h-1.5 rounded-full bg-zinc-800/80 overflow-hidden cursor-pointer"
+                className="group relative h-1.5 rounded-full bg-[var(--border-subtle)] overflow-hidden cursor-pointer"
                 title={`Step ${idx + 1}: ${step.label}`}
               >
                 <div
                   className={`h-full rounded-full transition-all ${
-                    isPassed
-                      ? 'w-full bg-blue-500'
-                      : isCurrent
-                      ? 'w-full bg-blue-400'
+                    isPassed || isCurrent
+                      ? 'w-full bg-[var(--accent-primary)]'
                       : 'w-0 bg-transparent'
                   }`}
                   style={{
@@ -483,48 +481,48 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
         {/* Page Step Header */}
         <div className="flex items-start justify-between gap-3 sm:gap-4 mt-1 mb-2.5 sm:mb-3">
           <div className="flex items-center gap-2.5 sm:gap-3">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0 shadow-xs">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[var(--accent-primary-soft)] border border-[var(--accent-primary)]/30 flex items-center justify-center text-[var(--accent-primary)] shrink-0 shadow-xs">
               <StepIcon size={19} />
             </div>
             <div>
-              <div className="text-[10px] sm:text-[11px] font-mono font-medium text-blue-400 uppercase tracking-wider">
+              <div className="text-[10px] sm:text-[11px] font-mono font-medium text-[var(--accent-primary)] uppercase tracking-wider">
                 {currentStep.badge}
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-white tracking-tight leading-snug">
+              <h3 className="text-base sm:text-lg font-bold text-[var(--text-primary)] tracking-tight leading-snug">
                 {currentStep.title}
               </h3>
             </div>
           </div>
-          <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-[10px] sm:text-[11px] font-mono text-zinc-400 shrink-0">
+          <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] text-[10px] sm:text-[11px] font-mono text-[var(--text-muted)] shrink-0">
             {currentStep.route}
           </span>
         </div>
 
         {/* Description & Key Features */}
-        <p className="text-xs sm:text-sm text-zinc-300 mb-3 leading-relaxed">
+        <p className="text-xs sm:text-sm text-[var(--text-secondary)] mb-3 leading-relaxed">
           {currentStep.description}
         </p>
 
         {/* Feature Highlights Card */}
-        <div className="bg-zinc-900/60 border border-zinc-800/90 rounded-xl p-3 sm:p-4 mb-3 sm:mb-4 space-y-2">
+        <div className="bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-xl p-3 sm:p-4 mb-3 sm:mb-4 space-y-2">
           {currentStep.features.map((feature, fIdx) => (
-            <div key={fIdx} className="flex items-start gap-2.5 text-xs text-zinc-300">
-              <CheckCircle2 size={14} className="text-blue-400 shrink-0 mt-0.5" />
+            <div key={fIdx} className="flex items-start gap-2.5 text-xs text-[var(--text-secondary)]">
+              <CheckCircle2 size={14} className="text-[var(--comfort)] shrink-0 mt-0.5" />
               <span className="leading-snug">{feature}</span>
             </div>
           ))}
         </div>
 
         {/* Action Tip */}
-        <div className="px-3 py-2 rounded-lg bg-blue-950/30 border border-blue-900/40 text-[11px] text-blue-300 flex items-center gap-2 mb-4">
-          <Sparkles size={13} className="text-blue-400 shrink-0" />
+        <div className="px-3 py-2 rounded-lg bg-[var(--accent-primary-soft)] border border-[var(--accent-primary)]/30 text-[11px] text-[var(--text-primary)] flex items-center gap-2 mb-4">
+          <Sparkles size={13} className="text-[var(--accent-primary)] shrink-0" />
           <span className="leading-snug">
-            <strong className="font-semibold text-blue-200">How to use:</strong> {currentStep.actionTip}
+            <strong className="font-semibold text-[var(--accent-primary)]">How to use:</strong> {currentStep.actionTip}
           </span>
         </div>
 
         {/* Navigation & Minimization Actions */}
-        <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3 pt-2.5 border-t border-zinc-800/80">
+        <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3 pt-2.5 border-t border-[var(--border-subtle)]">
           <div className="flex items-center justify-between sm:justify-start gap-2 w-full sm:w-auto">
             <div className="flex items-center gap-1.5">
               <button
@@ -532,7 +530,7 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
                 onClick={() =>
                   setActiveStep((prev) => (prev === 0 ? TOUR_STEPS.length - 1 : prev - 1))
                 }
-                className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                className="p-2 rounded-lg bg-[var(--bg-surface-raised)] hover:bg-[var(--border-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
                 title="Previous Page Guide"
               >
                 <ChevronLeft size={16} />
@@ -540,7 +538,7 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
               <button
                 type="button"
                 onClick={() => setActiveStep((prev) => (prev + 1) % TOUR_STEPS.length)}
-                className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                className="p-2 rounded-lg bg-[var(--bg-surface-raised)] hover:bg-[var(--border-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
                 title="Next Page Guide"
               >
                 <ChevronRight size={16} />
@@ -549,7 +547,7 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
             <button
               type="button"
               onClick={handleMinimizeIntoLogo}
-              className="text-xs text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer px-2 py-1"
+              className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer px-2 py-1"
             >
               Skip Tour
             </button>
@@ -559,7 +557,7 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
             type="button"
             disabled={isMinimizing}
             onClick={handleMinimizeIntoLogo}
-            className="w-full sm:w-auto justify-center py-2.5 px-5 rounded-xl font-bold text-xs sm:text-sm tracking-wide bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white shadow-[0_0_20px_rgba(59,130,246,0.35)] hover:shadow-[0_0_28px_rgba(59,130,246,0.5)] transition-all flex items-center gap-2 cursor-pointer"
+            className="w-full sm:w-auto justify-center py-2.5 px-5 rounded-xl font-bold text-xs sm:text-sm tracking-wide bg-[var(--accent-primary)] hover:opacity-90 active:opacity-100 text-[var(--bg-app)] shadow-[0_1px_2px_rgba(0,0,0,0.3)] transition-all flex items-center gap-2 cursor-pointer"
           >
             <span>ENTER SHELTER IQ LAB</span>
             <ArrowRight size={15} />
