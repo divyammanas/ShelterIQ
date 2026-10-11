@@ -88,7 +88,12 @@ def optimize(base_shelter: Shelter, mdb: MaterialDatabase, space: SearchSpace,
         rows = run_comparison([case], climate, dt_h=dt_h, comfort_band=comfort_band,
                                heating_setpoint_C=heating_setpoint_C)
         row = rows[0]
-        row["score"] = design_score(row)
+        total_h = float(climate.t_hours[-1] - climate.t_hours[0]) if len(climate.t_hours) > 1 else 72.0
+        row["score"] = design_score(
+            row,
+            max_comfort_h=max(1.0, total_h),
+            max_heating_kWh=max(50.0, 150.0 * (total_h / 72.0))
+        )
         row["params"] = dict(insulation=ins_k, insulation_thickness_m=ins_t,
                               structure=struct_k, structure_thickness_m=struct_t,
                               orientation_deg=orient, window_fraction=win_frac, ach=ach)

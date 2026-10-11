@@ -6,8 +6,7 @@ import { ClimateData } from './pages/ClimateData';
 import { ShelterDesign } from './pages/ShelterDesign';
 import { MaterialsCatalog } from './pages/MaterialsCatalog';
 import { SimulationSetup } from './pages/SimulationSetup';
-import { PortfolioCompare } from './pages/PortfolioCompare';
-import { AutoOptimizer } from './pages/AutoOptimizer';
+import { DesignCompare } from './pages/DesignCompare';
 import { AnsysValidation } from './pages/AnsysValidation';
 function App() {
     return (<AppProvider>
@@ -20,8 +19,7 @@ function App() {
             <Route path="design" element={<ShelterDesign />}/>
             <Route path="materials" element={<MaterialsCatalog />}/>
             <Route path="simulation" element={<SimulationSetup />}/>
-            <Route path="comparison" element={<PortfolioCompare />}/>
-            <Route path="optimization" element={<AutoOptimizer />}/>
+            <Route path="comparison" element={<DesignCompare />}/>
             <Route path="validation" element={<AnsysValidation />}/>
             <Route path="*" element={<Navigate to="/dashboard" replace/>}/>
           </Route>

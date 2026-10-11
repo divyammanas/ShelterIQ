@@ -4,6 +4,7 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSo
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, ArrowUp, ArrowDown, Trash2, Plus } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { formatDisplayNumber } from '../services/physicsEngine';
 const SortableLayerRow = ({ id, idx, layer, onMaterialChange, onThicknessChange, onDelete, onMoveUp, onMoveDown, isFirst, isLast, mdb }) => {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
     const style = {
@@ -12,40 +13,92 @@ const SortableLayerRow = ({ id, idx, layer, onMaterialChange, onThicknessChange,
         opacity: isDragging ? 0.5 : 1,
         zIndex: isDragging ? 50 : 'auto'
     };
-    return (<div ref={setNodeRef} style={style} className="flex items-center gap-3 p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl hover:shadow-sm transition-all duration-150">
-      <div {...attributes} {...listeners} className="text-zinc-400 dark:text-zinc-500 cursor-grab active:cursor-grabbing hover:text-zinc-600 dark:hover:text-zinc-300 p-1">
-        <GripVertical size={16}/>
-      </div>
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] rounded-xl hover:shadow-xs transition-all duration-150"
+      >
+        <div className="flex items-center gap-2 w-full sm:w-auto sm:flex-1">
+          <div
+            {...attributes}
+            {...listeners}
+            className="text-[var(--text-muted)] cursor-grab active:cursor-grabbing hover:text-[var(--text-primary)] p-1 shrink-0"
+          >
+            <GripVertical size={16} />
+          </div>
 
-      <div className="text-xs font-bold text-zinc-400 dark:text-zinc-500 w-6">
-        #{idx + 1}
-      </div>
+          <div className="text-xs font-bold text-[var(--text-muted)] w-5 shrink-0">
+            #{idx + 1}
+          </div>
 
-      <div className="flex-1 min-w-[120px]">
-        <select value={Object.keys(mdb.db).find(k => mdb.db[k].name === layer.material.name) || ''} onChange={(e) => onMaterialChange(e.target.value)} className="w-full bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-1.5 text-xs outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-zinc-100">
-          {Object.keys(mdb.db).map((key) => (<option key={key} value={key}>
-              {mdb.db[key].name}
-            </option>))}
-        </select>
-      </div>
+          <div className="flex-1 min-w-0">
+            <select
+              value={Object.keys(mdb.db).find((k) => mdb.db[k].name === layer.material.name) || ''}
+              onChange={(e) => onMaterialChange(e.target.value)}
+              className="w-full bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-2.5 sm:px-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-[var(--accent-primary)] focus:border-[var(--accent-primary)] text-[var(--text-primary)] truncate"
+            >
+              {Object.keys(mdb.db).map((key) => (
+                <option key={key} value={key} className="bg-[var(--bg-surface)] text-[var(--text-primary)]">
+                  {mdb.db[key].name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      <div className="flex items-center gap-1.5 shrink-0 w-24">
-        <input type="number" step="0.01" min="0.01" max="1.0" value={layer.thickness} onChange={(e) => onThicknessChange(parseFloat(e.target.value) || 0.01)} className="w-full text-right bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-1.5 text-xs outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-zinc-100 font-mono"/>
-        <span className="text-xs text-zinc-400 font-medium">m</span>
-      </div>
+          <div className="sm:hidden">
+            <button
+              onClick={onDelete}
+              title="Delete Layer"
+              className="p-1.5 rounded-lg border border-[var(--heat-loss)]/30 text-[var(--heat-loss)] hover:bg-[var(--heat-loss)]/10 transition-colors"
+            >
+              <Trash2 size={13} />
+            </button>
+          </div>
+        </div>
 
-      <div className="flex items-center gap-1 shrink-0">
-        <button onClick={onMoveUp} disabled={isFirst} title="Move Layer Up" className="p-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 bg-white dark:bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-900 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-          <ArrowUp size={14}/>
-        </button>
-        <button onClick={onMoveDown} disabled={isLast} title="Move Layer Down" className="p-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 bg-white dark:bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-900 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-          <ArrowDown size={14}/>
-        </button>
-        <button onClick={onDelete} title="Delete Layer" className="p-1.5 rounded-lg border border-red-100 dark:border-red-950/20 text-red-500 hover:text-red-700 dark:hover:text-red-400 bg-red-50/50 dark:bg-red-950/10 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">
-          <Trash2 size={14}/>
-        </button>
+        <div className="flex items-center justify-between sm:justify-start gap-2 w-full sm:w-auto pt-1 sm:pt-0 border-t sm:border-t-0 border-[var(--border-subtle)]">
+          <div className="flex items-center gap-1.5 shrink-0 w-24">
+            <input
+              type="number"
+              step="0.01"
+              min="0.01"
+              max="1.0"
+              value={layer.thickness}
+              onChange={(e) => onThicknessChange(parseFloat(e.target.value) || 0.01)}
+              className="w-full text-right bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-2.5 py-1.5 text-xs outline-none focus:ring-1 focus:ring-[var(--accent-primary)] focus:border-[var(--accent-primary)] text-[var(--text-primary)] font-mono"
+            />
+            <span className="text-xs text-[var(--text-muted)] font-medium">m</span>
+          </div>
+
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              onClick={onMoveUp}
+              disabled={isFirst}
+              title="Move Layer Up"
+              className="p-1.5 rounded-lg border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-raised)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              <ArrowUp size={14} />
+            </button>
+            <button
+              onClick={onMoveDown}
+              disabled={isLast}
+              title="Move Layer Down"
+              className="p-1.5 rounded-lg border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-raised)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              <ArrowDown size={14} />
+            </button>
+            <button
+              onClick={onDelete}
+              title="Delete Layer"
+              className="hidden sm:inline-flex p-1.5 rounded-lg border border-[var(--heat-loss)]/30 text-[var(--heat-loss)] hover:bg-[var(--heat-loss)]/10 transition-colors"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
+        </div>
       </div>
-    </div>);
+    );
 };
 export const LayerEditor = () => {
     const { mdb, wallLayers, setWallLayers, roofLayers, setRoofLayers, floorLayers, setFloorLayers, runActiveSimulation } = useApp();
@@ -144,15 +197,15 @@ export const LayerEditor = () => {
     };
     return (<div className="flex flex-col gap-6">
       
-      <div className="flex bg-zinc-100 dark:bg-zinc-950 p-1 rounded-xl w-fit self-start border border-zinc-200/50 dark:border-zinc-800/30">
+      <div className="flex bg-[var(--bg-surface-raised)] p-1 rounded-xl w-fit self-start border border-[var(--border-subtle)]">
         {['walls', 'roof', 'floor'].map((tab) => (<button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-2 text-xs font-bold rounded-lg capitalize transition-all duration-150 ${activeTab === tab
-                ? 'bg-white dark:bg-zinc-800 text-blue-600 dark:text-blue-400 shadow-sm'
-                : 'text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-200'}`}>
+                ? 'bg-[var(--accent-primary)] text-[var(--bg-app)] shadow-sm'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}>
             {tab}
           </button>))}
       </div>
 
-      <div className="text-[11px] text-zinc-500 dark:text-zinc-400">
+      <div className="text-[11px] text-[var(--text-muted)]">
         Layers assembly order is listed from <strong>Outside (top)</strong> to <strong>Inside (bottom)</strong>. Drag items to reorder.
       </div>
 
@@ -164,23 +217,23 @@ export const LayerEditor = () => {
         </SortableContext>
       </DndContext>
 
-      <button onClick={handleAddLayer} className="flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#0c0c0f] hover:bg-zinc-50 dark:hover:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-xs font-semibold px-4 py-2.5 rounded-xl transition-all w-fit">
+      <button onClick={handleAddLayer} className="flex items-center gap-2 border border-[var(--border-strong)] bg-transparent hover:bg-[var(--bg-surface-raised)] text-[var(--text-primary)] text-xs font-semibold px-4 py-2.5 rounded-xl transition-all w-fit">
         <Plus size={14}/> Add Layer
       </button>
 
-      <div className="border-t border-zinc-200 dark:border-zinc-800/80 pt-6">
-        <h4 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-3">
+      <div className="border-t border-[var(--border-subtle)] pt-6">
+        <h4 className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-3">
           Assembly Cross-Section Preview (Total: {totalThickness.toFixed(2)}m)
         </h4>
-        <div className="flex h-10 w-full rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-inner bg-zinc-100 dark:bg-zinc-900">
+        <div className="flex h-10 w-full rounded-xl overflow-hidden border border-[var(--border-subtle)] shadow-inner bg-[var(--bg-surface-raised)]">
           {layers.map((layer, idx) => {
             const pct = (layer.thickness / (totalThickness || 1)) * 100;
             return (<div key={idx} style={{ width: `${pct}%` }} className={`${getLayerSegmentColor(layer)} h-full flex items-center justify-center text-[10px] text-white font-bold truncate px-2 relative group cursor-help transition-all duration-150`}>
                 <span className="truncate">{layer.material.name}</span>
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-zinc-950/95 border border-zinc-800 text-white rounded-lg p-2 text-[10px] whitespace-nowrap shadow-xl z-50 pointer-events-none">
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-lg p-2 text-[10px] whitespace-nowrap shadow-xl z-50 pointer-events-none">
                   <div className="font-bold">{layer.material.name}</div>
                   <div>Thickness: {Math.round(layer.thickness * 100)}cm</div>
-                  <div>k: {layer.material.k} W/mK</div>
+                  <div>k: {formatDisplayNumber(layer.material.k)} W/mK</div>
                 </div>
               </div>);
         })}

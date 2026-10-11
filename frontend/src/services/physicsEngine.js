@@ -1,3 +1,10 @@
+export function formatDisplayNumber(value) {
+    const number = Number(value);
+    if (!Number.isFinite(number))
+        return String(value);
+    return number.toFixed(5).replace(/\.?(0+)$/, '');
+}
+
 export function LCG(seed) {
     const m = 0x80000000;
     const a = 1103515245;
@@ -79,7 +86,89 @@ export const DEFAULT_MATERIALS = {
     "pcm_salt_hydrate": {
         name: "PCM Salt Hydrate", k: 1.1, rho: 1560, cp: 2200, alpha: 0.6, epsilon: 0.9,
         is_pcm: true, pcm_props: { T_melt: 29.0, L: 190000, band: 2.0 }
-    }
+    },
+
+    // -----------------------------------------------------------------------
+    // CSV-sourced materials: ShelterIQ_materials_filtered.csv
+    // Keys are slugified material_name values (same algorithm as backend).
+    // Existing keys above are NOT duplicated here — they remain authoritative.
+    // category + source are stored here so the catalog can display them
+    // without a separate API call.
+    // -----------------------------------------------------------------------
+
+    // Structural
+    "normal_weight_concrete":    { name: "Normal-weight concrete",    k: 1.7,   rho: 2300,  cp: 880,  epsilon: 0.94, alpha: 0.6,  is_pcm: false, category: "Structural", source: "ASHRAE Ch.26 / NIST reference data" },
+    "high_strength_concrete":    { name: "High-strength concrete",    k: 2.0,   rho: 2400,  cp: 840,  epsilon: 0.94, alpha: 0.6,  is_pcm: false, category: "Structural", source: "ASHRAE Ch.26 / engineering reference" },
+
+    // Masonry
+    "aerated_autoclaved_concrete_aac": { name: "Aerated autoclaved concrete (AAC)", k: 0.12,  rho: 550,   cp: 1000, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Masonry", source: "ASHRAE Ch.26 / engineering reference" },
+    "dense_concrete_block":      { name: "Dense concrete block",      k: 1.1,   rho: 2100,  cp: 840,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Masonry", source: "ASHRAE Ch.26 / NIST reference data" },
+    "lightweight_concrete_block":{ name: "Lightweight concrete block",k: 0.3,   rho: 1000,  cp: 840,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Masonry", source: "ASHRAE Ch.26 / NIST reference data" },
+    "common_clay_brick":         { name: "Common clay brick",         k: 0.6,   rho: 1800,  cp: 840,  epsilon: 0.9,  alpha: 0.71, is_pcm: false, category: "Masonry", source: "ASHRAE Ch.26 / NIST reference data" },
+    "engineering_brick":         { name: "Engineering brick",         k: 1.1,   rho: 2100,  cp: 840,  epsilon: 0.9,  alpha: 0.71, is_pcm: false, category: "Masonry", source: "ASHRAE Ch.26 / engineering reference" },
+    "adobe_mud_brick":           { name: "Adobe / mud brick",         k: 0.7,   rho: 1600,  cp: 900,  epsilon: 0.9,  alpha: 0.65, is_pcm: false, category: "Masonry", source: "Building-material literature / engineering reference" },
+
+    // Stone
+    "granite":               { name: "Granite",                   k: 2.8,   rho: 2700,  cp: 790,  epsilon: 0.9,  alpha: 0.65, is_pcm: false, category: "Stone", source: "NIST/engineering reference" },
+    "limestone":                 { name: "Limestone",                 k: 1.3,   rho: 2300,  cp: 900,  epsilon: 0.9,  alpha: 0.65, is_pcm: false, category: "Stone", source: "NIST/engineering reference" },
+    "sandstone":                 { name: "Sandstone",                 k: 1.8,   rho: 2200,  cp: 800,  epsilon: 0.9,  alpha: 0.65, is_pcm: false, category: "Stone", source: "NIST/engineering reference" },
+    "marble":                    { name: "Marble",                    k: 2.9,   rho: 2700,  cp: 880,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Stone", source: "Engineering reference" },
+    "slate":                     { name: "Slate",                     k: 2.2,   rho: 2700,  cp: 800,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Stone", source: "Engineering reference" },
+
+    // Finish
+    "gypsum_plaster":            { name: "Gypsum plaster",            k: 0.35,  rho: 950,   cp: 840,  epsilon: 0.9,  alpha: 0.5,  is_pcm: false, category: "Finish", source: "NIST reference / building-material literature" },
+    "gypsum_board":              { name: "Gypsum board",              k: 0.16,  rho: 800,   cp: 1090, epsilon: 0.9,  alpha: 0.5,  is_pcm: false, category: "Finish", source: "NIST / ASHRAE reference" },
+    "cement_plaster":            { name: "Cement plaster",            k: 0.72,  rho: 1800,  cp: 840,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Finish", source: "Engineering reference" },
+    "lime_plaster":              { name: "Lime plaster",              k: 0.7,   rho: 1700,  cp: 840,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Finish", source: "Building-material literature" },
+    "ceramic_tile":              { name: "Ceramic tile",              k: 1.3,   rho: 2000,  cp: 840,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Finish", source: "Engineering reference" },
+
+    // Wood
+    "hardwood_timber":           { name: "Hardwood timber",           k: 0.18,  rho: 700,   cp: 1600, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Wood", source: "ASHRAE / building-material literature" },
+    "plywood":                   { name: "Plywood",                   k: 0.13,  rho: 550,   cp: 1200, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Wood", source: "ASHRAE / engineering reference" },
+    "osb_board":                 { name: "OSB board",                 k: 0.13,  rho: 600,   cp: 1500, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Wood", source: "Engineering reference" },
+
+    // Insulation
+    "cork_board":                { name: "Cork board",                k: 0.043, rho: 120,   cp: 1800, epsilon: 0.9,  alpha: 0.7,  is_pcm: false, category: "Insulation", source: "NIST SRD 81 / building-material literature" },
+    "expanded_perlite":          { name: "Expanded perlite",          k: 0.05,  rho: 150,   cp: 900,  epsilon: 0.9,  alpha: 0.55, is_pcm: false, category: "Insulation", source: "ASHRAE / NIST reference" },
+    "vermiculite":               { name: "Vermiculite",               k: 0.065, rho: 120,   cp: 1000, epsilon: 0.9,  alpha: 0.55, is_pcm: false, category: "Insulation", source: "ASHRAE / NIST SRD 81" },
+    "glass_fiber_batt":          { name: "Glass fiber batt",          k: 0.04,  rho: 20,    cp: 800,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Insulation", source: "ASHRAE Ch.26 / NIST SRD 81" },
+    "rock_wool_batt":            { name: "Rock wool batt",            k: 0.035, rho: 45,    cp: 800,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Insulation", source: "ASHRAE Ch.26 / NIST SRD 81" },
+    "cellular_glass":            { name: "Cellular glass",            k: 0.05,  rho: 120,   cp: 840,  epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Insulation", source: "NIST SRD 81 / ASHRAE" },
+    "polyurethane_foam":         { name: "Polyurethane foam",         k: 0.025, rho: 35,    cp: 1400, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Insulation", source: "ASHRAE / NIST SRD 81" },
+    "polyisocyanurate_foam":     { name: "Polyisocyanurate foam",     k: 0.023, rho: 35,    cp: 1400, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Insulation", source: "ASHRAE / manufacturer-reference range" },
+    "phenolic_foam":             { name: "Phenolic foam",             k: 0.02,  rho: 40,    cp: 1400, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Insulation", source: "Engineering/manufacturer reference" },
+
+    // Bio-based insulation
+    "hemp_lime_hempcrete":       { name: "Hemp-lime (hempcrete)",     k: 0.07,  rho: 300,   cp: 1500, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Bio-based insulation", source: "Building-material literature" },
+    "sheep_wool_insulation":     { name: "Sheep wool insulation",     k: 0.04,  rho: 25,    cp: 1500, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Bio-based insulation", source: "Building-material literature" },
+    "wood_fiber_insulation_board":{ name: "Wood fiber insulation board", k: 0.045, rho: 160, cp: 2100, epsilon: 0.9, alpha: 0.6,  is_pcm: false, category: "Bio-based insulation", source: "Building-material literature" },
+    "cellulose_loose_fill":      { name: "Cellulose loose-fill",      k: 0.04,  rho: 50,    cp: 1800, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Bio-based insulation", source: "ASHRAE / building-material literature" },
+    "coconut_coir_fiber":        { name: "Coconut coir fiber",        k: 0.045, rho: 100,   cp: 1500, epsilon: 0.9,  alpha: 0.6,  is_pcm: false, category: "Bio-based insulation", source: "Building-material literature" },
+
+    // Polymer
+    "polyethylene":              { name: "Polyethylene",              k: 0.4,   rho: 940,   cp: 1900, epsilon: 0.9,  alpha: 0.5,  is_pcm: false, category: "Polymer", source: "Engineering material reference" },
+    "pvc":                       { name: "PVC",                       k: 0.17,  rho: 1400,  cp: 900,  epsilon: 0.9,  alpha: 0.5,  is_pcm: false, category: "Polymer", source: "ASHRAE / engineering reference" },
+    "rubber":                    { name: "Rubber",                    k: 0.16,  rho: 1100,  cp: 1400, epsilon: 0.9,  alpha: 0.5,  is_pcm: false, category: "Polymer", source: "NIST SRD 81 / engineering reference" },
+
+    // Glazing
+    "glass":                 { name: "Glass",                     k: 1.0,   rho: 2500,  cp: 750,  epsilon: 0.95, alpha: 0.85, is_pcm: false, category: "Glazing", source: "ASHRAE Ch.26 / NIST reference" },
+    "double_glazing_air_gap":    { name: "Double glazing, air gap",   k: 2.7,   rho: 2500,  cp: 750,  epsilon: 0.84, alpha: 0.7,  is_pcm: false, category: "Glazing", source: "ASHRAE / glazing reference" },
+    "low_e_double_glazing":      { name: "Low-E double glazing",      k: 1.4,   rho: 2500,  cp: 750,  epsilon: 0.84, alpha: 0.5,  is_pcm: false, category: "Glazing", source: "ASHRAE / glazing reference" },
+
+    // Air cavity
+    "air_gap_still":             { name: "Air gap, still",            k: 0.026, rho: 1.2,   cp: 1007, epsilon: 0.9,  alpha: 0.1,  is_pcm: false, category: "Air cavity", source: "ASHRAE air-space reference" },
+
+    // Thermal storage
+    "water_csv":                 { name: "Water",                     k: 0.6,   rho: 1000,  cp: 4180, epsilon: 0.96, alpha: 0.1,  is_pcm: false, category: "Thermal storage", source: "Engineering thermophysical reference" },
+
+    // PCM (no latent heat data in CSV — registered as plain thermal-mass materials)
+    "paraffin_pcm":              { name: "Paraffin PCM",              k: 0.2,   rho: 900,   cp: 2000, epsilon: 0.9,  alpha: 0.7,  is_pcm: false, category: "PCM", source: "PCM literature / manufacturer-dependent" },
+    "salt_hydrate_pcm_cacl2_6h2o":{ name: "Salt-hydrate PCM (CaCl2·6H2O)", k: 0.5, rho: 1710, cp: 1400, epsilon: 0.9, alpha: 0.7, is_pcm: false, category: "PCM", source: "PCM literature / manufacturer-dependent" },
+    "eutectic_pcm_organic":      { name: "Eutectic PCM, organic",     k: 0.2,   rho: 850,   cp: 2000, epsilon: 0.9,  alpha: 0.7,  is_pcm: false, category: "PCM", source: "PCM literature / manufacturer-dependent" },
+
+    // Metal
+    "aluminum":                  { name: "Aluminum",                  k: 205.0, rho: 2700,  cp: 900,  epsilon: 0.2,  alpha: 0.3,  is_pcm: false, category: "Metal", source: "Engineering thermophysical reference" },
+    "steel":                     { name: "Steel",                     k: 50.0,  rho: 7850,  cp: 490,  epsilon: 0.8,  alpha: 0.6,  is_pcm: false, category: "Metal", source: "Engineering thermophysical reference" }
 };
 export class MaterialDatabase {
     db;
@@ -243,8 +332,24 @@ export function surfaceIrradiance(ghi, hod, surface_orientation_deg, surface_til
     const cloud_derate = 1.0 - 0.75 * (cloud_pct / 100.0);
     return Math.max(total * cloud_derate, 0.0);
 }
-export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], internal_gains_W = 100.0, comfort_band = { t_min: 18.0, t_max: 26.0, t_marginal_low: 12.0, t_marginal_high: 30.0 }, heating_setpoint_C = null, T_air0 = 5.0, T_mass0 = 5.0) {
-    const t_axis = climate.t_hours;
+export const DEFAULT_COMFORT_BAND = {
+    // Comfort band for Ladakh winter shelter with auxiliary heating.
+    // Passive shelter never exceeds ~5°C (outdoor -8°C mean), so heating
+    // is required to bring indoor temps into the comfort zone.
+    // 16°C = WHO minimum for sedentary occupants (heated space).
+    t_min: 16.0,
+    t_max: 26.0,
+    t_marginal_low: 8.0,   // below this: cold-stress risk even with some shelter
+    t_marginal_high: 30.0
+};
+export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], internal_gains_W = 100.0, comfort_band = DEFAULT_COMFORT_BAND, heating_setpoint_C = null, T_air0 = 5.0, T_mass0 = 5.0) {
+    const active_comfort_band = (comfort_band && comfort_band.t_min != null) ? comfort_band : DEFAULT_COMFORT_BAND;
+    const duration_h = Number(climate.t_hours[climate.t_hours.length - 1] || 0);
+    const step = Math.max(Number(dt_h) || 0.5, 0.001);
+    const t_axis = [];
+    for (let hour = 0; hour <= duration_h + 1e-9; hour += step) {
+        t_axis.push(Number(hour.toFixed(10)));
+    }
     const n = t_axis.length;
     const windows = shelter.openings.filter(o => !o.is_door);
     const H_win_total = shelter.openings.reduce((sum, o) => sum + getOpeningUValue(o) * o.area, 0.0);
@@ -303,25 +408,36 @@ export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], intern
         }
         let Hop_sum = 0.0;
         let Hop_Tsolair_sum = 0.0;
+        let Q_opaque_solar = 0.0;
+        let Hop_ground = 0.0;
+        let Hop_nonground = 0.0;
         for (const el of elements) {
             const U = getUValue(el.layers, el.is_ground_contact);
             const A = el.area;
             let T_solair;
             if (el.is_ground_contact) {
                 T_solair = GROUND_TEMP_C;
+                Hop_ground += U * A;
             }
             else {
+                Hop_nonground += U * A;
                 const I_surf = surfaceIrradiance(cl.ghi, hod, el.orientation_deg, el.tilt_deg, cl.cloud);
                 const alpha = el.layers.length > 0 ? el.layers[0].material.alpha : 0.6;
-                T_solair = T_out_k + (alpha * I_surf / h_out_dyn) - (el.tilt_deg < 10 ? (I_surf === 0 ? 4.0 : 0.0) : 0.0);
+                const solar_dt = (cl.ghi > 0 && I_surf > 0) ? (alpha * I_surf / h_out_dyn) : 0.0;
+                T_solair = T_out_k + solar_dt - (el.tilt_deg < 10 ? (I_surf === 0 ? 4.0 : 0.0) : 0.0);
+                if (solar_dt > 0) {
+                    Q_opaque_solar += U * A * solar_dt;
+                }
             }
             Hop_sum += U * A;
             Hop_Tsolair_sum += U * A * T_solair;
         }
         let Q_win_solar = 0.0;
-        for (const w of windows) {
-            const I_surf = surfaceIrradiance(cl.ghi, hod, w.orientation_deg, 90.0, cl.cloud);
-            Q_win_solar += I_surf * w.shgc * w.area;
+        if (cl.ghi > 0) {
+            for (const w of windows) {
+                const I_surf = surfaceIrradiance(cl.ghi, hod, w.orientation_deg, 90.0, cl.cloud);
+                Q_win_solar += I_surf * w.shgc * w.area;
+            }
         }
         const Q_solar_air = 0.7 * Q_win_solar + internal_gains_W;
         const Q_solar_mass = 0.3 * Q_win_solar;
@@ -344,9 +460,9 @@ export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], intern
         T_air[k] = Ta_new;
         T_mass[k] = Tm_new;
         heating_power[k] = q_heat;
-        comfort_status[k] = classifyComfort(Ta_new, comfort_band);
-        solar_gain[k] = Q_win_solar + Hop_Tsolair_sum - Hop_sum * T_out_k;
-        const cond_opaque_loss = Hop_sum * (Tm_new - T_out_k);
+        comfort_status[k] = classifyComfort(Ta_new, active_comfort_band);
+        solar_gain[k] = cl.ghi > 0 ? Math.max(0.0, Q_win_solar + Q_opaque_solar) : 0.0;
+        const cond_opaque_loss = Hop_nonground * (Tm_new - T_out_k) + Hop_ground * (Tm_new - GROUND_TEMP_C);
         const cond_window_loss = H_win_total * (Ta_new - T_out_k);
         conduction_loss[k] = cond_opaque_loss + cond_window_loss;
         ventilation_loss[k] = H_ve * (Ta_new - T_out_k);
@@ -354,8 +470,9 @@ export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], intern
         storage_rate[k] = (current_C_mass * (Tm_new - T_mass[k - 1]) + C_air * (Ta_new - T_air[k - 1])) / dt_sec;
     }
     const summary = { comfortable: 0.0, marginal: 0.0, uncomfortable: 0.0 };
-    for (const status of comfort_status) {
-        summary[status] = (summary[status] || 0) + dt_h;
+    for (let k = 1; k < n; k++) {
+        const dt_h_step = t_axis[k] - t_axis[k - 1];
+        summary[comfort_status[k]] = (summary[comfort_status[k]] || 0) + dt_h_step;
     }
     let heating_energy_kWh = 0;
     for (let k = 1; k < n; k++) {
@@ -368,7 +485,7 @@ export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], intern
     const score = designScore({ comfort_summary_hours: summary, heating_energy_kWh, T_air }, t_axis[t_axis.length - 1]);
     return {
         t_hours: t_axis,
-        T_out: climate.T_out,
+        T_out: t_axis.map((hour) => climateAt(climate, hour).T_out),
         T_air,
         T_mass,
         solar_gain_W: solar_gain,
@@ -385,20 +502,28 @@ export function simulate(shelter, climate, dt_h = 0.5, added_masses = [], intern
         design_score: score
     };
 }
-export function classifyComfort(T, band) {
-    if (T >= band.t_min && T <= band.t_max)
+export function classifyComfort(T, band = DEFAULT_COMFORT_BAND) {
+    const b = (band && band.t_min != null) ? band : DEFAULT_COMFORT_BAND;
+    if (T >= b.t_min - 0.05 && T <= b.t_max + 0.05)
         return "comfortable";
-    if ((T >= band.t_marginal_low && T < band.t_min) || (T > band.t_max && T <= band.t_marginal_high))
+    if ((T >= b.t_marginal_low - 0.05 && T < b.t_min - 0.05) || (T > b.t_max + 0.05 && T <= b.t_marginal_high + 0.05))
         return "marginal";
     return "uncomfortable";
 }
-export function designScore(res, comfort_band_hours_duration = 72.0) {
-    const comfort_score = Math.min(res.comfort_summary_hours.comfortable / comfort_band_hours_duration, 1.0);
-    const heating_score = 1.0 - Math.min(res.heating_energy_kWh / 150.0, 1.0);
-    const mean_T = res.T_air.reduce((a, b) => a + b, 0) / res.T_air.length;
-    const variance = res.T_air.reduce((a, b) => a + Math.pow(b - mean_T, 2), 0) / res.T_air.length;
+export function normalizeDesignScore(res, comfort_band_hours_duration = 72.0) {
+    const comfortHours = Number(res?.comfort_summary_hours?.comfortable ?? res?.comfortable_h ?? 0);
+    const heatingEnergyKWh = Number(res?.heating_energy_kWh ?? res?.estimated_heating_kWh ?? 0);
+    const tempSeries = Array.isArray(res?.T_air) ? res.T_air : [];
+    const mean_T = tempSeries.length > 0 ? tempSeries.reduce((a, b) => a + b, 0) / tempSeries.length : 0;
+    const variance = tempSeries.length > 0 ? tempSeries.reduce((a, b) => a + Math.pow(b - mean_T, 2), 0) / tempSeries.length : 0;
     const std = Math.sqrt(variance);
+    const comfort_score = Math.min(comfortHours / comfort_band_hours_duration, 1.0);
+    const heating_score = 1.0 - Math.min(heatingEnergyKWh / 150.0, 1.0);
     const stability_score = 1.0 - Math.min(std / 10.0, 1.0);
     const score = 100 * (0.4 * comfort_score + 0.35 * heating_score + 0.25 * stability_score);
     return Math.round(score * 10) / 10;
+}
+
+export function designScore(res, comfort_band_hours_duration = 72.0) {
+    return normalizeDesignScore(res, comfort_band_hours_duration);
 }
