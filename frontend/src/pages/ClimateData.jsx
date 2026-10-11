@@ -370,30 +370,30 @@ export const ClimateData = () => {
             </p>
           </div>
 
-          <div className="flex items-center bg-zinc-100 dark:bg-zinc-900 p-1 rounded-xl border border-zinc-200 dark:border-zinc-800 self-start sm:self-auto">
+          <div className="w-full sm:w-auto grid grid-cols-2 sm:flex items-center bg-zinc-100 dark:bg-zinc-900 p-1 rounded-xl border border-zinc-200 dark:border-zinc-800">
             <button
               type="button"
               onClick={() => handleModeSwitch('real')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all ${
+              className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
                 climateSource === 'real'
-                  ? 'bg-blue-600 text-white shadow-sm'
+                  ? 'bg-blue-600 text-white shadow-xs'
                   : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
               }`}
             >
               <Database size={14} />
-              <span>Real Leh Dataset (5-Yr)</span>
+              <span className="truncate">Leh Data (5-Yr)</span>
             </button>
             <button
               type="button"
               onClick={() => handleModeSwitch('synthetic')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all ${
+              className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
                 climateSource === 'synthetic'
-                  ? 'bg-blue-600 text-white shadow-sm'
+                  ? 'bg-blue-600 text-white shadow-xs'
                   : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
               }`}
             >
               <Sparkles size={14} />
-              <span>Synthetic Model</span>
+              <span className="truncate">Synthetic</span>
             </button>
           </div>
         </div>
@@ -403,8 +403,8 @@ export const ClimateData = () => {
           <div className="flex flex-col gap-6">
             
             {/* Scenario Selection Box */}
-            <div className="bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/60 dark:border-blue-900/30 rounded-xl p-4 sm:p-5 flex flex-col gap-4">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/60 dark:border-blue-900/30 rounded-xl p-3.5 sm:p-5 flex flex-col gap-4">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
                 <div className="flex flex-col gap-1">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
                     <Calendar size={14} /> Active Climate Scenario
@@ -414,16 +414,16 @@ export const ClimateData = () => {
                   </p>
                   {activeScenarioMeta && (
                     <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 mt-0.5">
-                      Period: <strong className="text-zinc-700 dark:text-zinc-200">{activeScenarioMeta.start}</strong> → <strong className="text-zinc-700 dark:text-zinc-200">{activeScenarioMeta.end}</strong> ({activeScenarioMeta.duration_h} hours)
+                      Period: <strong className="text-zinc-700 dark:text-zinc-200">{activeScenarioMeta.start}</strong> → <strong className="text-zinc-700 dark:text-zinc-200">{activeScenarioMeta.end}</strong> ({activeScenarioMeta.duration_h}h)
                     </span>
                   )}
                 </div>
 
-                <div className="shrink-0 flex items-center gap-3">
+                <div className="w-full md:w-auto shrink-0 flex items-center">
                   <select
                     value={selectedScenario}
                     onChange={(e) => handleScenarioChange(e.target.value)}
-                    className="bg-white dark:bg-[#121622] border border-blue-200 dark:border-blue-900/60 text-zinc-900 dark:text-zinc-100 text-xs font-bold rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500/50 cursor-pointer shadow-xs min-w-[220px]"
+                    className="w-full md:w-auto bg-white dark:bg-[#121622] border border-blue-200 dark:border-blue-900/60 text-zinc-900 dark:text-zinc-100 text-xs font-bold rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-blue-500/50 cursor-pointer shadow-xs min-w-0 md:min-w-[220px]"
                   >
                     {safeScenarios.map((scen) => (
                       <option key={scen.id} value={scen.id}>
@@ -687,30 +687,30 @@ export const ClimateData = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {/* Metric Mode Switcher */}
             <div className="flex items-center bg-zinc-100 dark:bg-zinc-900 p-1 rounded-xl border border-zinc-200 dark:border-zinc-800">
               <button
                 type="button"
                 onClick={() => setActiveChartTab('temp_solar')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   activeChartTab === 'temp_solar'
                     ? 'bg-white dark:bg-zinc-800 text-blue-600 dark:text-blue-400 shadow-xs'
                     : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
                 }`}
               >
-                Temp & Solar GHI
+                Temp & Solar
               </button>
               <button
                 type="button"
                 onClick={() => setActiveChartTab('wind_humidity')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   activeChartTab === 'wind_humidity'
                     ? 'bg-white dark:bg-zinc-800 text-cyan-600 dark:text-cyan-400 shadow-xs'
                     : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
                 }`}
               >
-                Wind & Humidity
+                Wind & RH
               </button>
             </div>
 
@@ -722,13 +722,13 @@ export const ClimateData = () => {
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-xs font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
             >
               <Download size={13} />
-              <span className="hidden sm:inline">Export CSV</span>
+              <span>CSV</span>
             </button>
           </div>
         </div>
 
         {/* ECharts Canvas Container */}
-        <div className="h-80 sm:h-96 w-full pt-2">
+        <div className="h-64 sm:h-80 md:h-96 w-full pt-2">
           {chartData.labels.length > 0 ? (
             <ReactECharts
               option={getChartOptions()}

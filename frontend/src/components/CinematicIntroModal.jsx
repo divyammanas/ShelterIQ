@@ -414,7 +414,7 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
       <div
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
-        className="relative z-10 w-full max-w-2xl mx-4 bg-[#0c1017]/95 dark:bg-[#0c1017]/95 backdrop-blur-2xl border border-zinc-800 rounded-2xl shadow-[0_0_80px_rgba(0,0,0,0.85)] p-6 sm:p-7 text-zinc-100 flex flex-col will-change-transform"
+        className="relative z-10 w-full max-w-2xl mx-3 sm:mx-4 bg-[#0c1017]/95 dark:bg-[#0c1017]/95 backdrop-blur-2xl border border-zinc-800 rounded-2xl shadow-[0_0_80px_rgba(0,0,0,0.85)] p-4 sm:p-6 sm:p-7 text-zinc-100 flex flex-col will-change-transform max-h-[92vh] overflow-y-auto"
         style={minimizingStyle}
       >
         {/* Subtle accent highlight line */}
@@ -427,7 +427,7 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
             <span className="font-bold tracking-tight text-white">
               Shelter<span className="text-blue-500">IQ</span>
             </span>
-            <span className="text-zinc-500 font-mono text-[11px]">// Interactive Feature Tour</span>
+            <span className="text-zinc-500 font-mono text-[11px] hidden sm:inline">// Interactive Feature Tour</span>
           </div>
 
           <div className="flex items-center gap-2 font-mono text-[11px] text-zinc-400">
@@ -440,7 +440,7 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
               ) : (
                 <>
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping" />
-                  <span className="text-blue-400">Auto-Advancing</span>
+                  <span className="text-blue-400">Tour</span>
                 </>
               )}
             </span>
@@ -451,7 +451,7 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
         </div>
 
         {/* Continuous Progress Indicator Bar */}
-        <div className="grid grid-cols-7 gap-1.5 my-3.5">
+        <div className="grid grid-cols-7 gap-1 sm:gap-1.5 my-3 sm:my-3.5">
           {TOUR_STEPS.map((step, idx) => {
             const isCurrent = idx === activeStep;
             const isPassed = idx < activeStep;
@@ -481,73 +481,75 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
         </div>
 
         {/* Page Step Header */}
-        <div className="flex items-start justify-between gap-4 mt-1 mb-3">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0 shadow-sm">
-              <StepIcon size={20} />
+        <div className="flex items-start justify-between gap-3 sm:gap-4 mt-1 mb-2.5 sm:mb-3">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0 shadow-xs">
+              <StepIcon size={19} />
             </div>
             <div>
-              <div className="text-[11px] font-mono font-medium text-blue-400 uppercase tracking-wider">
+              <div className="text-[10px] sm:text-[11px] font-mono font-medium text-blue-400 uppercase tracking-wider">
                 {currentStep.badge}
               </div>
-              <h3 className="text-lg font-bold text-white tracking-tight">
+              <h3 className="text-base sm:text-lg font-bold text-white tracking-tight leading-snug">
                 {currentStep.title}
               </h3>
             </div>
           </div>
-          <span className="px-2.5 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-[11px] font-mono text-zinc-400 shrink-0">
+          <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-[10px] sm:text-[11px] font-mono text-zinc-400 shrink-0">
             {currentStep.route}
           </span>
         </div>
 
         {/* Description & Key Features */}
-        <p className="text-xs sm:text-sm text-zinc-300 mb-3.5 leading-relaxed">
+        <p className="text-xs sm:text-sm text-zinc-300 mb-3 leading-relaxed">
           {currentStep.description}
         </p>
 
         {/* Feature Highlights Card */}
-        <div className="bg-zinc-900/60 border border-zinc-800/90 rounded-xl p-3.5 sm:p-4 mb-4 space-y-2">
+        <div className="bg-zinc-900/60 border border-zinc-800/90 rounded-xl p-3 sm:p-4 mb-3 sm:mb-4 space-y-2">
           {currentStep.features.map((feature, fIdx) => (
             <div key={fIdx} className="flex items-start gap-2.5 text-xs text-zinc-300">
               <CheckCircle2 size={14} className="text-blue-400 shrink-0 mt-0.5" />
-              <span>{feature}</span>
+              <span className="leading-snug">{feature}</span>
             </div>
           ))}
         </div>
 
         {/* Action Tip */}
-        <div className="px-3 py-2 rounded-lg bg-blue-950/30 border border-blue-900/40 text-[11px] text-blue-300 flex items-center gap-2 mb-5">
+        <div className="px-3 py-2 rounded-lg bg-blue-950/30 border border-blue-900/40 text-[11px] text-blue-300 flex items-center gap-2 mb-4">
           <Sparkles size={13} className="text-blue-400 shrink-0" />
-          <span>
+          <span className="leading-snug">
             <strong className="font-semibold text-blue-200">How to use:</strong> {currentStep.actionTip}
           </span>
         </div>
 
         {/* Navigation & Minimization Actions */}
-        <div className="flex items-center justify-between gap-3 pt-2 border-t border-zinc-800/80">
-          <div className="flex items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() =>
-                setActiveStep((prev) => (prev === 0 ? TOUR_STEPS.length - 1 : prev - 1))
-              }
-              className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer"
-              title="Previous Page Guide"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveStep((prev) => (prev + 1) % TOUR_STEPS.length)}
-              className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer"
-              title="Next Page Guide"
-            >
-              <ChevronRight size={16} />
-            </button>
+        <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3 pt-2.5 border-t border-zinc-800/80">
+          <div className="flex items-center justify-between sm:justify-start gap-2 w-full sm:w-auto">
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveStep((prev) => (prev === 0 ? TOUR_STEPS.length - 1 : prev - 1))
+                }
+                className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                title="Previous Page Guide"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveStep((prev) => (prev + 1) % TOUR_STEPS.length)}
+                className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                title="Next Page Guide"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
             <button
               type="button"
               onClick={handleMinimizeIntoLogo}
-              className="ml-2 text-xs text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer px-2 py-1"
+              className="text-xs text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer px-2 py-1"
             >
               Skip Tour
             </button>
@@ -557,7 +559,7 @@ export const CinematicIntroModal = ({ isOpen, onClose, targetLogoId = 'shelteriq
             type="button"
             disabled={isMinimizing}
             onClick={handleMinimizeIntoLogo}
-            className="py-2.5 px-5 rounded-xl font-bold text-xs sm:text-sm tracking-wide bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white shadow-[0_0_20px_rgba(59,130,246,0.35)] hover:shadow-[0_0_28px_rgba(59,130,246,0.5)] transition-all flex items-center gap-2 cursor-pointer"
+            className="w-full sm:w-auto justify-center py-2.5 px-5 rounded-xl font-bold text-xs sm:text-sm tracking-wide bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white shadow-[0_0_20px_rgba(59,130,246,0.35)] hover:shadow-[0_0_28px_rgba(59,130,246,0.5)] transition-all flex items-center gap-2 cursor-pointer"
           >
             <span>ENTER SHELTER IQ LAB</span>
             <ArrowRight size={15} />

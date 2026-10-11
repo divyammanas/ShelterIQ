@@ -78,12 +78,12 @@ export const SimulationSetup = () => {
     return (<div className="flex flex-col gap-6">
       
       {/* Settings Grid */}
-      <div className="bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl p-5 shadow-xs flex flex-col gap-4">
+      <div className="bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl p-3.5 sm:p-5 shadow-xs flex flex-col gap-4">
         <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2 border-b border-slate-200 dark:border-[#1e2638] pb-3 shrink-0">
           <Sliders size={15} className="text-blue-500" /> Solver Parameters
         </h3>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Simulation Duration</label>
             <select value={simDuration} onChange={(e) => handleSelectChange(setSimDuration, parseInt(e.target.value))} className="w-full bg-zinc-50 dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-zinc-100 font-medium">
@@ -158,11 +158,11 @@ export const SimulationSetup = () => {
 
       {/* Log Preview Table */}
       <div className="bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl shadow-xs overflow-hidden flex flex-col">
-        <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-[#1e2638]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-5 border-b border-slate-200 dark:border-[#1e2638]">
           <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
             <Table size={15} className="text-blue-500" /> Transient Solution Matrix Preview
           </h3>
-          <button onClick={exportTimeseriesCSV} disabled={!simResult} className="flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900 disabled:opacity-50 text-zinc-700 dark:text-zinc-300 text-xs font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 shadow-sm">
+          <button onClick={exportTimeseriesCSV} disabled={!simResult} className="w-full sm:w-auto justify-center flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900 disabled:opacity-50 text-zinc-700 dark:text-zinc-300 text-xs font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 shadow-sm">
             <FileSpreadsheet size={14} className="text-emerald-500"/> Export Full CSV
           </button>
         </div>
@@ -171,26 +171,26 @@ export const SimulationSetup = () => {
           <table className="w-full border-collapse text-left text-xs text-zinc-600 dark:text-zinc-300">
             <thead className="sticky top-0 bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 z-10 font-bold uppercase text-[9px] text-zinc-400 tracking-wider">
               <tr>
-                <th className="px-6 py-3.5">Time</th>
-                <th className="px-6 py-3.5">Outdoor Temp (°C)</th>
-                <th className="px-6 py-3.5">Indoor Air Temp (°C)</th>
-                <th className="px-6 py-3.5">Thermal Mass Temp (°C)</th>
-                <th className="px-6 py-3.5">Solar Gain (W)</th>
-                <th className="px-6 py-3.5">Conduction Loss (W)</th>
-                <th className="px-6 py-3.5">Heating Power (W)</th>
-                <th className="px-6 py-3.5">Comfort Status</th>
+                <th className="px-3 sm:px-6 py-2.5 sm:py-3.5">Time</th>
+                <th className="px-3 sm:px-6 py-2.5 sm:py-3.5">Outdoor Temp</th>
+                <th className="px-3 sm:px-6 py-2.5 sm:py-3.5">Indoor Air</th>
+                <th className="px-3 sm:px-6 py-2.5 sm:py-3.5">Thermal Mass</th>
+                <th className="px-3 sm:px-6 py-2.5 sm:py-3.5">Solar Gain</th>
+                <th className="px-3 sm:px-6 py-2.5 sm:py-3.5">Conduction</th>
+                <th className="px-3 sm:px-6 py-2.5 sm:py-3.5">Heating Power</th>
+                <th className="px-3 sm:px-6 py-2.5 sm:py-3.5">Comfort Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200/50 dark:divide-zinc-800/40">
               {sampledRows.map((row, idx) => (<tr key={idx} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30 transition-colors">
-                  <td className="px-6 py-3.5 font-bold font-mono">Hour {row.time.toFixed(1)}</td>
-                  <td className="px-6 py-3.5 font-mono">{row.T_out.toFixed(1)}°C</td>
-                  <td className="px-6 py-3.5 font-mono font-bold text-zinc-800 dark:text-zinc-100">{row.T_air.toFixed(1)}°C</td>
-                  <td className="px-6 py-3.5 font-mono">{row.T_mass.toFixed(1)}°C</td>
-                  <td className="px-6 py-3.5 font-mono text-yellow-600 dark:text-yellow-400">+{Math.round(row.solar)} W</td>
-                  <td className="px-6 py-3.5 font-mono text-blue-500">-{Math.round(Math.abs(row.conduction))} W</td>
-                  <td className="px-6 py-3.5 font-mono text-orange-500">{Math.round(row.heating_power) > 0 ? `+${Math.round(row.heating_power)} W` : '—'}</td>
-                  <td className="px-6 py-3.5">
+                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-bold font-mono whitespace-nowrap">Hour {row.time.toFixed(1)}</td>
+                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono whitespace-nowrap">{row.T_out.toFixed(1)}°C</td>
+                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono font-bold text-zinc-800 dark:text-zinc-100 whitespace-nowrap">{row.T_air.toFixed(1)}°C</td>
+                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono whitespace-nowrap">{row.T_mass.toFixed(1)}°C</td>
+                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono text-yellow-600 dark:text-yellow-400 whitespace-nowrap">+{Math.round(row.solar)} W</td>
+                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono text-blue-500 whitespace-nowrap">-{Math.round(Math.abs(row.conduction))} W</td>
+                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 font-mono text-orange-500 whitespace-nowrap">{Math.round(row.heating_power) > 0 ? `+${Math.round(row.heating_power)} W` : '—'}</td>
+                  <td className="px-3 sm:px-6 py-2.5 sm:py-3.5 whitespace-nowrap">
                     <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase ${getComfortBadge(row.status)}`}>
                       {row.status}
                     </span>

@@ -114,7 +114,7 @@ export const ShelterDesign = () => {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-2.5">
           {normalizedPicks.slice(0, 5).map((pick, idx) => {
             const isSelected = loadedPreset?.id !== undefined && loadedPreset?.id === (pick.id ?? idx);
             return (
@@ -151,23 +151,23 @@ export const ShelterDesign = () => {
         </div>
       </div>
 
-      <div className="lg:col-span-12 flex flex-wrap items-center justify-between gap-3 bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/50 dark:border-blue-900/30 rounded-xl p-4">
+      <div className="lg:col-span-12 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/50 dark:border-blue-900/30 rounded-xl p-3.5 sm:p-4">
         <div>
           <h2 className="text-sm font-extrabold text-zinc-950 dark:text-white">Save this material assembly</h2>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Store the current design for comparison under active weather conditions.</p>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Store the current design for comparison under active weather conditions.</p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <input value={assemblyName} onChange={(e) => setAssemblyName(e.target.value)} placeholder={`Assembly ${savedAssemblies.length + 1}`} className="w-44 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-blue-500/50" />
-          <button type="button" onClick={handleSaveAssembly} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+          <input value={assemblyName} onChange={(e) => setAssemblyName(e.target.value)} placeholder={`Assembly ${savedAssemblies.length + 1}`} className="w-full sm:w-44 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-blue-500/50" />
+          <button type="button" onClick={handleSaveAssembly} className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors cursor-pointer">
             <Save size={14} /> Save Assembly
           </button>
-          {saveMessage && <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">{saveMessage}</span>}
+          {saveMessage && <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 self-center">{saveMessage}</span>}
         </div>
       </div>
       
-      <div className="lg:col-span-6 flex flex-col gap-6">
+      <div className="lg:col-span-6 flex flex-col gap-4 sm:gap-6">
         
-        <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-4">
+        <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm flex flex-col gap-4">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3 shrink-0">
             <LayoutGrid size={16} className="text-blue-500"/> Envelope Dimensions
           </h3>

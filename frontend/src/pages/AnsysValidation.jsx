@@ -71,22 +71,22 @@ export const AnsysValidation = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
         {/* Validation Chart */}
-        <div className="lg:col-span-8 bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl p-5 shadow-xs">
-          <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4 flex items-center gap-2">
+        <div className="lg:col-span-8 bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl p-3.5 sm:p-5 shadow-xs">
+          <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 sm:mb-4 flex items-center gap-2">
             <LineChart size={15} className="text-blue-500" /> Transient Profile Validation vs Fluent CFD
           </h3>
-          <div className="h-[320px] w-full">
+          <div className="h-[250px] sm:h-[320px] w-full">
             <ReactECharts option={getValidationChartOption()} style={{ height: '100%', width: '100%' }} theme={isDarkMode ? 'dark' : 'light'}/>
           </div>
         </div>
 
         {/* Residuals Summary report */}
-        <div className="lg:col-span-4 bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl p-5 shadow-xs flex flex-col gap-6 self-stretch">
+        <div className="lg:col-span-4 bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl p-3.5 sm:p-5 shadow-xs flex flex-col gap-4 sm:gap-6 self-stretch">
           <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2 border-b border-slate-200 dark:border-[#1e2638] pb-3 shrink-0">
             <FileText size={15} className="text-blue-500" /> Error Residual Report
           </h3>
           
-          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3 sm:gap-4">
             <div className="p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
               <div className="text-lg font-extrabold text-zinc-900 dark:text-white font-mono">0.84°C</div>
               <div className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 mt-1 uppercase tracking-wider">Mean Absolute Error (MAE)</div>
@@ -116,32 +116,32 @@ export const AnsysValidation = () => {
       </div>
 
       {/* Specifications */}
-      <div className="bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl p-5 shadow-xs">
-        <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4 flex items-center gap-2">
+      <div className="bg-white dark:bg-[#121622] border border-slate-200 dark:border-[#1e2638] rounded-xl p-3.5 sm:p-5 shadow-xs">
+        <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 sm:mb-4 flex items-center gap-2">
           <Settings size={15} className="text-blue-500" /> ANSYS Fluent CFD Simulation Specification
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-zinc-100 dark:divide-zinc-800">
-          <div className="flex flex-col gap-1 p-2 sm:p-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <div className="flex flex-col gap-1 p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
             <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">CFD Mesh Configuration</span>
-            <span className="text-sm font-semibold text-zinc-900 dark:text-white mt-1 leading-normal">
+            <span className="text-xs sm:text-sm font-semibold text-zinc-900 dark:text-white mt-0.5 leading-normal">
               1,240,000 Hexahedral cells (Wall y+ ~ 1 boundary layer spacing)
             </span>
           </div>
-          <div className="flex flex-col gap-1 p-2 sm:p-0 sm:pl-6">
+          <div className="flex flex-col gap-1 p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
             <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Turbulence Solver Model</span>
-            <span className="text-sm font-semibold text-zinc-900 dark:text-white mt-1 leading-normal">
+            <span className="text-xs sm:text-sm font-semibold text-zinc-900 dark:text-white mt-0.5 leading-normal">
               Standard k-epsilon (k-ε) with enhanced wall functions
             </span>
           </div>
-          <div className="flex flex-col gap-1 p-2 sm:p-0 sm:pl-6">
+          <div className="flex flex-col gap-1 p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
             <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Boundary Conditions</span>
-            <span className="text-sm font-semibold text-zinc-900 dark:text-white mt-1 leading-normal">
+            <span className="text-xs sm:text-sm font-semibold text-zinc-900 dark:text-white mt-0.5 leading-normal">
               Convective heat flux (ambient wind correlation), ground coupled conduction
             </span>
           </div>
-          <div className="flex flex-col gap-1 p-2 sm:p-0 sm:pl-6">
+          <div className="flex flex-col gap-1 p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
             <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Timestep Resolution</span>
-            <span className="text-sm font-semibold text-zinc-900 dark:text-white mt-1 leading-normal">
+            <span className="text-xs sm:text-sm font-semibold text-zinc-900 dark:text-white mt-0.5 leading-normal">
               15 seconds solver timestep, transient run over 72 hours
             </span>
           </div>

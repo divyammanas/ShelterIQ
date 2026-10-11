@@ -338,71 +338,71 @@ export const Dashboard = () => {
     const strokeDashoffset = circumference - (Math.min(score, 100) / 100) * circumference;
     return (<div className="flex flex-col gap-6">
       
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-6 items-start">
         
-        <div className="xl:col-span-7 flex flex-col gap-6">
+        <div className="xl:col-span-7 flex flex-col gap-4 sm:gap-6">
           
-          <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3 sm:mb-4 flex items-center gap-2">
               <Thermometer size={16} className="text-red-500"/> Temperature Profile
             </h3>
-            <div className="h-[240px] w-full">
+            <div className="h-[220px] sm:h-[250px] w-full">
               {simResult ? (<ReactECharts option={getTempChartOption()} style={{ height: '100%', width: '100%' }} theme={isDarkMode ? 'dark' : 'light'}/>) : (<div className="h-full flex items-center justify-center text-zinc-400">Loading thermal models...</div>)}
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex flex-col gap-1 shadow-sm">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
+            <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 p-3 sm:p-4 rounded-xl flex flex-col gap-1 shadow-sm">
               <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Indoor Min</span>
-              <span className="text-xl font-extrabold text-zinc-900 dark:text-white font-mono">{minTemp} °C</span>
+              <span className="text-lg sm:text-xl font-extrabold text-zinc-900 dark:text-white font-mono">{minTemp} °C</span>
             </div>
-            <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex flex-col gap-1 shadow-sm">
+            <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 p-3 sm:p-4 rounded-xl flex flex-col gap-1 shadow-sm">
               <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Indoor Max</span>
-              <span className="text-xl font-extrabold text-zinc-900 dark:text-white font-mono">{maxTemp} °C</span>
+              <span className="text-lg sm:text-xl font-extrabold text-zinc-900 dark:text-white font-mono">{maxTemp} °C</span>
             </div>
-            <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex flex-col gap-1 shadow-sm">
+            <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 p-3 sm:p-4 rounded-xl flex flex-col gap-1 shadow-sm">
               <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Comfort Hours</span>
-              <span className="text-xl font-extrabold text-zinc-900 dark:text-white font-mono">{comfortHours} h</span>
-              <span className="text-[9px] text-zinc-400 dark:text-zinc-500">
-                {((comfortHours / totalDuration) * 100).toFixed(0)}% · ≥16°C · heated shelter
+              <span className="text-lg sm:text-xl font-extrabold text-zinc-900 dark:text-white font-mono">{comfortHours} h</span>
+              <span className="text-[9px] text-zinc-400 dark:text-zinc-500 leading-tight">
+                {((comfortHours / totalDuration) * 100).toFixed(0)}% · ≥16°C
               </span>
             </div>
-            <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex flex-col gap-1 shadow-sm">
+            <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 p-3 sm:p-4 rounded-xl flex flex-col gap-1 shadow-sm">
               <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Heating Demand</span>
-              <span className="text-xl font-extrabold text-zinc-900 dark:text-white font-mono">{heatingEnergy.toFixed(1)} kWh</span>
+              <span className="text-lg sm:text-xl font-extrabold text-zinc-900 dark:text-white font-mono">{heatingEnergy.toFixed(1)} kWh</span>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3 sm:mb-4 flex items-center gap-2">
               <Zap size={16} className="text-blue-500"/> Instantaneous Heat Balance (Hour {activeHour.toFixed(1)}h)
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              <div className="flex flex-col gap-1 border-b border-zinc-100 dark:border-zinc-800 pb-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+              <div className="flex flex-col gap-1 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
                 <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Solar Gain</span>
                 <span className="text-sm font-bold text-yellow-500 font-mono">{current.solar_gain > 0 ? `+${current.solar_gain.toFixed(0)}` : '0'} W</span>
               </div>
-              <div className="flex flex-col gap-1 border-b border-zinc-100 dark:border-zinc-800 pb-3">
+              <div className="flex flex-col gap-1 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
                 <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Conduction</span>
                 <span className={`text-sm font-bold font-mono ${current.conduction_loss > 0 ? 'text-blue-500' : 'text-red-500'}`}>
                   {current.conduction_loss > 0 ? `-${current.conduction_loss.toFixed(0)}` : `+${Math.abs(current.conduction_loss).toFixed(0)}`} W
                 </span>
               </div>
-              <div className="flex flex-col gap-1 border-b border-zinc-100 dark:border-zinc-800 pb-3">
-                <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Ventilation (ACH-based)</span>
+              <div className="flex flex-col gap-1 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
+                <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Ventilation (ACH)</span>
                 <span className="text-sm font-bold text-orange-500 font-mono">{formatHeatLoss(current.ventilation_loss)} W</span>
               </div>
-              <div className="flex flex-col gap-1 pb-3">
+              <div className="flex flex-col gap-1 pb-2.5">
                 <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Heating Power</span>
                 <span className="text-sm font-bold text-rose-500 font-mono">{current.heating_power > 0 ? `+${current.heating_power.toFixed(0)} W` : '—'}</span>
               </div>
-              <div className="flex flex-col gap-1 pb-3">
+              <div className="flex flex-col gap-1 pb-2.5">
                 <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Thermal Mass</span>
                 <span className={`text-sm font-bold font-mono ${current.storage_rate > 0 ? 'text-pink-500' : 'text-teal-500'}`}>
-                  {current.storage_rate > 0 ? `Charging: +${current.storage_rate.toFixed(0)}` : `Discharging: -${Math.abs(current.storage_rate).toFixed(0)}`} W
+                  {current.storage_rate > 0 ? `+${current.storage_rate.toFixed(0)}` : `-${Math.abs(current.storage_rate).toFixed(0)}`} W
                 </span>
               </div>
-              <div className="flex flex-col gap-1 bg-blue-50/50 dark:bg-blue-950/20 px-3 py-1.5 rounded-lg border-l-4 border-blue-500 justify-center">
+              <div className="col-span-2 sm:col-span-1 flex flex-col gap-1 bg-blue-50/60 dark:bg-blue-950/30 px-3 py-2 rounded-lg border-l-4 border-blue-500 justify-center">
                 <span className="text-[10px] text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">Net Heat Flow</span>
                 <span className="text-sm font-extrabold text-blue-600 dark:text-blue-400 font-mono">{current.net_heat_flow.toFixed(0)} W</span>
               </div>
@@ -411,24 +411,24 @@ export const Dashboard = () => {
 
         </div>
 
-        <div ref={viewerPanelRef} className={`xl:col-span-5 flex flex-col gap-4 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm self-stretch ${isViewerFullscreen ? 'w-screen h-screen overflow-y-auto rounded-none border-0' : ''}`}>
-          <div className="flex items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-4">
+        <div ref={viewerPanelRef} className={`xl:col-span-5 flex flex-col gap-3.5 sm:gap-4 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm self-stretch ${isViewerFullscreen ? 'w-screen h-screen overflow-y-auto rounded-none border-0' : ''}`}>
+          <div className="flex flex-wrap items-center justify-between gap-2.5 border-b border-zinc-200 dark:border-zinc-800 pb-3 sm:pb-4">
             <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-2">
               <Box size={16} className="text-blue-500"/> Interactive 3D Model
             </h3>
             
-            <div className="flex items-center gap-2">
-              <button onClick={() => setViewMode('physical')} className={`px-3 py-1 text-[10px] font-bold rounded-lg transition-colors ${viewMode === 'physical'
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <button onClick={() => setViewMode('physical')} className={`px-2.5 sm:px-3 py-1 text-[10px] font-bold rounded-lg transition-colors ${viewMode === 'physical'
             ? 'bg-blue-600 text-white'
             : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-200'}`}>
                 Physical
               </button>
-              <button onClick={() => setViewMode('thermal')} className={`px-3 py-1 text-[10px] font-bold rounded-lg transition-colors ${viewMode === 'thermal'
+              <button onClick={() => setViewMode('thermal')} className={`px-2.5 sm:px-3 py-1 text-[10px] font-bold rounded-lg transition-colors ${viewMode === 'thermal'
             ? 'bg-blue-600 text-white'
             : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-200'}`}>
                 Thermal
               </button>
-              <span className="text-xs font-mono font-bold bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-2 py-1 rounded-lg">
+              <span className="text-[11px] font-mono font-bold bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-2 py-0.5 rounded-lg">
                 {activeHour.toFixed(1)}h
               </span>
               <button type="button" onClick={toggleViewerFullscreen} title={isViewerFullscreen ? 'Exit fullscreen' : 'View 3D model fullscreen'} aria-label={isViewerFullscreen ? 'Exit fullscreen' : 'View 3D model fullscreen'} className="p-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-50 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors">
@@ -437,19 +437,19 @@ export const Dashboard = () => {
             </div>
           </div>
 
-          <div className={`${isViewerFullscreen ? 'flex-1 min-h-[420px]' : 'h-[320px]'} w-full relative`}>
+          <div className={`${isViewerFullscreen ? 'flex-1 min-h-[420px]' : 'h-[250px] sm:h-[320px]'} w-full relative touch-manipulation`}>
             <ThreeDShelter viewMode={viewMode} envelopeOpacity={envelopeOpacity} visibilityStates={visibilityStates} isRotating={isRotating}/>
           </div>
 
-          <div className="flex flex-col gap-3 p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl">
-            <div className="flex flex-wrap gap-3 items-center justify-between">
+          <div className="flex flex-col gap-2.5 sm:gap-3 p-2.5 sm:p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl">
+            <div className="flex flex-wrap gap-2 sm:gap-3 items-center justify-between">
               
               <div className="flex gap-2">
-                <button onClick={() => setIsPlaying(!isPlaying)} className="flex items-center gap-1.5 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
+                <button onClick={() => setIsPlaying(!isPlaying)} className="flex items-center gap-1.5 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900 text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg transition-colors">
                   {isPlaying ? <Pause size={12}/> : <Play size={12}/>}
                   <span>{isPlaying ? 'Pause' : 'Play'}</span>
                 </button>
-                <button onClick={() => setIsRotating(!isRotating)} className={`flex items-center gap-1.5 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-150 ${isRotating
+                <button onClick={() => setIsRotating(!isRotating)} className={`flex items-center gap-1.5 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg transition-all duration-150 ${isRotating
             ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-900/30'
             : 'bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900'}`}>
                   <RotateCw size={12}/>
@@ -463,8 +463,8 @@ export const Dashboard = () => {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-1.5 border-t border-zinc-200 dark:border-zinc-800 pt-3">
-              {['roof', 'walls', 'floor', 'openings', 'mass', 'arrows'].map((key) => (<button key={key} onClick={() => toggleVisibility(key)} className={`px-2 py-1 text-[9px] font-bold uppercase rounded-lg border transition-all ${visibilityStates[key]
+            <div className="grid grid-cols-3 sm:flex sm:flex-wrap gap-1.5 border-t border-zinc-200 dark:border-zinc-800 pt-2.5">
+              {['roof', 'walls', 'floor', 'openings', 'mass', 'arrows'].map((key) => (<button key={key} onClick={() => toggleVisibility(key)} className={`px-2 py-1 text-[9px] font-bold uppercase rounded-lg border text-center transition-all ${visibilityStates[key]
                 ? 'bg-blue-500 hover:bg-blue-600 border-blue-500 text-white'
                 : 'bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-400 dark:text-zinc-500 hover:bg-zinc-50 dark:hover:bg-zinc-900'}`}>
                   {key}
@@ -472,62 +472,62 @@ export const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 mt-2">
-            <span className="text-xs font-bold text-zinc-400 dark:text-zinc-500">Hour:</span>
-              <input type="range" min="0" max={simResult ? simResult.t_hours[simResult.t_hours.length - 1] : 72} step={simTimestep} value={activeHour} onChange={(e) => setActiveHour(parseFloat(e.target.value))} className="flex-1"/>
+          <div className="flex items-center gap-3 mt-1">
+            <span className="text-xs font-bold text-zinc-400 dark:text-zinc-500 shrink-0">Hour:</span>
+            <input type="range" min="0" max={simResult ? simResult.t_hours[simResult.t_hours.length - 1] : 72} step={simTimestep} value={activeHour} onChange={(e) => setActiveHour(parseFloat(e.target.value))} className="flex-1"/>
           </div>
         </div>
 
       </div>
 
-      <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-4 flex items-center gap-2">
+      <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3 sm:mb-4 flex items-center gap-2">
           <Lightbulb size={16} className="text-amber-500"/> Current Design Specifications Summary
         </h3>
-        <div className="grid grid-cols-2 sm:grid-cols-6 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-zinc-100 dark:divide-zinc-800">
-          <div className="flex flex-col gap-1 p-2 sm:p-0">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4">
+          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
             <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Orientation</span>
-            <span className="text-sm font-extrabold text-zinc-900 dark:text-white font-mono">{shelter.orientation_deg}° Azimuth</span>
+            <span className="text-xs sm:text-sm font-extrabold text-zinc-900 dark:text-white font-mono">{shelter.orientation_deg}° Azimuth</span>
           </div>
-          <div className="flex flex-col gap-1 p-2 sm:p-0 sm:pl-6">
+          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
             <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Wall U-Value</span>
-            <span className="text-sm font-extrabold text-zinc-900 dark:text-white font-mono">{getWallU()} W/m²K</span>
+            <span className="text-xs sm:text-sm font-extrabold text-zinc-900 dark:text-white font-mono">{getWallU()} W/m²K</span>
           </div>
-          <div className="flex flex-col gap-1 p-2 sm:p-0 sm:pl-6">
+          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
             <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Roof U-Value</span>
-            <span className="text-sm font-extrabold text-zinc-900 dark:text-white font-mono">{getRoofU()} W/m²K</span>
+            <span className="text-xs sm:text-sm font-extrabold text-zinc-900 dark:text-white font-mono">{getRoofU()} W/m²K</span>
           </div>
-          <div className="flex flex-col gap-1 p-2 sm:p-0 sm:pl-6">
+          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
             <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Ventilation (ACH)</span>
-            <span className="text-sm font-extrabold text-zinc-900 dark:text-white font-mono">{shelter.ach} ACH</span>
+            <span className="text-xs sm:text-sm font-extrabold text-zinc-900 dark:text-white font-mono">{shelter.ach} ACH</span>
           </div>
-          <div className="flex flex-col gap-1 p-2 sm:p-0 sm:pl-6">
+          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
             <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Thermal Mass</span>
-            <span className="text-sm font-extrabold text-zinc-900 dark:text-white capitalize">
+            <span className="text-xs sm:text-sm font-extrabold text-zinc-900 dark:text-white capitalize truncate">
               {thermalMassType === 'none' ? 'None' : thermalMassType.replace('_', ' ')}
             </span>
           </div>
-          <div className="flex flex-col gap-1 p-2 sm:p-0 sm:pl-6">
+          <div className="flex flex-col gap-1 p-2.5 sm:p-3 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/40 border border-zinc-100 dark:border-zinc-800/60">
             <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Climate Location</span>
-            <span className="text-sm font-extrabold text-zinc-900 dark:text-white">Ladakh Winter</span>
+            <span className="text-xs sm:text-sm font-extrabold text-zinc-900 dark:text-white">Ladakh Winter</span>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-6 items-start">
         
-        <div className="xl:col-span-7 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-4 flex items-center gap-2">
+        <div className="xl:col-span-7 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3 sm:mb-4 flex items-center gap-2">
             <Timer size={16} className="text-blue-500"/> Energy Flow Breakdown
           </h3>
-          <div className="h-[250px] w-full">
+          <div className="h-[220px] sm:h-[250px] w-full">
             {simResult ? (<ReactECharts option={getFlowChartOption()} style={{ height: '100%', width: '100%' }} theme={isDarkMode ? 'dark' : 'light'}/>) : (<div className="h-full flex items-center justify-center text-zinc-400">Loading flow metrics...</div>)}
           </div>
         </div>
 
-        <div className="xl:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-6 self-stretch">
+        <div className="xl:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 self-stretch">
           
-          <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col items-center justify-center relative">
+          <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 sm:p-5 shadow-sm flex flex-col items-center justify-center relative">
             <div className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 self-start mb-2 flex items-center gap-1.5">
               <ShieldCheck size={14} className="text-blue-500"/> Design Score
             </div>
@@ -565,13 +565,13 @@ export const Dashboard = () => {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col self-stretch">
+          <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 sm:p-5 shadow-sm flex flex-col self-stretch">
             <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3 flex items-center gap-1.5 shrink-0">
               <Lightbulb size={14} className="text-amber-500"/> Advisor Recommendations
             </h3>
             
-            <div className="flex-1 overflow-y-auto space-y-3 pr-1 max-h-[220px]">
-              {recommendations.map((rec, i) => (<div key={i} className={`p-3 rounded-xl border flex items-start gap-2.5 ${rec.type === 'danger'
+            <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 max-h-[220px]">
+              {recommendations.map((rec, i) => (<div key={i} className={`p-2.5 sm:p-3 rounded-xl border flex items-start gap-2.5 ${rec.type === 'danger'
                 ? 'bg-red-50/50 dark:bg-red-950/10 border-red-100 dark:border-red-950/20 text-red-800 dark:text-red-300'
                 : rec.type === 'warning'
                     ? 'bg-amber-50/50 dark:bg-amber-950/10 border-amber-100 dark:border-amber-950/20 text-amber-800 dark:text-amber-300'

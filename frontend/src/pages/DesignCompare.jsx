@@ -69,7 +69,7 @@ export const DesignCompare = () => {
     <div className="flex flex-col gap-6">
 
       {/* Page header info bar */}
-      <div className="bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/50 dark:border-blue-900/30 rounded-xl p-5">
+      <div className="bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/50 dark:border-blue-900/30 rounded-xl p-3.5 sm:p-5">
         <div className="flex items-start gap-3">
           <Award size={18} className="text-blue-500 shrink-0 mt-0.5" />
           <div>
@@ -77,7 +77,7 @@ export const DesignCompare = () => {
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed">
               Saved material assemblies are simulated against the current active weather profile, results update when the climate settings change.
             </p>
-            <div className="flex flex-wrap gap-x-4 gap-y-2 mt-3 text-[10px] font-mono text-blue-600 dark:text-blue-400">
+            <div className="flex flex-wrap gap-x-4 gap-y-1.5 mt-2.5 text-[10px] font-mono text-blue-600 dark:text-blue-400">
               <span className="flex items-center gap-1"><Thermometer size={12} /> {climateParams.tMean.toFixed(1)}°C mean / {climateParams.tAmp.toFixed(1)}°C swing</span>
               <span className="flex items-center gap-1"><Sun size={12} /> {formatDisplayNumber(climateParams.ghiPeak)} W/m² solar peak</span>
               <span className="flex items-center gap-1"><Wind size={12} /> {climateParams.windMean.toFixed(1)} m/s wind</span>
@@ -89,13 +89,13 @@ export const DesignCompare = () => {
 
       {/* Saved Assembly Comparison Cards — full width */}
       {comparisons.length === 0 ? (
-        <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-10 shadow-sm text-center text-zinc-400 font-semibold text-sm">
+        <div className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 sm:p-10 shadow-sm text-center text-zinc-400 font-semibold text-xs sm:text-sm">
           No saved assemblies yet. Save an assembly from Shelter Design to compare it here.
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
           {comparisons.map(({ assembly, result, score }) => (
-            <div key={assembly.id} className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col gap-4">
+            <div key={assembly.id} className="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-5 shadow-sm flex flex-col gap-4">
               <div className="flex items-start justify-between gap-3 border-b border-zinc-200 dark:border-zinc-800 pb-3">
                 <div>
                   <span className="text-[10px] font-bold text-blue-500 uppercase tracking-wider">Saved assembly</span>

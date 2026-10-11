@@ -13,40 +13,92 @@ const SortableLayerRow = ({ id, idx, layer, onMaterialChange, onThicknessChange,
         opacity: isDragging ? 0.5 : 1,
         zIndex: isDragging ? 50 : 'auto'
     };
-    return (<div ref={setNodeRef} style={style} className="flex items-center gap-3 p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl hover:shadow-sm transition-all duration-150">
-      <div {...attributes} {...listeners} className="text-zinc-400 dark:text-zinc-500 cursor-grab active:cursor-grabbing hover:text-zinc-600 dark:hover:text-zinc-300 p-1">
-        <GripVertical size={16}/>
-      </div>
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl hover:shadow-xs transition-all duration-150"
+      >
+        <div className="flex items-center gap-2 w-full sm:w-auto sm:flex-1">
+          <div
+            {...attributes}
+            {...listeners}
+            className="text-zinc-400 dark:text-zinc-500 cursor-grab active:cursor-grabbing hover:text-zinc-600 dark:hover:text-zinc-300 p-1 shrink-0"
+          >
+            <GripVertical size={16} />
+          </div>
 
-      <div className="text-xs font-bold text-zinc-400 dark:text-zinc-500 w-6">
-        #{idx + 1}
-      </div>
+          <div className="text-xs font-bold text-zinc-400 dark:text-zinc-500 w-5 shrink-0">
+            #{idx + 1}
+          </div>
 
-      <div className="flex-1 min-w-[120px]">
-        <select value={Object.keys(mdb.db).find(k => mdb.db[k].name === layer.material.name) || ''} onChange={(e) => onMaterialChange(e.target.value)} className="w-full bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-1.5 text-xs outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-zinc-100">
-          {Object.keys(mdb.db).map((key) => (<option key={key} value={key}>
-              {mdb.db[key].name}
-            </option>))}
-        </select>
-      </div>
+          <div className="flex-1 min-w-0">
+            <select
+              value={Object.keys(mdb.db).find((k) => mdb.db[k].name === layer.material.name) || ''}
+              onChange={(e) => onMaterialChange(e.target.value)}
+              className="w-full bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl px-2.5 sm:px-3 py-1.5 text-xs outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-zinc-100 truncate"
+            >
+              {Object.keys(mdb.db).map((key) => (
+                <option key={key} value={key}>
+                  {mdb.db[key].name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      <div className="flex items-center gap-1.5 shrink-0 w-24">
-        <input type="number" step="0.01" min="0.01" max="1.0" value={layer.thickness} onChange={(e) => onThicknessChange(parseFloat(e.target.value) || 0.01)} className="w-full text-right bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-1.5 text-xs outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-zinc-100 font-mono"/>
-        <span className="text-xs text-zinc-400 font-medium">m</span>
-      </div>
+          <div className="sm:hidden">
+            <button
+              onClick={onDelete}
+              title="Delete Layer"
+              className="p-1.5 rounded-lg border border-red-100 dark:border-red-950/20 text-red-500 hover:text-red-700 dark:hover:text-red-400 bg-red-50/50 dark:bg-red-950/10 transition-colors"
+            >
+              <Trash2 size={13} />
+            </button>
+          </div>
+        </div>
 
-      <div className="flex items-center gap-1 shrink-0">
-        <button onClick={onMoveUp} disabled={isFirst} title="Move Layer Up" className="p-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 bg-white dark:bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-900 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-          <ArrowUp size={14}/>
-        </button>
-        <button onClick={onMoveDown} disabled={isLast} title="Move Layer Down" className="p-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 bg-white dark:bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-900 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-          <ArrowDown size={14}/>
-        </button>
-        <button onClick={onDelete} title="Delete Layer" className="p-1.5 rounded-lg border border-red-100 dark:border-red-950/20 text-red-500 hover:text-red-700 dark:hover:text-red-400 bg-red-50/50 dark:bg-red-950/10 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">
-          <Trash2 size={14}/>
-        </button>
+        <div className="flex items-center justify-between sm:justify-start gap-2 w-full sm:w-auto pt-1 sm:pt-0 border-t sm:border-t-0 border-zinc-200/50 dark:border-zinc-800/50">
+          <div className="flex items-center gap-1.5 shrink-0 w-24">
+            <input
+              type="number"
+              step="0.01"
+              min="0.01"
+              max="1.0"
+              value={layer.thickness}
+              onChange={(e) => onThicknessChange(parseFloat(e.target.value) || 0.01)}
+              className="w-full text-right bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs outline-none focus:ring-2 focus:ring-blue-500/50 text-zinc-950 dark:text-zinc-100 font-mono"
+            />
+            <span className="text-xs text-zinc-400 font-medium">m</span>
+          </div>
+
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              onClick={onMoveUp}
+              disabled={isFirst}
+              title="Move Layer Up"
+              className="p-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 bg-white dark:bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-900 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              <ArrowUp size={14} />
+            </button>
+            <button
+              onClick={onMoveDown}
+              disabled={isLast}
+              title="Move Layer Down"
+              className="p-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 bg-white dark:bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-900 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              <ArrowDown size={14} />
+            </button>
+            <button
+              onClick={onDelete}
+              title="Delete Layer"
+              className="hidden sm:inline-flex p-1.5 rounded-lg border border-red-100 dark:border-red-950/20 text-red-500 hover:text-red-700 dark:hover:text-red-400 bg-red-50/50 dark:bg-red-950/10 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
+        </div>
       </div>
-    </div>);
+    );
 };
 export const LayerEditor = () => {
     const { mdb, wallLayers, setWallLayers, roofLayers, setRoofLayers, floorLayers, setFloorLayers, runActiveSimulation } = useApp();
