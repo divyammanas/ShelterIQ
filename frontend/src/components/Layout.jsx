@@ -40,6 +40,11 @@ export const Layout = () => {
                     title: "Envelope Construction Materials",
                     subtitle: "Inspect properties and register customized thermal/PCM specifications"
                 };
+            case '/recommendations':
+                return {
+                    title: "AI Material Intelligence & Recommendation System",
+                    subtitle: "Multi-criteria physics evaluation, extreme climate matching, cost estimation & AI explanations"
+                };
             case '/simulation':
                 return {
                     title: "Numerical Simulation Setup",
@@ -67,6 +72,7 @@ export const Layout = () => {
         { path: '/climate', label: 'Climate Data', icon: CloudSun },
         { path: '/design', label: 'Shelter Design', icon: Home },
         { path: '/materials', label: 'Materials Catalog', icon: Database },
+        { path: '/recommendations', label: 'Material AI', icon: Sparkles },
         { path: '/simulation', label: 'Simulation Setup', icon: Play },
         { path: '/comparison', label: 'Design Compare', icon: Columns },
         { path: '/validation', label: 'ANSYS Validation', icon: ShieldCheck },

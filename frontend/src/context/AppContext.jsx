@@ -318,6 +318,66 @@ export const AppProvider = ({ children }) => {
     const removeAssembly = (id) => {
         setSavedAssemblies(prev => prev.filter(assembly => assembly.id !== id));
     };
+    const applyRecommendedAssembly = (assembly) => {
+        try {
+            const getMatSafe = (key, fallbackKey) => {
+                if (key && mdb.db[key]) return mdb.get(key);
+                if (fallbackKey && mdb.db[fallbackKey]) return mdb.get(fallbackKey);
+                return mdb.get("stone_granite");
+            };
+
+            const wallKey = assembly.wall_material?.material?.id || assembly.wall_material?.id;
+            const insulKey = assembly.insulation_material?.material?.id || assembly.insulation_material?.id;
+            const roofKey = assembly.roof_material?.material?.id || assembly.roof_material?.id;
+            const floorKey = assembly.floor_material?.material?.id || assembly.floor_material?.id;
+            const glazeKey = assembly.glazing_material?.material?.id || assembly.glazing_material?.id;
+
+            const wallMat = getMatSafe(wallKey, "stone_granite");
+            const insulMat = getMatSafe(insulKey, "eps_insulation");
+            const roofMat = getMatSafe(roofKey, "stone_granite");
+            const floorMat = getMatSafe(floorKey, "stone_granite");
+            const glazeMat = getMatSafe(glazeKey, "glass_double_lowE");
+
+            const nextWalls = [
+                { material: wallMat, thickness: 0.25 },
+                { material: insulMat, thickness: 0.10 }
+            ];
+            const nextRoof = [
+                { material: roofMat, thickness: 0.05 },
+                { material: insulMat, thickness: 0.12 }
+            ];
+            const nextFloor = [
+                { material: floorMat, thickness: 0.15 },
+                { material: insulMat, thickness: 0.08 }
+            ];
+
+            setWallLayers(nextWalls);
+            setRoofLayers(nextRoof);
+            setFloorLayers(nextFloor);
+
+            setShelter(prev => {
+                const nextOpenings = prev.openings.map(op => {
+                    if (!op.is_door) {
+                        return { ...op, glazing: glazeMat };
+                    }
+                    return op;
+                });
+                return {
+                    ...prev,
+                    openings: nextOpenings
+                };
+            });
+
+            setTimeout(() => {
+                runActiveSimulation(undefined, nextWalls, nextRoof, nextFloor);
+            }, 100);
+
+            return true;
+        } catch (err) {
+            console.error("Failed to apply recommended assembly:", err);
+            return false;
+        }
+    };
     const runActiveSimulation = async (customShelter, customWalls, customRoof, customFloor, overrideScore) => {
         setIsSimulating(true);
         const w = customWalls || wallLayers;
@@ -733,6 +793,7 @@ export const AppProvider = ({ children }) => {
             setOptLogs,
             isOptimizing,
             runActiveSimulation,
+            applyRecommendedAssembly,
             runOptimizationMC,
             loadDesignPreset,
             loadedPreset,

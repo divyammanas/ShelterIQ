@@ -21,6 +21,13 @@ from compare import DesignCase, run_comparison, design_score
 from optimize import SearchSpace, optimize as run_optimize
 from weather_dataset import get_weather_dataset
 from materials import get_material_dataset as _get_material_dataset
+from material_intelligence import (
+    get_recommendation_engine,
+    RecommendationRequest,
+    REGIONS,
+    CLIMATE_TYPES,
+    BUDGET_TIERS
+)
 
 app = FastAPI(title="ShelterIQ Simulation & Optimization Engine API")
 
@@ -173,6 +180,158 @@ def get_materials_list():
     if _material_dataset is None:
         raise HTTPException(status_code=503, detail="Material dataset not available.")
     return _material_dataset.list_with_meta()
+
+
+class RecommendationRequestSchema(BaseModel):
+    location: str = "ladakh_high_altitude"
+    location_name: Optional[str] = None
+    climate_condition: str = "high_altitude_cold_desert"
+    budget_level: str = "moderate_balanced"
+    budget_target_usd_m2: Optional[float] = None
+    priority_thermal_efficiency: float = 0.85
+    priority_affordability: float = 0.70
+    priority_durability: float = 0.80
+    priority_local_availability: float = 0.85
+    priority_eco_sustainability: float = 0.50
+    prefers_high_thermal_mass: bool = True
+    prefers_prefabricated_speed: bool = False
+    custom_notes: Optional[str] = None
+
+class MaterialCompareRequestSchema(BaseModel):
+    material_ids: List[str]
+
+class MaterialExplainRequestSchema(BaseModel):
+    material_id: str
+    target_role: str = "walls"
+    climate_condition: str = "high_altitude_cold_desert"
+    location: str = "ladakh_high_altitude"
+
+@app.get("/api/materials/intelligence/meta")
+def get_material_intelligence_meta():
+    """
+    Returns available climate regions, climate classifications, and budget tiers
+    for guiding the Material Recommendation Engine.
+    """
+    return {
+        "regions": REGIONS,
+        "climate_types": CLIMATE_TYPES,
+        "budget_tiers": BUDGET_TIERS
+    }
+
+
+@app.get("/api/materials/intelligence/list")
+def get_material_intelligence_list(
+    role: Optional[str] = None,
+    category: Optional[str] = None,
+    max_cost: Optional[float] = None
+):
+    """
+    Returns full enriched material intelligence database including physical properties
+    (thermal conductivity, density, specific heat, emissivity, solar absorptivity)
+    and clearly labeled estimated values (cost, durability lifespan, regional availability,
+    advantages, disadvantages, and verified data provenance).
+    """
+    engine = get_recommendation_engine()
+    materials = engine.list_all_enriched()
+    result = []
+    for m in materials:
+        if role and role not in m.envelope_roles and role != "all":
+            continue
+        if category and category.lower() != m.category.lower():
+            continue
+        if max_cost and m.typical_cost_usd_m2 > max_cost:
+            continue
+        result.append(m.to_dict())
+    return result
+
+
+@app.post("/api/materials/intelligence/recommend")
+def recommend_materials(req: RecommendationRequestSchema):
+    """
+    Multi-criteria intelligent recommendation endpoint. Evaluates construction materials
+    for walls, roofs, insulation, flooring, and glazing based on thermal conductivity,
+    density, specific heat, emissivity, solar absorptivity, cost, availability, and durability.
+    Returns optimal, budget-alternative, and high-inertia assemblies with AI physics explanations.
+    """
+    try:
+        engine = get_recommendation_engine()
+        internal_req = RecommendationRequest(
+            location=req.location,
+            location_name=req.location_name,
+            climate_condition=req.climate_condition,
+            budget_level=req.budget_level,
+            budget_target_usd_m2=req.budget_target_usd_m2,
+            priority_thermal_efficiency=req.priority_thermal_efficiency,
+            priority_affordability=req.priority_affordability,
+            priority_durability=req.priority_durability,
+            priority_local_availability=req.priority_local_availability,
+            priority_eco_sustainability=req.priority_eco_sustainability,
+            prefers_high_thermal_mass=req.prefers_high_thermal_mass,
+            prefers_prefabricated_speed=req.prefers_prefabricated_speed,
+            custom_notes=req.custom_notes
+        )
+        report = engine.recommend(internal_req)
+        return report.to_dict()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Material recommendation error: {str(e)}")
+
+
+@app.post("/api/materials/intelligence/compare")
+def compare_materials(req: MaterialCompareRequestSchema):
+    """
+    Returns a side-by-side technical comparison matrix for specified material keys.
+    """
+    engine = get_recommendation_engine()
+    results = []
+    for mid in req.material_ids:
+        m = engine.get_enriched_material(mid)
+        if m:
+            results.append(m.to_dict())
+    return {
+        "count": len(results),
+        "materials": results
+    }
+
+
+@app.post("/api/materials/intelligence/explain")
+def explain_material(req: MaterialExplainRequestSchema):
+    """
+    Generates a dedicated physics-backed engineering explanation for why a specific
+    material is or is not suitable for a designated envelope role and climate.
+    """
+    engine = get_recommendation_engine()
+    mat = engine.get_enriched_material(req.material_id)
+    if not mat:
+        raise HTTPException(status_code=404, detail=f"Material '{req.material_id}' not found.")
+
+    v_cap = mat.volumetric_heat_capacity_J_m3K / 1e6
+    effusivity = mat.thermal_effusivity
+    diffusivity_e7 = mat.thermal_diffusivity_m2_s * 1e7
+
+    explanation = {
+        "material_id": mat.id,
+        "material_name": mat.name,
+        "target_role": req.target_role,
+        "climate_condition": req.climate_condition,
+        "thermodynamic_metrics": {
+            "thermal_conductivity_k": f"{mat.k_W_mK:.3f} W/m·K (Fourier conduction rate)",
+            "volumetric_heat_capacity": f"{v_cap:.2f} MJ/m³·K (Thermal inertia storage density)",
+            "thermal_effusivity": f"{effusivity:.0f} J/(m²·K·s½) (Transient surface contact response)",
+            "thermal_diffusivity": f"{diffusivity_e7:.2f} × 10⁻⁷ m²/s (Heat wave propagation velocity)"
+        },
+        "suitability_analysis": (
+            f"{mat.name} exhibits thermal conductivity k = {mat.k_W_mK:.3f} W/m·K and volumetric heat capacity {v_cap:.2f} MJ/m³·K. "
+            f"For {req.target_role} applications in {req.climate_condition}, "
+            f"{'it excels as a primary thermal storage medium' if v_cap > 1.8 else 'it functions primarily as a thermal barrier / resist element'}. "
+            f"Its surface emissivity of {mat.emissivity:.2f} and solar absorptivity of {mat.solar_absorptivity:.2f} determine longwave radiative emission and solar gain."
+        ),
+        "advantages": mat.advantages,
+        "disadvantages": mat.disadvantages,
+        "estimated_cost_usd_m2": mat.typical_cost_usd_m2,
+        "durability_years": mat.durability_lifespan_years,
+        "provenance_note": mat.provenance
+    }
+    return explanation
 
 
 @app.get("/api/materials/{material_id}")

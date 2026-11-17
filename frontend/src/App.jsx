@@ -5,6 +5,7 @@ import { Dashboard } from './pages/Dashboard';
 import { ClimateData } from './pages/ClimateData';
 import { ShelterDesign } from './pages/ShelterDesign';
 import { MaterialsCatalog } from './pages/MaterialsCatalog';
+import { MaterialIntelligence } from './pages/MaterialIntelligence';
 import { SimulationSetup } from './pages/SimulationSetup';
 import { DesignCompare } from './pages/DesignCompare';
 import { AnsysValidation } from './pages/AnsysValidation';
@@ -18,6 +19,7 @@ function App() {
             <Route path="climate" element={<ClimateData />}/>
             <Route path="design" element={<ShelterDesign />}/>
             <Route path="materials" element={<MaterialsCatalog />}/>
+            <Route path="recommendations" element={<MaterialIntelligence />}/>
             <Route path="simulation" element={<SimulationSetup />}/>
             <Route path="comparison" element={<DesignCompare />}/>
             <Route path="validation" element={<AnsysValidation />}/>
