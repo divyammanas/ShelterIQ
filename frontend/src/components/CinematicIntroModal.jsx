@@ -78,11 +78,26 @@ const TOUR_STEPS = [
     actionTip: 'Select high thermal capacitance materials for interior walls to buffer sub-zero temperature drops.'
   },
   {
+    id: 'recommendations',
+    route: '/recommendations',
+    label: 'Material AI',
+    icon: Sparkles,
+    badge: 'Page 5 // AI Recommendation Engine',
+    title: 'AI Material Intelligence & Envelope Optimizer',
+    description: 'Intelligent multi-criteria recommendation engine evaluating 48 construction materials for extreme climates and budgets.',
+    features: [
+      'Multi-criteria scoring based on thermal conductivity, volumetric heat capacity, cost, durability & local logistics',
+      'AI engineering explanations with Fourier conduction physics, diurnal phase shifts, and budget alternative suggestions',
+      '1-Click "Apply to Shelter Model" to instantly configure active 3D CAD layers for immediate simulation'
+    ],
+    actionTip: 'Select your shelter location and budget to generate custom passive envelope assemblies.'
+  },
+  {
     id: 'simulation',
     route: '/simulation',
     label: 'Simulation Setup',
     icon: Play,
-    badge: 'Page 5 // Numerical Solvers',
+    badge: 'Page 6 // Numerical Solvers',
     title: 'Transient Solvers & Boundary Setup',
     description: 'Configure numerical computation timesteps, convective boundary films, ground coupling, and execute transient runs.',
     features: [
@@ -97,7 +112,7 @@ const TOUR_STEPS = [
     route: '/comparison',
     label: 'Design Compare',
     icon: Columns,
-    badge: 'Page 6 // Benchmark Analysis',
+    badge: 'Page 7 // Benchmark Analysis',
     title: 'Assembly Comparison & Benchmarking',
     description: 'Compare multiple shelter envelope configurations side-by-side to evaluate thermal efficiency and cost metrics.',
     features: [
@@ -112,7 +127,7 @@ const TOUR_STEPS = [
     route: '/validation',
     label: 'ANSYS Validation',
     icon: ShieldCheck,
-    badge: 'Page 7 // CFD Verification',
+    badge: 'Page 8 // CFD Verification',
     title: 'CFD Fluid Flow & Residual Verification',
     description: 'Correlate simplified fast 1D RC nodal calculations against high-fidelity 3D ANSYS Fluent CHT simulations.',
     features: [

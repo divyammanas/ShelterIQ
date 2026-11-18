@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Database, Plus } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Database, Plus, Sparkles, ArrowRight } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { formatDisplayNumber } from '../services/physicsEngine';
 export const MaterialsCatalog = () => {
@@ -89,6 +90,29 @@ export const MaterialsCatalog = () => {
         }
     };
     return (<div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
+      
+      {/* AI Recommendation Banner */}
+      <div className="lg:col-span-12 bg-gradient-to-r from-[var(--accent-primary-soft)] via-[var(--bg-surface)] to-[var(--bg-surface)] border border-[var(--accent-primary)]/30 rounded-[10px] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-[0_1px_3px_rgba(0,0,0,0.2)]">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-[8px] bg-[var(--accent-primary)] text-white shrink-0">
+            <Sparkles size={20} />
+          </div>
+          <div>
+            <h4 className="text-sm font-serif font-bold text-[var(--text-primary)]">
+              AI-Powered Material Intelligence & Recommendation System
+            </h4>
+            <p className="text-xs text-[var(--text-secondary)]">
+              Evaluate construction materials against extreme climate conditions, budget constraints, thermal mass, and local availability.
+            </p>
+          </div>
+        </div>
+        <Link
+          to="/recommendations"
+          className="px-4 py-2 rounded-[8px] bg-[var(--accent-primary)] hover:opacity-90 text-white font-medium text-xs flex items-center justify-center gap-2 shrink-0 transition-opacity"
+        >
+          <Sparkles size={14} /> Open Material AI <ArrowRight size={14} />
+        </Link>
+      </div>
       
       <form onSubmit={handleAddMaterial} className="lg:col-span-4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[10px] p-3.5 sm:p-5 shadow-[0_1px_2px_rgba(0,0,0,0.3)] flex flex-col gap-3.5 sm:gap-4">
         <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2 border-b border-[var(--border-subtle)] pb-3 shrink-0">
