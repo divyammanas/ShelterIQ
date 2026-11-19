@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import axios from 'axios';
+import {
+  fetchMaterialMeta,
+  fetchMaterialRecommendation,
+  fetchMaterialComparison
+} from '../services/materialIntelligenceService';
 import {
   Sparkles,
   Layers,
@@ -59,17 +63,13 @@ export const MaterialIntelligence = () => {
   // Fetch metadata on mount
   useEffect(() => {
     let isMounted = true;
-    const fetchMeta = async () => {
-      try {
-        const res = await axios.get('/api/materials/intelligence/meta');
-        if (isMounted && res.data) {
-          setMeta(res.data);
-        }
-      } catch (err) {
-        console.warn('Backend meta endpoint offline, using local fallback presets:', err);
+    const loadMeta = async () => {
+      const data = await fetchMaterialMeta();
+      if (isMounted && data) {
+        setMeta(data);
       }
     };
-    fetchMeta();
+    loadMeta();
     return () => { isMounted = false; };
   }, []);
 
@@ -90,12 +90,12 @@ export const MaterialIntelligence = () => {
         prefers_high_thermal_mass: prefersMass,
         prefers_prefabricated_speed: !prefersMass
       };
-      const res = await axios.post('/api/materials/intelligence/recommend', payload);
-      if (res.data) {
-        setRecommendationReport(res.data);
+      const report = await fetchMaterialRecommendation(payload);
+      if (report) {
+        setRecommendationReport(report);
       }
     } catch (err) {
-      console.error('Recommendation request failed:', err);
+      console.error('Recommendation processing failed:', err);
     } finally {
       setLoading(false);
     }
@@ -130,14 +130,12 @@ export const MaterialIntelligence = () => {
   const runComparison = async (id1, id2) => {
     setCompareLoading(true);
     try {
-      const res = await axios.post('/api/materials/intelligence/compare', {
-        material_ids: [id1, id2]
-      });
-      if (res.data && res.data.materials) {
-        setCompareDetails(res.data.materials);
+      const materials = await fetchMaterialComparison([id1, id2]);
+      if (materials) {
+        setCompareDetails(materials);
       }
     } catch (err) {
-      console.error('Comparison request failed:', err);
+      console.error('Comparison processing failed:', err);
     } finally {
       setCompareLoading(false);
     }

@@ -1,0 +1,3 @@
+design,min_T_air_C,max_T_air_C,comfortable_h,marginal_h,uncomfortable_h,total_heat_loss_kWh,total_solar_gain_kWh,thermal_stability_stdC,estimated_heating_kWh,design_score
+Baseline: Stone + EPS10cm,5.0,16.0,72.0,0.0,0.5,100.07,16.36,0.91,98.47,74.7
+"Alt: Rammed Earth + XPS15cm, low ACH",5.0,16.0,72.0,0.0,0.5,74.03,13.9,0.91,77.16,79.7

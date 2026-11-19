@@ -1,0 +1,2653 @@
+{
+  "regions": {
+    "ladakh_high_altitude": {
+      "name": "Ladakh & Western Himalayas (High Altitude Cold Desert)",
+      "lat": 34.15,
+      "elevation_m": 3500,
+      "climate_type": "high_altitude_cold_desert",
+      "description": "High diurnal swing, sub-zero winters (-20\u00b0C), intense solar irradiance (>750 W/m\u00b2), high UV, transport passes closed in winter."
+    },
+    "arctic_subzero": {
+      "name": "Arctic & Sub-Zero Tundra (Extreme Polar Cold)",
+      "lat": 68.0,
+      "elevation_m": 200,
+      "climate_type": "extreme_cold",
+      "description": "Prolonged extreme sub-zero conditions (-35\u00b0C), low winter solar gains, permafrost ground, high wind chill."
+    },
+    "hot_arid_desert": {
+      "name": "Thar & Arabian Desert (Hot Arid)",
+      "lat": 26.9,
+      "elevation_m": 250,
+      "climate_type": "extreme_heat",
+      "description": "Severe daytime heat (>45\u00b0C), strong diurnal drop, high solar radiation, sandstorms, scarce water."
+    },
+    "tropical_humid": {
+      "name": "Coastal & Western Ghats (Tropical Humid)",
+      "lat": 18.9,
+      "elevation_m": 50,
+      "climate_type": "tropical_humid",
+      "description": "High ambient humidity (>80%), high rainfall, moderate-high temperatures (30-36\u00b0C), mold/rot hazard."
+    },
+    "temperate_alpine": {
+      "name": "Shimla & Mid-Himalayan Alpine (Temperate Alpine)",
+      "lat": 31.1,
+      "elevation_m": 2200,
+      "climate_type": "temperate",
+      "description": "Moderate seasonal shifts, freezing snow winter, pleasant summer, rainfall during monsoon."
+    },
+    "global_standard": {
+      "name": "Standard Continental (Temperate)",
+      "lat": 40.0,
+      "elevation_m": 300,
+      "climate_type": "temperate",
+      "description": "Balanced heating and cooling degree days, standard urban supply chains."
+    }
+  },
+  "climate_types": {
+    "high_altitude_cold_desert": "High Altitude Cold Desert (Leh / Ladakh)",
+    "extreme_cold": "Extreme Cold / Sub-Zero Winter",
+    "extreme_heat": "Extreme Heat / Arid Desert",
+    "tropical_humid": "Warm & Humid / Coastal",
+    "temperate": "Moderate / Continental"
+  },
+  "budget_tiers": {
+    "humanitarian_low": {
+      "label": "Humanitarian / Low Cost ($)",
+      "max_envelope_cost_m2": 35.0,
+      "description": "Prioritizes locally sourced, low-cost or earth-based materials."
+    },
+    "moderate_balanced": {
+      "label": "Moderate / Cost-Effective ($$)",
+      "max_envelope_cost_m2": 75.0,
+      "description": "Balances thermal efficiency with standard commercial affordability."
+    },
+    "premium_high_perf": {
+      "label": "High-Performance / Premium ($$$)",
+      "max_envelope_cost_m2": 160.0,
+      "description": "Maximizes passive performance, durability, and specialized insulation."
+    }
+  },
+  "materials": {
+    "normal_weight_concrete": {
+      "id": "normal_weight_concrete",
+      "name": "Normal-weight concrete",
+      "category": "Structural",
+      "k_W_mK": 1.7,
+      "density_kg_m3": 2300.0,
+      "cp_J_kgK": 880.0,
+      "emissivity": 0.94,
+      "solar_absorptivity": 0.6,
+      "source": "ASHRAE Ch.26 / NIST reference data",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 2024000.0,
+      "thermal_diffusivity_m2_s": 8.399209486166008e-07,
+      "thermal_effusivity": 1854.9,
+      "envelope_roles": [
+        "walls",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 38.0,
+      "cost_range_usd_m2": [
+        28.0,
+        50.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 9.2,
+      "durability_lifespan_years": 80,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 6.5,
+        "arctic_subzero": 5.0,
+        "hot_arid_desert": 9.0,
+        "tropical_humid": 9.5,
+        "temperate_alpine": 8.0,
+        "global_standard": 9.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "High",
+      "advantages": [
+        "Very high volumetric heat capacity (2.02 MJ/m\u00b3\u00b7K) for passive thermal mass",
+        "Exceptional structural durability, compressive strength, and lifespan (80+ yrs)",
+        "Impervious to rodent intrusion and rot; class A1 non-combustible"
+      ],
+      "disadvantages": [
+        "High thermal conductivity (1.7 W/m\u00b7K) requires exterior insulation wrap",
+        "Heavy transport penalty (2300 kg/m\u00b3) on high-altitude passes",
+        "High embodied carbon footprint"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE Ch.26 / NIST reference data",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "high_strength_concrete": {
+      "id": "high_strength_concrete",
+      "name": "High-strength concrete",
+      "category": "Structural",
+      "k_W_mK": 2.0,
+      "density_kg_m3": 2400.0,
+      "cp_J_kgK": 840.0,
+      "emissivity": 0.94,
+      "solar_absorptivity": 0.6,
+      "source": "ASHRAE Ch.26 / engineering reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 2016000.0,
+      "thermal_diffusivity_m2_s": 9.92063492063492e-07,
+      "thermal_effusivity": 2008.0,
+      "envelope_roles": [
+        "walls",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 48.0,
+      "cost_range_usd_m2": [
+        38.0,
+        65.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 9.6,
+      "durability_lifespan_years": 100,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 5.0,
+        "arctic_subzero": 4.5,
+        "hot_arid_desert": 8.5,
+        "tropical_humid": 9.0,
+        "temperate_alpine": 7.0,
+        "global_standard": 9.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "High",
+      "advantages": [
+        "Maximum compressive strength for multistory or heavy seismic loads",
+        "Superior freeze-thaw cracking resistance in sub-zero environments",
+        "Dense thermal mass"
+      ],
+      "disadvantages": [
+        "Very high thermal conductivity (2.0 W/m\u00b7K) causes severe thermal bridging without insulation",
+        "Requires specialized batching plants rarely available in remote mountain valleys"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE Ch.26 / engineering reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "aerated_autoclaved_concrete_aac": {
+      "id": "aerated_autoclaved_concrete_aac",
+      "name": "Aerated autoclaved concrete (AAC)",
+      "category": "Masonry",
+      "k_W_mK": 0.12,
+      "density_kg_m3": 550.0,
+      "cp_J_kgK": 1000.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "ASHRAE Ch.26 / engineering reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 550000.0,
+      "thermal_diffusivity_m2_s": 2.1818181818181818e-07,
+      "thermal_effusivity": 256.9,
+      "envelope_roles": [
+        "walls"
+      ],
+      "typical_cost_usd_m2": 32.0,
+      "cost_range_usd_m2": [
+        24.0,
+        44.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 8.0,
+      "durability_lifespan_years": 50,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 5.5,
+        "arctic_subzero": 5.0,
+        "hot_arid_desert": 8.5,
+        "tropical_humid": 8.5,
+        "temperate_alpine": 7.0,
+        "global_standard": 9.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Low thermal conductivity (0.12 W/m\u00b7K) provides integrated structural insulation",
+        "Lightweight (550 kg/m\u00b3) reduces dead load and logistics transport effort",
+        "Excellent fire resistance and acoustic absorption"
+      ],
+      "disadvantages": [
+        "Hydrophilic porous matrix requires breathable external waterproofing against freeze-thaw spalling",
+        "Lower thermal mass than dense concrete or stone"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE Ch.26 / engineering reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "dense_concrete_block": {
+      "id": "dense_concrete_block",
+      "name": "Dense concrete block",
+      "category": "Masonry",
+      "k_W_mK": 1.1,
+      "density_kg_m3": 2100.0,
+      "cp_J_kgK": 840.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "ASHRAE Ch.26 / NIST reference data",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1764000.0,
+      "thermal_diffusivity_m2_s": 6.235827664399093e-07,
+      "thermal_effusivity": 1393.0,
+      "envelope_roles": [
+        "walls",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 26.0,
+      "cost_range_usd_m2": [
+        18.0,
+        35.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 8.5,
+      "durability_lifespan_years": 60,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 7.0,
+        "arctic_subzero": 6.0,
+        "hot_arid_desert": 9.0,
+        "tropical_humid": 9.0,
+        "temperate_alpine": 8.5,
+        "global_standard": 9.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Inexpensive and widely manufactured",
+        "Decent thermal mass (1.76 MJ/m\u00b3\u00b7K)",
+        "Robust against physical abrasion and pests"
+      ],
+      "disadvantages": [
+        "Moderate thermal conductivity (1.1 W/m\u00b7K) needs continuous external insulation",
+        "Mortar joints can create thermal bridges if uninsulated"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE Ch.26 / NIST reference data",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "lightweight_concrete_block": {
+      "id": "lightweight_concrete_block",
+      "name": "Lightweight concrete block",
+      "category": "Masonry",
+      "k_W_mK": 0.3,
+      "density_kg_m3": 1000.0,
+      "cp_J_kgK": 840.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "ASHRAE Ch.26 / NIST reference data",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 840000.0,
+      "thermal_diffusivity_m2_s": 3.571428571428571e-07,
+      "thermal_effusivity": 502.0,
+      "envelope_roles": [
+        "walls"
+      ],
+      "typical_cost_usd_m2": 28.0,
+      "cost_range_usd_m2": [
+        20.0,
+        38.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 7.8,
+      "durability_lifespan_years": 50,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 6.5,
+        "arctic_subzero": 5.5,
+        "hot_arid_desert": 8.5,
+        "tropical_humid": 8.5,
+        "temperate_alpine": 7.5,
+        "global_standard": 9.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Balanced weight and thermal conductivity (0.3 W/m\u00b7K)",
+        "Easier manual handling during emergency shelter erection"
+      ],
+      "disadvantages": [
+        "Lower structural compressive capacity",
+        "Requires moisture protection in freeze zones"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE Ch.26 / NIST reference data",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "common_clay_brick": {
+      "id": "common_clay_brick",
+      "name": "Common clay brick",
+      "category": "Masonry",
+      "k_W_mK": 0.6,
+      "density_kg_m3": 1800.0,
+      "cp_J_kgK": 840.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.71,
+      "source": "ASHRAE Ch.26 / NIST reference data",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1512000.0,
+      "thermal_diffusivity_m2_s": 3.9682539682539683e-07,
+      "thermal_effusivity": 952.5,
+      "envelope_roles": [
+        "walls",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 24.0,
+      "cost_range_usd_m2": [
+        16.0,
+        32.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 8.4,
+      "durability_lifespan_years": 70,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 6.0,
+        "arctic_subzero": 5.0,
+        "hot_arid_desert": 8.5,
+        "tropical_humid": 9.5,
+        "temperate_alpine": 8.5,
+        "global_standard": 9.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Time-tested construction material with proven thermal inertia",
+        "High solar absorptivity (0.71) helpful for passive solar facade heating",
+        "Good durability and fire resistance"
+      ],
+      "disadvantages": [
+        "Substantial thermal transmission (0.6 W/m\u00b7K) requires supplemental insulation in extreme cold",
+        "Labor-intensive wet masonry construction"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE Ch.26 / NIST reference data",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "engineering_brick": {
+      "id": "engineering_brick",
+      "name": "Engineering brick",
+      "category": "Masonry",
+      "k_W_mK": 1.1,
+      "density_kg_m3": 2100.0,
+      "cp_J_kgK": 840.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.71,
+      "source": "ASHRAE Ch.26 / engineering reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1764000.0,
+      "thermal_diffusivity_m2_s": 6.235827664399093e-07,
+      "thermal_effusivity": 1393.0,
+      "envelope_roles": [
+        "walls",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 36.0,
+      "cost_range_usd_m2": [
+        26.0,
+        48.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 9.4,
+      "durability_lifespan_years": 90,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 5.0,
+        "arctic_subzero": 5.0,
+        "hot_arid_desert": 8.0,
+        "tropical_humid": 8.5,
+        "temperate_alpine": 7.5,
+        "global_standard": 8.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Extremely low water absorption (<4.5%), immune to freeze-thaw frost heave",
+        "High density and compressive capacity"
+      ],
+      "disadvantages": [
+        "High thermal conductivity (1.1 W/m\u00b7K)",
+        "Heavier and higher cost than standard clay brick"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE Ch.26 / engineering reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "adobe_mud_brick": {
+      "id": "adobe_mud_brick",
+      "name": "Adobe / mud brick",
+      "category": "Masonry",
+      "k_W_mK": 0.7,
+      "density_kg_m3": 1600.0,
+      "cp_J_kgK": 900.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.65,
+      "source": "Building-material literature / engineering reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1440000.0,
+      "thermal_diffusivity_m2_s": 4.861111111111111e-07,
+      "thermal_effusivity": 1004.0,
+      "envelope_roles": [
+        "walls"
+      ],
+      "typical_cost_usd_m2": 11.0,
+      "cost_range_usd_m2": [
+        6.0,
+        18.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 6.8,
+      "durability_lifespan_years": 45,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 9.8,
+        "arctic_subzero": 2.0,
+        "hot_arid_desert": 9.5,
+        "tropical_humid": 4.0,
+        "temperate_alpine": 7.0,
+        "global_standard": 6.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Low",
+      "advantages": [
+        "Outstanding local availability in Ladakh and arid valleys using indigenous silt/soil",
+        "Near-zero embodied carbon and very low construction budget",
+        "High thermal mass (1.44 MJ/m\u00b3\u00b7K) ideal for diurnal phase-shift damping",
+        "Naturally regulates indoor relative humidity via hygroscopic buffering"
+      ],
+      "disadvantages": [
+        "Vulnerable to water erosion and driving rains; needs lime plaster or wide roof overhangs",
+        "Requires thicker walls (300-450mm) to achieve adequate thermal resistance"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Building-material literature / engineering reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "granite": {
+      "id": "granite",
+      "name": "Granite",
+      "category": "Stone",
+      "k_W_mK": 2.8,
+      "density_kg_m3": 2700.0,
+      "cp_J_kgK": 790.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.65,
+      "source": "NIST/engineering reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 2133000.0,
+      "thermal_diffusivity_m2_s": 1.3127051101734646e-06,
+      "thermal_effusivity": 2443.8,
+      "envelope_roles": [
+        "walls",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 55.0,
+      "cost_range_usd_m2": [
+        40.0,
+        80.0
+      ],
+      "cost_tier": "High",
+      "is_cost_estimated": true,
+      "durability_score": 9.8,
+      "durability_lifespan_years": 120,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 9.5,
+        "arctic_subzero": 6.5,
+        "hot_arid_desert": 8.0,
+        "tropical_humid": 7.5,
+        "temperate_alpine": 9.0,
+        "global_standard": 8.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Low",
+      "advantages": [
+        "Virtually indestructible stone with 100+ year lifespan; impervious to freeze-thaw cycles",
+        "Abundantly quarryable on-site across Himalayan slopes and Ladakh ranges",
+        "High thermal mass (2.13 MJ/m\u00b3\u00b7K) serves as a supreme heat sink when wrapped with exterior insulation"
+      ],
+      "disadvantages": [
+        "Extremely high thermal conductivity (2.8 W/m\u00b7K) \u2014 UNUSABLE without external insulation wrap",
+        "Heavy manual stone masonry requires skilled labor"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: NIST/engineering reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "limestone": {
+      "id": "limestone",
+      "name": "Limestone",
+      "category": "Stone",
+      "k_W_mK": 1.3,
+      "density_kg_m3": 2300.0,
+      "cp_J_kgK": 900.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.65,
+      "source": "NIST/engineering reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 2070000.0,
+      "thermal_diffusivity_m2_s": 6.280193236714976e-07,
+      "thermal_effusivity": 1640.4,
+      "envelope_roles": [
+        "walls",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 42.0,
+      "cost_range_usd_m2": [
+        30.0,
+        60.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 8.5,
+      "durability_lifespan_years": 80,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 7.0,
+        "arctic_subzero": 4.0,
+        "hot_arid_desert": 9.0,
+        "tropical_humid": 7.0,
+        "temperate_alpine": 8.0,
+        "global_standard": 8.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Low",
+      "advantages": [
+        "Lower thermal conductivity than granite (1.3 W/m\u00b7K)",
+        "High thermal mass (2.07 MJ/m\u00b3\u00b7K)",
+        "Workable stone with attractive aesthetic"
+      ],
+      "disadvantages": [
+        "Susceptible to acid precipitation and freeze-thaw micro-fissuring in wet climates"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: NIST/engineering reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "sandstone": {
+      "id": "sandstone",
+      "name": "Sandstone",
+      "category": "Stone",
+      "k_W_mK": 1.8,
+      "density_kg_m3": 2200.0,
+      "cp_J_kgK": 800.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.65,
+      "source": "NIST/engineering reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1760000.0,
+      "thermal_diffusivity_m2_s": 1.0227272727272727e-06,
+      "thermal_effusivity": 1779.9,
+      "envelope_roles": [
+        "walls",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 38.0,
+      "cost_range_usd_m2": [
+        26.0,
+        52.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 8.0,
+      "durability_lifespan_years": 70,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 7.5,
+        "arctic_subzero": 4.5,
+        "hot_arid_desert": 9.2,
+        "tropical_humid": 6.5,
+        "temperate_alpine": 7.5,
+        "global_standard": 8.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Low",
+      "advantages": [
+        "Good thermal storage (1.76 MJ/m\u00b3\u00b7K)",
+        "Readily split into flat slabs for flooring and walls in arid zones"
+      ],
+      "disadvantages": [
+        "Higher porosity than granite requires sealant against water penetration in freezing conditions"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: NIST/engineering reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "marble": {
+      "id": "marble",
+      "name": "Marble",
+      "category": "Stone",
+      "k_W_mK": 2.9,
+      "density_kg_m3": 2700.0,
+      "cp_J_kgK": 880.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "Engineering reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 2376000.0,
+      "thermal_diffusivity_m2_s": 1.2205387205387204e-06,
+      "thermal_effusivity": 2625.0,
+      "envelope_roles": [
+        "flooring",
+        "finish"
+      ],
+      "typical_cost_usd_m2": 70.0,
+      "cost_range_usd_m2": [
+        50.0,
+        110.0
+      ],
+      "cost_tier": "Premium",
+      "is_cost_estimated": true,
+      "durability_score": 8.8,
+      "durability_lifespan_years": 90,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 4.0,
+        "arctic_subzero": 3.0,
+        "hot_arid_desert": 8.5,
+        "tropical_humid": 7.0,
+        "temperate_alpine": 6.5,
+        "global_standard": 8.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Low",
+      "advantages": [
+        "High thermal effusivity (cool to touch in hot climates)",
+        "High scratch and compressive resistance"
+      ],
+      "disadvantages": [
+        "Poor thermal insulator (2.9 W/m\u00b7K); feels cold in sub-zero winters",
+        "High financial cost"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Engineering reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "slate": {
+      "id": "slate",
+      "name": "Slate",
+      "category": "Stone",
+      "k_W_mK": 2.2,
+      "density_kg_m3": 2700.0,
+      "cp_J_kgK": 800.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "Engineering reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 2160000.0,
+      "thermal_diffusivity_m2_s": 1.0185185185185185e-06,
+      "thermal_effusivity": 2179.9,
+      "envelope_roles": [
+        "roofs",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 52.0,
+      "cost_range_usd_m2": [
+        38.0,
+        75.0
+      ],
+      "cost_tier": "High",
+      "is_cost_estimated": true,
+      "durability_score": 9.5,
+      "durability_lifespan_years": 100,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 7.0,
+        "arctic_subzero": 6.0,
+        "hot_arid_desert": 5.0,
+        "tropical_humid": 6.0,
+        "temperate_alpine": 8.5,
+        "global_standard": 8.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Low",
+      "advantages": [
+        "Extremely durable pitched roofing material; resists severe mountain snow loads and freeze-thaw",
+        "Natural cleavage provides impermeable water-shedding tiles"
+      ],
+      "disadvantages": [
+        "Heavy roof framing required (2700 kg/m\u00b3)",
+        "High thermal transmission requires thick attic/rafter insulation underneath"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Engineering reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "gypsum_plaster": {
+      "id": "gypsum_plaster",
+      "name": "Gypsum plaster",
+      "category": "Finish",
+      "k_W_mK": 0.35,
+      "density_kg_m3": 950.0,
+      "cp_J_kgK": 840.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.5,
+      "source": "NIST reference / building-material literature",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 798000.0,
+      "thermal_diffusivity_m2_s": 4.3859649122807013e-07,
+      "thermal_effusivity": 528.5,
+      "envelope_roles": [
+        "finish"
+      ],
+      "typical_cost_usd_m2": 10.0,
+      "cost_range_usd_m2": [
+        6.0,
+        15.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 7.2,
+      "durability_lifespan_years": 35,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 6.5,
+        "arctic_subzero": 6.0,
+        "hot_arid_desert": 8.5,
+        "tropical_humid": 7.0,
+        "temperate_alpine": 8.0,
+        "global_standard": 9.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A2 Fire resistant",
+      "embodied_carbon": "Low",
+      "advantages": [
+        "Smooth interior air-tight finish reduces unintended infiltration",
+        "Endothermic water release during fire exposure"
+      ],
+      "disadvantages": [
+        "Strictly interior only; rapidly breaks down if exposed to exterior moisture"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: NIST reference / building-material literature",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "gypsum_board": {
+      "id": "gypsum_board",
+      "name": "Gypsum board",
+      "category": "Finish",
+      "k_W_mK": 0.16,
+      "density_kg_m3": 800.0,
+      "cp_J_kgK": 1090.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.5,
+      "source": "NIST / ASHRAE reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 872000.0,
+      "thermal_diffusivity_m2_s": 1.834862385321101e-07,
+      "thermal_effusivity": 373.5,
+      "envelope_roles": [
+        "finish",
+        "walls"
+      ],
+      "typical_cost_usd_m2": 12.0,
+      "cost_range_usd_m2": [
+        8.0,
+        18.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 7.0,
+      "durability_lifespan_years": 30,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 6.0,
+        "arctic_subzero": 6.5,
+        "hot_arid_desert": 8.5,
+        "tropical_humid": 8.0,
+        "temperate_alpine": 8.0,
+        "global_standard": 9.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A2 Fire resistant",
+      "embodied_carbon": "Low",
+      "advantages": [
+        "Fast dry installation with stud framing",
+        "Low thermal conductivity (0.16 W/m\u00b7K) assists internal comfort"
+      ],
+      "disadvantages": [
+        "Susceptible to moisture damage unless treated with greenboard/cement backer"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: NIST / ASHRAE reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "cement_plaster": {
+      "id": "cement_plaster",
+      "name": "Cement plaster",
+      "category": "Finish",
+      "k_W_mK": 0.72,
+      "density_kg_m3": 1800.0,
+      "cp_J_kgK": 840.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "Engineering reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1512000.0,
+      "thermal_diffusivity_m2_s": 4.761904761904762e-07,
+      "thermal_effusivity": 1043.4,
+      "envelope_roles": [
+        "finish",
+        "walls"
+      ],
+      "typical_cost_usd_m2": 14.0,
+      "cost_range_usd_m2": [
+        9.0,
+        20.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 8.5,
+      "durability_lifespan_years": 45,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 7.5,
+        "arctic_subzero": 6.0,
+        "hot_arid_desert": 9.0,
+        "tropical_humid": 9.5,
+        "temperate_alpine": 8.5,
+        "global_standard": 9.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Tough external weather barrier protecting masonry from driving snow and wind",
+        "Good impact resistance"
+      ],
+      "disadvantages": [
+        "Vapor-impermeable compared to lime; can trap internal condensation if incorrectly placed"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Engineering reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "lime_plaster": {
+      "id": "lime_plaster",
+      "name": "Lime plaster",
+      "category": "Finish",
+      "k_W_mK": 0.7,
+      "density_kg_m3": 1700.0,
+      "cp_J_kgK": 840.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "Building-material literature",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1428000.0,
+      "thermal_diffusivity_m2_s": 4.901960784313725e-07,
+      "thermal_effusivity": 999.8,
+      "envelope_roles": [
+        "finish",
+        "walls"
+      ],
+      "typical_cost_usd_m2": 15.0,
+      "cost_range_usd_m2": [
+        10.0,
+        22.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 8.0,
+      "durability_lifespan_years": 50,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 8.5,
+        "arctic_subzero": 5.0,
+        "hot_arid_desert": 9.0,
+        "tropical_humid": 8.0,
+        "temperate_alpine": 8.5,
+        "global_standard": 8.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Low",
+      "advantages": [
+        "Vapor-permeable ('breathable') finish essential for adobe, rammed earth, and straw-bale envelopes",
+        "Self-healing microcracks via carbonation; natural antiseptic/antifungal qualities"
+      ],
+      "disadvantages": [
+        "Slower setting and curing time in cold weather"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Building-material literature",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "ceramic_tile": {
+      "id": "ceramic_tile",
+      "name": "Ceramic tile",
+      "category": "Finish",
+      "k_W_mK": 1.3,
+      "density_kg_m3": 2000.0,
+      "cp_J_kgK": 840.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "Engineering reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1680000.0,
+      "thermal_diffusivity_m2_s": 7.738095238095238e-07,
+      "thermal_effusivity": 1477.8,
+      "envelope_roles": [
+        "flooring",
+        "finish"
+      ],
+      "typical_cost_usd_m2": 28.0,
+      "cost_range_usd_m2": [
+        18.0,
+        45.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 9.0,
+      "durability_lifespan_years": 60,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 6.5,
+        "arctic_subzero": 5.5,
+        "hot_arid_desert": 9.0,
+        "tropical_humid": 9.5,
+        "temperate_alpine": 8.0,
+        "global_standard": 9.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Waterproof, abrasion-resistant, easy to sanitize",
+        "Good thermal coupling with underfloor radiant heating or solar direct gain"
+      ],
+      "disadvantages": [
+        "High thermal effusivity feels cold to bare feet without insulation layer underneath"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Engineering reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "hardwood_timber": {
+      "id": "hardwood_timber",
+      "name": "Hardwood timber",
+      "category": "Wood",
+      "k_W_mK": 0.18,
+      "density_kg_m3": 700.0,
+      "cp_J_kgK": 1600.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "ASHRAE / building-material literature",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1120000.0,
+      "thermal_diffusivity_m2_s": 1.607142857142857e-07,
+      "thermal_effusivity": 449.0,
+      "envelope_roles": [
+        "walls",
+        "roofs",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 45.0,
+      "cost_range_usd_m2": [
+        32.0,
+        70.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 8.2,
+      "durability_lifespan_years": 60,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 4.0,
+        "arctic_subzero": 6.5,
+        "hot_arid_desert": 3.0,
+        "tropical_humid": 8.5,
+        "temperate_alpine": 9.0,
+        "global_standard": 8.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "D-s2,d0 (charring protection)",
+      "embodied_carbon": "Low",
+      "advantages": [
+        "Carbon-sequestering renewable material",
+        "Low thermal conductivity (0.18 W/m\u00b7K) prevents cold bridging",
+        "High specific heat (1600 J/kg\u00b7K) creates comfortable interior touch warmth"
+      ],
+      "disadvantages": [
+        "Extremely scarce in high-altitude desert (Ladakh is above tree line; requires transport)",
+        "Vulnerable to termite attack in humid tropics unless treated"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE / building-material literature",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "plywood": {
+      "id": "plywood",
+      "name": "Plywood",
+      "category": "Wood",
+      "k_W_mK": 0.13,
+      "density_kg_m3": 550.0,
+      "cp_J_kgK": 1200.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "ASHRAE / engineering reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 660000.0,
+      "thermal_diffusivity_m2_s": 1.9696969696969698e-07,
+      "thermal_effusivity": 292.9,
+      "envelope_roles": [
+        "walls",
+        "roofs",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 18.0,
+      "cost_range_usd_m2": [
+        12.0,
+        26.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 7.5,
+      "durability_lifespan_years": 35,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 6.5,
+        "arctic_subzero": 7.0,
+        "hot_arid_desert": 7.5,
+        "tropical_humid": 8.5,
+        "temperate_alpine": 8.5,
+        "global_standard": 9.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "D-s2,d0",
+      "embodied_carbon": "Low",
+      "advantages": [
+        "Shear diaphragms for seismic stability and roof decking",
+        "Low thermal conductivity (0.13 W/m\u00b7K)"
+      ],
+      "disadvantages": [
+        "Standard grades delaminate if soaked; requires marine or exterior grade adhesive"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE / engineering reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "osb_board": {
+      "id": "osb_board",
+      "name": "OSB board",
+      "category": "Wood",
+      "k_W_mK": 0.13,
+      "density_kg_m3": 600.0,
+      "cp_J_kgK": 1500.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "Engineering reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 900000.0,
+      "thermal_diffusivity_m2_s": 1.4444444444444445e-07,
+      "thermal_effusivity": 342.1,
+      "envelope_roles": [
+        "walls",
+        "roofs",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 16.0,
+      "cost_range_usd_m2": [
+        11.0,
+        22.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 7.3,
+      "durability_lifespan_years": 35,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 6.0,
+        "arctic_subzero": 7.5,
+        "hot_arid_desert": 7.0,
+        "tropical_humid": 7.5,
+        "temperate_alpine": 8.0,
+        "global_standard": 9.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "D-s2,d0",
+      "embodied_carbon": "Low",
+      "advantages": [
+        "Cost-effective structural sheathing",
+        "Consistent structural properties without natural knot defects"
+      ],
+      "disadvantages": [
+        "Edge swelling under prolonged water exposure"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Engineering reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "cork_board": {
+      "id": "cork_board",
+      "name": "Cork board",
+      "category": "Insulation",
+      "k_W_mK": 0.043,
+      "density_kg_m3": 120.0,
+      "cp_J_kgK": 1800.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.7,
+      "source": "NIST SRD 81 / building-material literature",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 216000.0,
+      "thermal_diffusivity_m2_s": 1.9907407407407407e-07,
+      "thermal_effusivity": 96.4,
+      "envelope_roles": [
+        "insulation",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 32.0,
+      "cost_range_usd_m2": [
+        24.0,
+        45.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 8.8,
+      "durability_lifespan_years": 60,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 4.0,
+        "arctic_subzero": 4.5,
+        "hot_arid_desert": 4.5,
+        "tropical_humid": 5.0,
+        "temperate_alpine": 5.5,
+        "global_standard": 7.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "B-s1,d0 Fire retardant",
+      "embodied_carbon": "Very Low",
+      "advantages": [
+        "100% natural, renewable, carbon-negative insulation (k=0.043 W/m\u00b7K)",
+        "Naturally impermeable to water and rot; does not off-gas toxic fumes",
+        "High specific heat capacity (1800 J/kg\u00b7K) provides thermal lag unmatched by petrochemical foams"
+      ],
+      "disadvantages": [
+        "Higher unit price than EPS or glass fiber",
+        "Limited supply chain in Central Asia and remote mountain regions"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: NIST SRD 81 / building-material literature",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "expanded_perlite": {
+      "id": "expanded_perlite",
+      "name": "Expanded perlite",
+      "category": "Insulation",
+      "k_W_mK": 0.05,
+      "density_kg_m3": 150.0,
+      "cp_J_kgK": 900.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.55,
+      "source": "ASHRAE / NIST reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 135000.0,
+      "thermal_diffusivity_m2_s": 3.703703703703704e-07,
+      "thermal_effusivity": 82.2,
+      "envelope_roles": [
+        "insulation"
+      ],
+      "typical_cost_usd_m2": 18.0,
+      "cost_range_usd_m2": [
+        12.0,
+        26.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 9.0,
+      "durability_lifespan_years": 70,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 6.0,
+        "arctic_subzero": 5.0,
+        "hot_arid_desert": 8.0,
+        "tropical_humid": 6.5,
+        "temperate_alpine": 7.0,
+        "global_standard": 8.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Low",
+      "advantages": [
+        "Inorganic volcanic glass loose-fill; 100% fireproof and rodent-proof",
+        "Decent thermal insulation (k=0.05 W/m\u00b7K) for filling masonry cavity cores"
+      ],
+      "disadvantages": [
+        "Dusty during installation; settles over time if improperly retained"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE / NIST reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "vermiculite": {
+      "id": "vermiculite",
+      "name": "Vermiculite",
+      "category": "Insulation",
+      "k_W_mK": 0.065,
+      "density_kg_m3": 120.0,
+      "cp_J_kgK": 1000.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.55,
+      "source": "ASHRAE / NIST SRD 81",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 120000.0,
+      "thermal_diffusivity_m2_s": 5.416666666666666e-07,
+      "thermal_effusivity": 88.3,
+      "envelope_roles": [
+        "insulation"
+      ],
+      "typical_cost_usd_m2": 20.0,
+      "cost_range_usd_m2": [
+        14.0,
+        28.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 9.0,
+      "durability_lifespan_years": 70,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 6.0,
+        "arctic_subzero": 5.0,
+        "hot_arid_desert": 8.0,
+        "tropical_humid": 6.5,
+        "temperate_alpine": 7.0,
+        "global_standard": 8.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Low",
+      "advantages": [
+        "High thermal stability up to 1200\u00b0C; non-combustible",
+        "Effective loose-fill for chimneys and thermal ceiling plenums"
+      ],
+      "disadvantages": [
+        "Slightly higher thermal conductivity (0.065 W/m\u00b7K) than modern batt insulations"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE / NIST SRD 81",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "glass_fiber_batt": {
+      "id": "glass_fiber_batt",
+      "name": "Glass fiber batt",
+      "category": "Insulation",
+      "k_W_mK": 0.04,
+      "density_kg_m3": 20.0,
+      "cp_J_kgK": 800.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "ASHRAE Ch.26 / NIST SRD 81",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 16000.0,
+      "thermal_diffusivity_m2_s": 2.5e-06,
+      "thermal_effusivity": 25.3,
+      "envelope_roles": [
+        "insulation"
+      ],
+      "typical_cost_usd_m2": 14.0,
+      "cost_range_usd_m2": [
+        9.0,
+        20.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 7.8,
+      "durability_lifespan_years": 45,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 7.5,
+        "arctic_subzero": 8.0,
+        "hot_arid_desert": 8.5,
+        "tropical_humid": 8.5,
+        "temperate_alpine": 8.5,
+        "global_standard": 9.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Highly affordable thermal insulation (k=0.04 W/m\u00b7K)",
+        "Lightweight (20 kg/m\u00b3) minimal freight payload for high-altitude transport",
+        "Non-combustible"
+      ],
+      "disadvantages": [
+        "Loses insulating ability dramatically if penetrated by condensation or moisture",
+        "Requires PPE during handling; can sag if not mechanically supported"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE Ch.26 / NIST SRD 81",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "rock_wool_batt": {
+      "id": "rock_wool_batt",
+      "name": "Rock wool batt",
+      "category": "Insulation",
+      "k_W_mK": 0.035,
+      "density_kg_m3": 45.0,
+      "cp_J_kgK": 800.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "ASHRAE Ch.26 / NIST SRD 81",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 36000.0,
+      "thermal_diffusivity_m2_s": 9.722222222222224e-07,
+      "thermal_effusivity": 35.5,
+      "envelope_roles": [
+        "insulation"
+      ],
+      "typical_cost_usd_m2": 22.0,
+      "cost_range_usd_m2": [
+        16.0,
+        30.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 9.0,
+      "durability_lifespan_years": 60,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 7.8,
+        "arctic_subzero": 8.5,
+        "hot_arid_desert": 8.0,
+        "tropical_humid": 8.0,
+        "temperate_alpine": 8.5,
+        "global_standard": 9.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible (Euroclass)",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Exceptional low thermal conductivity (0.035 W/m\u00b7K) providing R-2.86 per 100mm",
+        "Melting point >1000\u00b0C provides world-class fire barrier in emergency shelters",
+        "Vapor-permeable and hydrophobic; sheds water and does not rot or promote mold",
+        "Higher density (45 kg/m\u00b3) provides superior acoustic insulation and sag resistance"
+      ],
+      "disadvantages": [
+        "Heavier and slightly more expensive than glass wool"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE Ch.26 / NIST SRD 81",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "cellular_glass": {
+      "id": "cellular_glass",
+      "name": "Cellular glass",
+      "category": "Insulation",
+      "k_W_mK": 0.05,
+      "density_kg_m3": 120.0,
+      "cp_J_kgK": 840.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "NIST SRD 81 / ASHRAE",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 100800.0,
+      "thermal_diffusivity_m2_s": 4.96031746031746e-07,
+      "thermal_effusivity": 71.0,
+      "envelope_roles": [
+        "insulation",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 45.0,
+      "cost_range_usd_m2": [
+        32.0,
+        65.0
+      ],
+      "cost_tier": "High",
+      "is_cost_estimated": true,
+      "durability_score": 9.8,
+      "durability_lifespan_years": 80,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 4.5,
+        "arctic_subzero": 6.5,
+        "hot_arid_desert": 5.5,
+        "tropical_humid": 6.0,
+        "temperate_alpine": 6.0,
+        "global_standard": 7.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "100% closed glass cells; totally impervious to water, water vapor, and sub-surface frost",
+        "High compressive strength allows load-bearing installation directly under concrete slabs",
+        "Rodent, pest, and acid proof"
+      ],
+      "disadvantages": [
+        "Higher thermal conductivity (0.05 W/m\u00b7K) than foam",
+        "Brittle; requires careful handling on rough terrain"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: NIST SRD 81 / ASHRAE",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "polyurethane_foam": {
+      "id": "polyurethane_foam",
+      "name": "Polyurethane foam",
+      "category": "Insulation",
+      "k_W_mK": 0.025,
+      "density_kg_m3": 35.0,
+      "cp_J_kgK": 1400.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "ASHRAE / NIST SRD 81",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 49000.0,
+      "thermal_diffusivity_m2_s": 5.102040816326531e-07,
+      "thermal_effusivity": 35.0,
+      "envelope_roles": [
+        "insulation"
+      ],
+      "typical_cost_usd_m2": 26.0,
+      "cost_range_usd_m2": [
+        18.0,
+        36.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 8.2,
+      "durability_lifespan_years": 40,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 6.5,
+        "arctic_subzero": 7.5,
+        "hot_arid_desert": 8.0,
+        "tropical_humid": 8.0,
+        "temperate_alpine": 8.0,
+        "global_standard": 9.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "B2 Combustible with retardant",
+      "embodied_carbon": "High",
+      "advantages": [
+        "Superior thermal resistance (k=0.025 W/m\u00b7K) \u2014 thin profile saves precious shelter interior space",
+        "Spray-applied formulation creates seamless air-tight envelope sealing gaps and drafts"
+      ],
+      "disadvantages": [
+        "Combustible and releases toxic cyanide gases during fire exposure; must be shielded behind drywall",
+        "Sensitive to UV degradation if exposed to sunlight"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE / NIST SRD 81",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "polyisocyanurate_foam": {
+      "id": "polyisocyanurate_foam",
+      "name": "Polyisocyanurate foam",
+      "category": "Insulation",
+      "k_W_mK": 0.023,
+      "density_kg_m3": 35.0,
+      "cp_J_kgK": 1400.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "ASHRAE / manufacturer-reference range",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 49000.0,
+      "thermal_diffusivity_m2_s": 4.693877551020408e-07,
+      "thermal_effusivity": 33.6,
+      "envelope_roles": [
+        "insulation",
+        "roofs"
+      ],
+      "typical_cost_usd_m2": 30.0,
+      "cost_range_usd_m2": [
+        22.0,
+        42.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 8.5,
+      "durability_lifespan_years": 45,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 6.0,
+        "arctic_subzero": 7.5,
+        "hot_arid_desert": 7.5,
+        "tropical_humid": 7.5,
+        "temperate_alpine": 7.5,
+        "global_standard": 9.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "B1 Reduced combustibility",
+      "embodied_carbon": "High",
+      "advantages": [
+        "Market-leading thermal resistance (k=0.023 W/m\u00b7K) \u2014 delivers R-4.35 per 100mm",
+        "Often foil-faced to provide radiant heat reflection and vapor barrier in one layer"
+      ],
+      "disadvantages": [
+        "Conductivity degrades slightly at sub-zero temperatures (blowing gas condensation)",
+        "High embodied petrochemical content"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE / manufacturer-reference range",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "phenolic_foam": {
+      "id": "phenolic_foam",
+      "name": "Phenolic foam",
+      "category": "Insulation",
+      "k_W_mK": 0.02,
+      "density_kg_m3": 40.0,
+      "cp_J_kgK": 1400.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "Engineering/manufacturer reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 56000.0,
+      "thermal_diffusivity_m2_s": 3.5714285714285716e-07,
+      "thermal_effusivity": 33.5,
+      "envelope_roles": [
+        "insulation"
+      ],
+      "typical_cost_usd_m2": 38.0,
+      "cost_range_usd_m2": [
+        28.0,
+        52.0
+      ],
+      "cost_tier": "High",
+      "is_cost_estimated": true,
+      "durability_score": 8.6,
+      "durability_lifespan_years": 45,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 4.5,
+        "arctic_subzero": 6.5,
+        "hot_arid_desert": 6.0,
+        "tropical_humid": 6.5,
+        "temperate_alpine": 6.5,
+        "global_standard": 8.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "B-s1,d0 Low smoke",
+      "embodied_carbon": "High",
+      "advantages": [
+        "Lowest thermal conductivity among rigid foams (k=0.020 W/m\u00b7K)",
+        "Superior fire and smoke performance compared to standard polyurethane"
+      ],
+      "disadvantages": [
+        "Acidic leaching risk if saturated with water in contact with structural metals",
+        "Premium pricing"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Engineering/manufacturer reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "hemp_lime_hempcrete": {
+      "id": "hemp_lime_hempcrete",
+      "name": "Hemp-lime (hempcrete)",
+      "category": "Bio-based insulation",
+      "k_W_mK": 0.07,
+      "density_kg_m3": 300.0,
+      "cp_J_kgK": 1500.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "Building-material literature",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 450000.0,
+      "thermal_diffusivity_m2_s": 1.5555555555555556e-07,
+      "thermal_effusivity": 177.5,
+      "envelope_roles": [
+        "walls",
+        "insulation"
+      ],
+      "typical_cost_usd_m2": 28.0,
+      "cost_range_usd_m2": [
+        19.0,
+        40.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 8.6,
+      "durability_lifespan_years": 70,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 7.5,
+        "arctic_subzero": 3.0,
+        "hot_arid_desert": 6.0,
+        "tropical_humid": 6.5,
+        "temperate_alpine": 8.0,
+        "global_standard": 7.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "B-s1,d0 Fire resistant",
+      "embodied_carbon": "Very Low (Carbon negative)",
+      "advantages": [
+        "Carbon-negative composite combining thermal insulation (0.07 W/m\u00b7K) and thermal inertia",
+        "Volumetric heat capacity of 450 kJ/m\u00b3\u00b7K moderates temperature swings",
+        "Naturally vapor-permeable and mold-inhibiting lime matrix; pest resistant"
+      ],
+      "disadvantages": [
+        "Non-load-bearing; requires timber or bamboo framing cage",
+        "Slow drying in cold humid conditions"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Building-material literature",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "sheep_wool_insulation": {
+      "id": "sheep_wool_insulation",
+      "name": "Sheep wool insulation",
+      "category": "Bio-based insulation",
+      "k_W_mK": 0.04,
+      "density_kg_m3": 25.0,
+      "cp_J_kgK": 1500.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "Building-material literature",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 37500.0,
+      "thermal_diffusivity_m2_s": 1.0666666666666667e-06,
+      "thermal_effusivity": 38.7,
+      "envelope_roles": [
+        "insulation"
+      ],
+      "typical_cost_usd_m2": 24.0,
+      "cost_range_usd_m2": [
+        16.0,
+        34.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 8.2,
+      "durability_lifespan_years": 50,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 9.6,
+        "arctic_subzero": 7.0,
+        "hot_arid_desert": 4.0,
+        "tropical_humid": 4.0,
+        "temperate_alpine": 8.5,
+        "global_standard": 7.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "B-s1,d0 Naturally flame retardant",
+      "embodied_carbon": "Very Low",
+      "advantages": [
+        "Highly available across Ladakh, Changthang nomads, and pastoral Himalayan communities",
+        "Low thermal conductivity (k=0.04 W/m\u00b7K) equivalent to commercial mineral wool",
+        "Can absorb up to 33% of its weight in water vapor without losing thermal resistance",
+        "Releases latent heat of adsorption when absorbing moisture in freezing winter nights"
+      ],
+      "disadvantages": [
+        "Must be treated with borate salts against moth and beetle larvae",
+        "Requires light framing retainers"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Building-material literature",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "wood_fiber_insulation_board": {
+      "id": "wood_fiber_insulation_board",
+      "name": "Wood fiber insulation board",
+      "category": "Bio-based insulation",
+      "k_W_mK": 0.045,
+      "density_kg_m3": 160.0,
+      "cp_J_kgK": 2100.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "Building-material literature",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 336000.0,
+      "thermal_diffusivity_m2_s": 1.3392857142857142e-07,
+      "thermal_effusivity": 123.0,
+      "envelope_roles": [
+        "insulation",
+        "roofs"
+      ],
+      "typical_cost_usd_m2": 26.0,
+      "cost_range_usd_m2": [
+        18.0,
+        36.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 8.2,
+      "durability_lifespan_years": 50,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 5.0,
+        "arctic_subzero": 7.0,
+        "hot_arid_desert": 4.5,
+        "tropical_humid": 6.5,
+        "temperate_alpine": 8.5,
+        "global_standard": 8.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "E (needs cladding)",
+      "embodied_carbon": "Very Low",
+      "advantages": [
+        "Very high specific heat capacity (2100 J/kg\u00b7K) creates 10-12 hr summer heat wave phase lag",
+        "Breathable and hygroscopic",
+        "Low thermal conductivity (0.045 W/m\u00b7K)"
+      ],
+      "disadvantages": [
+        "Heavier than synthetic foams (160 kg/m\u00b3)",
+        "Requires weather-resistive barrier"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Building-material literature",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "cellulose_loose_fill": {
+      "id": "cellulose_loose_fill",
+      "name": "Cellulose loose-fill",
+      "category": "Bio-based insulation",
+      "k_W_mK": 0.04,
+      "density_kg_m3": 50.0,
+      "cp_J_kgK": 1800.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "ASHRAE / building-material literature",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 90000.0,
+      "thermal_diffusivity_m2_s": 4.4444444444444444e-07,
+      "thermal_effusivity": 60.0,
+      "envelope_roles": [
+        "insulation"
+      ],
+      "typical_cost_usd_m2": 15.0,
+      "cost_range_usd_m2": [
+        10.0,
+        22.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 7.8,
+      "durability_lifespan_years": 40,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 6.5,
+        "arctic_subzero": 7.0,
+        "hot_arid_desert": 7.0,
+        "tropical_humid": 6.0,
+        "temperate_alpine": 7.5,
+        "global_standard": 9.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "B-s2,d0 Borate treated",
+      "embodied_carbon": "Very Low",
+      "advantages": [
+        "Recycled paper product with very low embodied carbon",
+        "Tight dense packing stops convective air loops inside wall cavities",
+        "Affordable thermal performance (k=0.04 W/m\u00b7K)"
+      ],
+      "disadvantages": [
+        "Requires blown-in blowing machine or careful manual tamp",
+        "Can settle over 5-10 years if under-compacted"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE / building-material literature",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "coconut_coir_fiber": {
+      "id": "coconut_coir_fiber",
+      "name": "Coconut coir fiber",
+      "category": "Bio-based insulation",
+      "k_W_mK": 0.045,
+      "density_kg_m3": 100.0,
+      "cp_J_kgK": 1500.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.6,
+      "source": "Building-material literature",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 150000.0,
+      "thermal_diffusivity_m2_s": 3e-07,
+      "thermal_effusivity": 82.2,
+      "envelope_roles": [
+        "insulation"
+      ],
+      "typical_cost_usd_m2": 14.0,
+      "cost_range_usd_m2": [
+        8.0,
+        20.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 8.0,
+      "durability_lifespan_years": 45,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 3.0,
+        "arctic_subzero": 2.0,
+        "hot_arid_desert": 4.0,
+        "tropical_humid": 9.8,
+        "temperate_alpine": 4.5,
+        "global_standard": 7.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "B2 Treated",
+      "embodied_carbon": "Very Low",
+      "advantages": [
+        "Supreme local availability in coastal, South Asian, and tropical environments",
+        "Naturally high lignin content provides resistance to rot and fungal attack",
+        "Good thermal insulation (k=0.045 W/m\u00b7K)"
+      ],
+      "disadvantages": [
+        "High freight cost if transported to high mountain altitudes"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Building-material literature",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "polyethylene": {
+      "id": "polyethylene",
+      "name": "Polyethylene",
+      "category": "Polymer",
+      "k_W_mK": 0.4,
+      "density_kg_m3": 940.0,
+      "cp_J_kgK": 1900.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.5,
+      "source": "Engineering material reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1786000.0,
+      "thermal_diffusivity_m2_s": 2.2396416573348264e-07,
+      "thermal_effusivity": 845.2,
+      "envelope_roles": [
+        "roofs",
+        "glazing"
+      ],
+      "typical_cost_usd_m2": 6.0,
+      "cost_range_usd_m2": [
+        3.0,
+        10.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 5.5,
+      "durability_lifespan_years": 10,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 9.0,
+        "arctic_subzero": 8.0,
+        "hot_arid_desert": 9.0,
+        "tropical_humid": 9.5,
+        "temperate_alpine": 9.0,
+        "global_standard": 9.8
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "F Combustible",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Lightweight emergency vapor retarder and greenhouse glazing for solar trombe gain",
+        "Inexpensive and instantly deployed"
+      ],
+      "disadvantages": [
+        "Degrades rapidly under harsh high-altitude UV radiation unless UV-stabilized",
+        "Poor thermal resistance without multi-layer dead air cavities"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Engineering material reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "pvc": {
+      "id": "pvc",
+      "name": "PVC",
+      "category": "Polymer",
+      "k_W_mK": 0.17,
+      "density_kg_m3": 1400.0,
+      "cp_J_kgK": 900.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.5,
+      "source": "ASHRAE / engineering reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1260000.0,
+      "thermal_diffusivity_m2_s": 1.3492063492063494e-07,
+      "thermal_effusivity": 462.8,
+      "envelope_roles": [
+        "roofs",
+        "finish"
+      ],
+      "typical_cost_usd_m2": 18.0,
+      "cost_range_usd_m2": [
+        12.0,
+        26.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 7.5,
+      "durability_lifespan_years": 25,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 8.0,
+        "arctic_subzero": 7.0,
+        "hot_arid_desert": 9.0,
+        "tropical_humid": 9.5,
+        "temperate_alpine": 8.5,
+        "global_standard": 9.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "B1 Self-extinguishing",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Waterproof roofing membranes and window frame profiles",
+        "Low maintenance"
+      ],
+      "disadvantages": [
+        "Becomes brittle in sub-zero extreme cold (-20\u00b0C)"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE / engineering reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "rubber": {
+      "id": "rubber",
+      "name": "Rubber",
+      "category": "Polymer",
+      "k_W_mK": 0.16,
+      "density_kg_m3": 1100.0,
+      "cp_J_kgK": 1400.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.5,
+      "source": "NIST SRD 81 / engineering reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1540000.0,
+      "thermal_diffusivity_m2_s": 1.038961038961039e-07,
+      "thermal_effusivity": 496.4,
+      "envelope_roles": [
+        "roofs",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 24.0,
+      "cost_range_usd_m2": [
+        16.0,
+        34.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 8.5,
+      "durability_lifespan_years": 40,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 7.0,
+        "arctic_subzero": 7.5,
+        "hot_arid_desert": 8.0,
+        "tropical_humid": 8.5,
+        "temperate_alpine": 8.0,
+        "global_standard": 9.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "E Combustible",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "EPDM rubber membranes provide supreme flat-roof waterproofing down to -45\u00b0C",
+        "High elongation accommodates thermal movement"
+      ],
+      "disadvantages": [
+        "Dark color absorbs high solar heat in summer unless coated with reflective acrylic"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: NIST SRD 81 / engineering reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "glass": {
+      "id": "glass",
+      "name": "Glass",
+      "category": "Glazing",
+      "k_W_mK": 1.0,
+      "density_kg_m3": 2500.0,
+      "cp_J_kgK": 750.0,
+      "emissivity": 0.95,
+      "solar_absorptivity": 0.85,
+      "source": "ASHRAE Ch.26 / NIST reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1875000.0,
+      "thermal_diffusivity_m2_s": 5.333333333333333e-07,
+      "thermal_effusivity": 1369.3,
+      "envelope_roles": [
+        "glazing"
+      ],
+      "typical_cost_usd_m2": 35.0,
+      "cost_range_usd_m2": [
+        25.0,
+        48.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 8.5,
+      "durability_lifespan_years": 40,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 7.5,
+        "arctic_subzero": 7.0,
+        "hot_arid_desert": 9.0,
+        "tropical_humid": 9.0,
+        "temperate_alpine": 8.5,
+        "global_standard": 9.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Allows direct passive solar gain into living areas during sunlit hours",
+        "Durable surface impervious to scratching and weather"
+      ],
+      "disadvantages": [
+        "Single-pane has atrocious thermal conductivity (1.0 W/m\u00b7K) causing massive nighttime heat drain",
+        "Severe condensation and frost formation in winter"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE Ch.26 / NIST reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "double_glazing_air_gap": {
+      "id": "double_glazing_air_gap",
+      "name": "Double glazing, air gap",
+      "category": "Glazing",
+      "k_W_mK": 2.7,
+      "density_kg_m3": 2500.0,
+      "cp_J_kgK": 750.0,
+      "emissivity": 0.84,
+      "solar_absorptivity": 0.7,
+      "source": "ASHRAE / glazing reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1875000.0,
+      "thermal_diffusivity_m2_s": 1.4400000000000002e-06,
+      "thermal_effusivity": 2250.0,
+      "envelope_roles": [
+        "glazing"
+      ],
+      "typical_cost_usd_m2": 75.0,
+      "cost_range_usd_m2": [
+        55.0,
+        105.0
+      ],
+      "cost_tier": "High",
+      "is_cost_estimated": true,
+      "durability_score": 8.8,
+      "durability_lifespan_years": 30,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 6.8,
+        "arctic_subzero": 7.5,
+        "hot_arid_desert": 8.5,
+        "tropical_humid": 8.5,
+        "temperate_alpine": 8.0,
+        "global_standard": 9.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Cuts window heat loss by ~50% compared to single pane",
+        "Reduces interior draft chills and condensation"
+      ],
+      "disadvantages": [
+        "Seal failure over decades can cause internal fogging",
+        "Fragile transport over bumpy unpaved mountain roads"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE / glazing reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "low_e_double_glazing": {
+      "id": "low_e_double_glazing",
+      "name": "Low-E double glazing",
+      "category": "Glazing",
+      "k_W_mK": 1.4,
+      "density_kg_m3": 2500.0,
+      "cp_J_kgK": 750.0,
+      "emissivity": 0.84,
+      "solar_absorptivity": 0.5,
+      "source": "ASHRAE / glazing reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1875000.0,
+      "thermal_diffusivity_m2_s": 7.466666666666666e-07,
+      "thermal_effusivity": 1620.2,
+      "envelope_roles": [
+        "glazing"
+      ],
+      "typical_cost_usd_m2": 110.0,
+      "cost_range_usd_m2": [
+        85.0,
+        150.0
+      ],
+      "cost_tier": "Premium",
+      "is_cost_estimated": true,
+      "durability_score": 9.0,
+      "durability_lifespan_years": 30,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 5.5,
+        "arctic_subzero": 7.5,
+        "hot_arid_desert": 8.0,
+        "tropical_humid": 8.0,
+        "temperate_alpine": 7.5,
+        "global_standard": 9.2
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Microscopic metal coating reflects long-wave infrared heat back into the shelter",
+        "Cuts nocturnal radiant heat loss by >70% while admitting 75% of solar daylight",
+        "Essential for achieving net-positive solar gain envelopes in sub-zero climates"
+      ],
+      "disadvantages": [
+        "Higher capital investment",
+        "Requires specialized procurement and careful handling"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE / glazing reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "air_gap_still": {
+      "id": "air_gap_still",
+      "name": "Air gap, still",
+      "category": "Air cavity",
+      "k_W_mK": 0.026,
+      "density_kg_m3": 1.2,
+      "cp_J_kgK": 1007.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.1,
+      "source": "ASHRAE air-space reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1208.4,
+      "thermal_diffusivity_m2_s": 2.151605428666005e-05,
+      "thermal_effusivity": 5.6,
+      "envelope_roles": [
+        "air_cavity"
+      ],
+      "typical_cost_usd_m2": 2.0,
+      "cost_range_usd_m2": [
+        0.0,
+        5.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 9.9,
+      "durability_lifespan_years": 100,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 10.0,
+        "arctic_subzero": 10.0,
+        "hot_arid_desert": 10.0,
+        "tropical_humid": 10.0,
+        "temperate_alpine": 10.0,
+        "global_standard": 10.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Zero",
+      "advantages": [
+        "Free insulating air barrier (k=0.026 W/m\u00b7K) when unventilated and sealed under 25mm thickness",
+        "Breaks conductive bridging across masonry wythes"
+      ],
+      "disadvantages": [
+        "Convective loops degrade performance if gap exceeds 30mm; must be airtight"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: ASHRAE air-space reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "water": {
+      "id": "water",
+      "name": "Water",
+      "category": "Thermal storage",
+      "k_W_mK": 0.6,
+      "density_kg_m3": 1000.0,
+      "cp_J_kgK": 4180.0,
+      "emissivity": 0.96,
+      "solar_absorptivity": 0.1,
+      "source": "Engineering thermophysical reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 4180000.0,
+      "thermal_diffusivity_m2_s": 1.4354066985645933e-07,
+      "thermal_effusivity": 1583.7,
+      "envelope_roles": [
+        "walls",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 8.0,
+      "cost_range_usd_m2": [
+        4.0,
+        14.0
+      ],
+      "cost_tier": "Low",
+      "is_cost_estimated": true,
+      "durability_score": 8.5,
+      "durability_lifespan_years": 50,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 7.0,
+        "arctic_subzero": 5.0,
+        "hot_arid_desert": 4.0,
+        "tropical_humid": 9.5,
+        "temperate_alpine": 8.5,
+        "global_standard": 9.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Zero",
+      "advantages": [
+        "Unrivaled volumetric heat capacity (4.18 MJ/m\u00b3\u00b7K) \u2014 2x higher than concrete and 4x higher than brick",
+        "Thermal drum walls absorb massive solar gain on south glazing and discharge warmth all night long",
+        "Virtually free storage medium"
+      ],
+      "disadvantages": [
+        "Requires freeze protection (glycol or salt) if shelter interior drops below 0\u00b0C",
+        "Risk of container puncture or leaks over decades"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Engineering thermophysical reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "paraffin_pcm": {
+      "id": "paraffin_pcm",
+      "name": "Paraffin PCM",
+      "category": "PCM",
+      "k_W_mK": 0.2,
+      "density_kg_m3": 900.0,
+      "cp_J_kgK": 2000.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.7,
+      "source": "PCM literature / manufacturer-dependent",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1800000.0,
+      "thermal_diffusivity_m2_s": 1.1111111111111112e-07,
+      "thermal_effusivity": 600.0,
+      "envelope_roles": [
+        "walls",
+        "roofs",
+        "insulation"
+      ],
+      "typical_cost_usd_m2": 85.0,
+      "cost_range_usd_m2": [
+        60.0,
+        120.0
+      ],
+      "cost_tier": "Premium",
+      "is_cost_estimated": true,
+      "durability_score": 8.5,
+      "durability_lifespan_years": 35,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 3.5,
+        "arctic_subzero": 4.5,
+        "hot_arid_desert": 5.5,
+        "tropical_humid": 6.0,
+        "temperate_alpine": 5.5,
+        "global_standard": 7.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "B2 Treated",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Isothermal latent heat release near human comfort zone (21\u00b0C) prevents indoor overheating and freezing",
+        "Stores 155 kJ/kg latent enthalpy in a compact lightweight panel"
+      ],
+      "disadvantages": [
+        "High material cost; low liquid thermal conductivity requires heat-spreader fins"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: PCM literature / manufacturer-dependent",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "salt_hydrate_pcm_cacl2_6h2o": {
+      "id": "salt_hydrate_pcm_cacl2_6h2o",
+      "name": "Salt-hydrate PCM (CaCl2\u00b76H2O)",
+      "category": "PCM",
+      "k_W_mK": 0.5,
+      "density_kg_m3": 1710.0,
+      "cp_J_kgK": 1400.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.7,
+      "source": "PCM literature / manufacturer-dependent",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 2394000.0,
+      "thermal_diffusivity_m2_s": 2.0885547201336675e-07,
+      "thermal_effusivity": 1094.1,
+      "envelope_roles": [
+        "walls",
+        "flooring"
+      ],
+      "typical_cost_usd_m2": 65.0,
+      "cost_range_usd_m2": [
+        45.0,
+        95.0
+      ],
+      "cost_tier": "High",
+      "is_cost_estimated": true,
+      "durability_score": 8.0,
+      "durability_lifespan_years": 30,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 4.0,
+        "arctic_subzero": 4.0,
+        "hot_arid_desert": 6.0,
+        "tropical_humid": 6.0,
+        "temperate_alpine": 5.5,
+        "global_standard": 7.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "Low",
+      "advantages": [
+        "High latent heat (190 kJ/kg) and higher thermal conductivity than organic paraffin (0.5 W/m\u00b7K)",
+        "Non-combustible"
+      ],
+      "disadvantages": [
+        "Phase segregation and subcooling over thousands of freeze-thaw cycles without nucleating agents"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: PCM literature / manufacturer-dependent",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "eutectic_pcm_organic": {
+      "id": "eutectic_pcm_organic",
+      "name": "Eutectic PCM, organic",
+      "category": "PCM",
+      "k_W_mK": 0.2,
+      "density_kg_m3": 850.0,
+      "cp_J_kgK": 2000.0,
+      "emissivity": 0.9,
+      "solar_absorptivity": 0.7,
+      "source": "PCM literature / manufacturer-dependent",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 1700000.0,
+      "thermal_diffusivity_m2_s": 1.1764705882352942e-07,
+      "thermal_effusivity": 583.1,
+      "envelope_roles": [
+        "walls",
+        "insulation"
+      ],
+      "typical_cost_usd_m2": 90.0,
+      "cost_range_usd_m2": [
+        65.0,
+        130.0
+      ],
+      "cost_tier": "Premium",
+      "is_cost_estimated": true,
+      "durability_score": 8.5,
+      "durability_lifespan_years": 35,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 3.0,
+        "arctic_subzero": 4.0,
+        "hot_arid_desert": 5.0,
+        "tropical_humid": 5.5,
+        "temperate_alpine": 5.0,
+        "global_standard": 7.0
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "B2 Treated",
+      "embodied_carbon": "Medium",
+      "advantages": [
+        "Sharp congruent melting with negligible subcooling for precise indoor temperature stabilization"
+      ],
+      "disadvantages": [
+        "High cost and limited availability in frontier logistics networks"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: PCM literature / manufacturer-dependent",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "aluminum": {
+      "id": "aluminum",
+      "name": "Aluminum",
+      "category": "Metal",
+      "k_W_mK": 205.0,
+      "density_kg_m3": 2700.0,
+      "cp_J_kgK": 900.0,
+      "emissivity": 0.2,
+      "solar_absorptivity": 0.3,
+      "source": "Engineering thermophysical reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 2430000.0,
+      "thermal_diffusivity_m2_s": 8.436213991769547e-05,
+      "thermal_effusivity": 22319.3,
+      "envelope_roles": [
+        "roofs",
+        "finish"
+      ],
+      "typical_cost_usd_m2": 42.0,
+      "cost_range_usd_m2": [
+        30.0,
+        60.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 9.2,
+      "durability_lifespan_years": 60,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 7.0,
+        "arctic_subzero": 7.5,
+        "hot_arid_desert": 8.5,
+        "tropical_humid": 8.5,
+        "temperate_alpine": 8.0,
+        "global_standard": 9.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "High",
+      "advantages": [
+        "Ultra-lightweight (2700 kg/m\u00b3) corrosion-resistant roofing sheet",
+        "High solar reflectance (0.7) and low emissivity (0.2) acts as radiant heat barrier"
+      ],
+      "disadvantages": [
+        "Extreme thermal conductivity (205 W/m\u00b7K) requires robust continuous insulation underneath to avoid thermal short-circuits"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Engineering thermophysical reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    },
+    "steel": {
+      "id": "steel",
+      "name": "Steel",
+      "category": "Metal",
+      "k_W_mK": 50.0,
+      "density_kg_m3": 7850.0,
+      "cp_J_kgK": 490.0,
+      "emissivity": 0.8,
+      "solar_absorptivity": 0.6,
+      "source": "Engineering thermophysical reference",
+      "is_pcm": false,
+      "volumetric_heat_capacity_J_m3K": 3846500.0,
+      "thermal_diffusivity_m2_s": 1.2998830105290524e-05,
+      "thermal_effusivity": 13868.1,
+      "envelope_roles": [
+        "roofs",
+        "walls"
+      ],
+      "typical_cost_usd_m2": 35.0,
+      "cost_range_usd_m2": [
+        24.0,
+        50.0
+      ],
+      "cost_tier": "Moderate",
+      "is_cost_estimated": true,
+      "durability_score": 8.8,
+      "durability_lifespan_years": 50,
+      "is_durability_estimated": true,
+      "regional_availability": {
+        "ladakh_high_altitude": 7.5,
+        "arctic_subzero": 7.5,
+        "hot_arid_desert": 9.0,
+        "tropical_humid": 8.5,
+        "temperate_alpine": 8.5,
+        "global_standard": 9.5
+      },
+      "is_availability_estimated": true,
+      "fire_rating": "A1 Non-combustible",
+      "embodied_carbon": "High",
+      "advantages": [
+        "Pre-fabricated corrugated GI roofing sheets allow rapid emergency weather sealing",
+        "High structural wind and snow load resistance"
+      ],
+      "disadvantages": [
+        "High thermal transmission (50 W/m\u00b7K) and condensation drippage without thermal break insulation"
+      ],
+      "provenance": {
+        "thermal_properties": "Measured benchmark: Engineering thermophysical reference",
+        "estimated_cost": "Estimated regional construction index (2024-2025)",
+        "durability": "Empirical building science standard lifespan",
+        "availability": "Regional logistics assessment"
+      }
+    }
+  }
+}
